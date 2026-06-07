@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>белль — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1779879077">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1779804907"></script>
+<script>
+renderTieredCake({
+  "id": "bell",
+  "name": "белль",
+  "title": "белль",
+  "desc": "Многообразие форм, цветов, размеров и узоров. Вкупе с лентами и вишенками — полная тортовая феерия!",
+  "subtitle": "Торт назван в честь принцессы из мультфильма «Красавица и чудовище» компании Дисней.",
+  "decorPerTier": 3000,
+  "minWeight": 6,
+  "minTiers": 6,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+</script>
+</body>
+</html>

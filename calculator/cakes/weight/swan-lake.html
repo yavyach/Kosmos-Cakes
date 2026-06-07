@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>лебединое озеро — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1779879077">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1779804907"></script>
+<script>
+renderWeightCake({
+  "id": "swan-lake",
+  "name": "лебединое озеро",
+  "title": "лебединое озеро",
+  "desc": "Утончённый и глубокий, как русское искусство 19 века. Кремовые цветы, миндальные лепестки, лебеди из безе.",
+  "subtitle": "Торт назван в честь покорившего весь мир балета Петра Ильича Чайковского.",
+  "decorTable": [
+    {
+      "min": 2,
+      "max": 20,
+      "price": 2500
+    }
+  ],
+  "minWeight": 2,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHERNIKA
+});
+</script>
+</body>
+</html>

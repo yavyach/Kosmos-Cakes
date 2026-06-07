@@ -1,0 +1,362 @@
+/* ============================================================
+   ШРИФТЫ
+   1) local() — если шрифты установлены в платформе (Тильда/Редимаг)
+   2) GitHub Pages — иначе тянутся из репозитория
+   3) assets/ — fallback при локальном открытии
+   ============================================================ */
+@font-face{
+  font-family:'ALS Beast';
+  src: local('ALS Beast'), local('ALS Beast Ultra'), local('ALSBeast'),
+       url('https://ab-aacoop.github.io/kosmos_calc/calculator/assets/ALS_Beast_Ultra.otf') format('opentype'),
+       url('assets/ALS_Beast_Ultra.otf') format('opentype'),
+       url('../assets/ALS_Beast_Ultra.otf') format('opentype'),
+       url('../../assets/ALS_Beast_Ultra.otf') format('opentype');
+  font-weight:900;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Golos Text';
+  src: local('Golos Text'), local('GolosText'),
+       url('https://ab-aacoop.github.io/kosmos_calc/calculator/assets/GolosText-Regular.ttf') format('truetype'),
+       url('assets/GolosText-Regular.ttf') format('truetype'),
+       url('../assets/GolosText-Regular.ttf') format('truetype'),
+       url('../../assets/GolosText-Regular.ttf') format('truetype');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+
+/* ============================================================
+   ПАЛИТРА
+   --red   : тёмный красный для крупных цифр и заголовков
+   --pink  : малиновый для линий, +/-, мелкого текста и лейблов
+   --rose  : чуть темнее розового, для hover
+   ============================================================ */
+:root{
+  --bg:#cfcfcf;
+  --red:#D2363C;
+  --pink:#F16471;
+  --rose:#E55264;
+  --red-deep:#B0202A;
+  --display:'ALS Beast', system-ui, sans-serif;
+  --text:'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;padding:0;height:100%;
+  background:var(--bg);
+  font-family:var(--text);color:#1a1a1a;
+  overflow-x:hidden;
+  overscroll-behavior-x:none;
+  touch-action:pan-y;
+}
+
+/* ============ FRAME ============ */
+.calc-frame{position:relative;height:100%;background:var(--bg);overflow:hidden}
+.calc-scroll{
+  height:100%;overflow-y:auto;
+  padding:28px 22px 28px;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.calc-scroll::-webkit-scrollbar{display:none;width:0;height:0}
+/* глобально прячем скроллбары — оставляем функциональность,
+   но визуально без полосок везде в калькуляторе */
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{display:none;width:0;height:0}
+
+/* мобильный / inline на странице торта: высота по контенту, без лишней пустоты. */
+body.mobile,
+body.mobile html{min-height:0;height:auto}
+body.mobile .calc-frame{height:auto;overflow:visible;min-height:0}
+body.mobile .calc-scroll{
+  height:auto;overflow:visible;padding:14px 16px 18px;
+  display:flex;flex-direction:column;min-height:0;
+}
+body.mobile .total-wrap{margin-top:14px}
+body.mobile .label{font-size:19px;margin:8px 0 0}
+body.mobile .cake-desc{font-size:22px}
+body.mobile .stepper{gap:10px}
+body.mobile .stepper .value, body.mobile .fixed-row .value{font-size:96px}
+body.mobile .stepper .step-btn.plus svg{width:46px;height:46px}
+body.mobile .stepper .step-btn.minus svg{width:46px;height:17px}
+body.mobile .hint{margin:6px 6px 0}
+body.mobile .hint--big{margin:10px 12px 0;font-size:12px}
+body.mobile .total-wrap{margin-top:10px;padding:6px 0 0;gap:2px}
+body.mobile .total-meta{font-size:18px}
+body.mobile .total-value{font-size:60px}
+body.mobile .send-row{margin-top:4px}
+body.mobile .next-btn{font-size:22px}
+body.mobile .fill-class{margin-top:8px}
+
+/* ============ CAKE HEADER ============ */
+.cake-header{margin:0 0 22px;text-align:center}
+.cake-title{
+  margin:0 0 16px;
+  font-family:var(--display);font-weight:900;
+  color:var(--pink);
+  text-transform:lowercase;
+  line-height:.85;
+  letter-spacing:-1px;
+  word-break:normal;
+}
+/* Каждое слово заголовка — на отдельной строке, размер шрифта подбирается из JS */
+.cake-title .word{
+  display:block;
+  white-space:nowrap;
+  line-height:.9;
+}
+.cake-desc{
+  margin:0 0 6px;
+  font-family:var(--display);font-weight:900;
+  font-size:24px;line-height:1;letter-spacing:.2px;
+  color:#fff;
+  text-transform:lowercase;
+}
+.cake-desc::first-letter{text-transform:uppercase}
+.cake-subtitle{
+  margin:0;
+  font-family:var(--text);font-weight:400;
+  font-size:15px;line-height:1.25;
+  color:var(--red);
+}
+
+/* ============ META ============ */
+.calc-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;
+  font-family:var(--text);font-size:10px;color:var(--red);
+  letter-spacing:.3px;text-transform:uppercase;
+}
+
+/* ============ LABEL («Сколько килограмм?» / «начинка») — чуть меньше белого описания торта ============ */
+.label{
+  text-align:center;color:#fff;
+  font-family:var(--display);font-weight:900;
+  font-size:22px;text-transform:lowercase;line-height:1;
+  margin:18px 0 4px;
+}
+.label::first-letter{text-transform:uppercase}
+
+/* ============ STEPPER ============ */
+.stepper{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+}
+.stepper .step-btn{
+  background:none;border:0;padding:0;cursor:pointer;color:var(--pink);
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:transform .08s ease, color .15s ease;
+}
+.stepper .step-btn:active{transform:scale(.92)}
+.stepper .step-btn:hover{color:var(--rose)}
+.stepper .step-btn svg{display:block;fill:currentColor}
+.stepper .step-btn.minus svg{width:56px;height:20px}
+.stepper .step-btn.plus svg{width:56px;height:56px}
+.stepper .value{
+  font-family:var(--display);font-weight:900;
+  font-size:128px;line-height:.9;min-width:0;text-align:center;
+  color:var(--red);
+  letter-spacing:-2px;
+}
+
+/* ============ FIXED WEIGHT ============ */
+.fixed-row{
+  display:flex;align-items:center;justify-content:center;gap:24px;
+  margin:6px 0;cursor:pointer;border-radius:8px;padding:6px 8px;
+  user-select:none;
+}
+.fixed-row .value{
+  font-family:var(--display);font-weight:900;
+  font-size:120px;line-height:.9;color:var(--red);letter-spacing:-2px;
+}
+.radio-big{
+  width:68px;height:68px;border-radius:50%;border:0;
+  background:#fff;cursor:pointer;flex-shrink:0;padding:0;
+  transition:background-color .15s ease, transform .08s ease;
+}
+.radio-big:hover{background:var(--pink)}
+.radio-big.checked{background:var(--red)}
+.radio-big:active{transform:scale(.94)}
+.fixed-row:hover .radio-big:not(.checked){background:var(--pink)}
+
+/* ============ HINT ============ */
+.hint{
+  text-align:center;color:var(--red);font-size:12px;
+  margin:6px 8px 2px;line-height:1.05;
+  font-family:var(--text);
+}
+.hint--big{
+  font-family:var(--text);font-weight:400;
+  font-size:14px;line-height:1.05;
+  color:var(--red);
+  margin:12px 12px 6px;
+}
+
+/* ============ TIERS (мелкая подпись «начинка N ярус») ============ */
+.tiers{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.tier-row .tier-label{
+  text-align:center;
+  font-family:var(--text);font-weight:400;
+  font-size:11px;color:var(--red);
+  margin-bottom:3px;letter-spacing:.3px;
+}
+
+/* ============ CUSTOM SELECT ============ */
+.csel{
+  position:relative;
+  font-family:var(--text);font-size:14px;
+  user-select:none;
+}
+.csel__trigger{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  border:1px solid var(--pink);border-radius:999px;
+  background:#fff;color:var(--pink);
+  padding:10px 36px 10px 16px;
+  cursor:pointer;text-align:center;
+  outline:none;
+  transition:border-color .15s ease, color .15s ease;
+}
+.csel__trigger::after{
+  content:'';position:absolute;right:16px;top:50%;
+  width:13px;height:7px;transform:translateY(-50%);
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='%23F16471' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat center / contain;
+}
+.csel__trigger:hover,
+.csel.is-open .csel__trigger{border-color:var(--rose);color:var(--rose)}
+.csel.is-open .csel__trigger::after{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='%23E55264' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><polyline points='18 15 12 9 6 15'/></svg>");
+}
+.csel__list{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;
+  background:#fff;
+  border:1px solid var(--pink);
+  border-radius:18px;
+  padding:8px 0;
+  max-height:260px;overflow-y:auto;
+  z-index:100;
+  display:none;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.csel__list::-webkit-scrollbar{display:none;width:0;height:0}
+.csel.is-open .csel__list{display:block}
+.csel__opt{
+  padding:9px 16px;cursor:pointer;
+  color:var(--pink);text-align:center;
+  transition:background-color .12s ease, color .12s ease;
+}
+.csel__opt:hover{background:var(--pink);color:var(--red)}
+.csel__opt.is-selected{color:var(--red);font-weight:600}
+
+/* ============ TOTAL (надпись «стоимость торта» + красная цена с искрами по бокам) ============ */
+.total-wrap{
+  margin-top:16px;
+  padding:10px 0 0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+}
+.total-wrap .total-meta{
+  font-family:var(--display);font-weight:900;
+  color:var(--pink);
+  font-size:20px;line-height:1;letter-spacing:.2px;
+  text-transform:lowercase;
+}
+.total-wrap .total-meta::first-letter{text-transform:uppercase}
+.total-wrap .total-row{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+}
+.total-wrap .sparkle{
+  display:inline-block;
+  width:22px;height:22px;color:var(--red);flex-shrink:0;
+}
+.total-wrap .sparkle svg{width:100%;height:100%;fill:currentColor;display:block}
+.total-value{
+  font-family:var(--display);font-weight:900;
+  color:var(--red);font-size:76px;line-height:1;letter-spacing:-1px;
+  white-space:nowrap;
+}
+/* старая подпись «итоговая стоимость» больше не показывается */
+.total-label{display:none}
+
+/* ============ КЛАСС НАЧИНКИ (космос база/классик/люкс) ============
+   - в плоских/фикс калькуляторах под ценой появляется один символ,
+     соответствующий цене выбранной начинки;
+   - в ярусных тортах после цены идёт строка из всех трёх символов
+     одинакового размера (декор/легенда классов).
+   Картинки берутся из assets/class-base.svg / class-classic.svg / class-lux.svg.
+*/
+.fill-class{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  margin:16px auto 0;
+  width:100%;
+}
+.fill-class__ico{
+  flex:0 0 auto;
+  width:180px;height:60px;
+  background:no-repeat center / contain;
+}
+/* Cache-bust версия после ?v= автоматически обновляется build_site_pages.py
+   по mtime файлов assets/class-*.svg, чтобы после ручной замены картинки
+   браузер сразу подгружал новую версию, а не отдавал из кэша. */
+.fill-class__ico.is-base   {background-image:url('assets/class-base.svg?v=1779726900')}
+.fill-class__ico.is-classic{background-image:url('assets/class-classic.svg?v=1779726900')}
+.fill-class__ico.is-lux    {background-image:url('assets/class-lux.svg?v=1779726900')}
+
+/* В ярусных — три рядом, чуть мельче чтобы умещались в одну линию */
+.fill-class--all{gap:12px;margin-top:18px}
+.fill-class--all .fill-class__ico{width:110px;height:48px}
+
+@media (max-width:420px){
+  .fill-class__ico{width:140px;height:48px}
+  .fill-class--all{gap:8px}
+  .fill-class--all .fill-class__ico{width:90px;height:40px}
+}
+
+/* ============ NEXT BUTTON («далее») — в одну визуальную линию с .label ============ */
+.send-row{margin-top:10px;display:flex;justify-content:center}
+
+/* Бантик, который рендерится последним блоком в .calc-scroll
+   (см. endBowHTML в core.js). Прижат прямо к кнопке «далее»,
+   без серой пустоты сверху. */
+.calc-scroll .end-bow{
+  display:block;width:92px;height:auto;
+  margin:6px auto 0;
+}
+body.mobile .calc-scroll .end-bow{
+  width:84px;margin:4px auto 0;
+}
+
+/* Заголовок-замена «далее»+бантика на мобильной cake-странице.
+   Появляется в режиме ?ctx=mobile (см. core.js → nextBtnHTML). */
+.mob-delivery-headline{
+  text-align:center;
+  font-family:var(--display);font-weight:900;
+  color:#fff;
+  font-size:24px;line-height:1.1;
+  text-transform:lowercase;
+  margin:18px auto 4px;
+  max-width:280px;
+}
+.next-btn{
+  background:none;border:0;padding:0;cursor:pointer;
+  font-family:var(--display);font-weight:900;
+  font-size:22px;line-height:1;letter-spacing:.2px;
+  color:var(--pink);text-transform:lowercase;
+  transition:color .15s ease, transform .08s ease;
+}
+.next-btn::first-letter{text-transform:lowercase}
+.next-btn:hover{color:var(--rose)}
+.next-btn:active{transform:scale(.96)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:420px){
+  .calc-scroll{padding:22px 16px 22px}
+  .cake-header{margin-bottom:18px}
+  .cake-desc{font-size:18px}
+  .stepper{gap:10px}
+  .stepper .step-btn.minus svg{width:42px;height:15px}
+  .stepper .step-btn.plus svg{width:42px;height:42px}
+  .stepper .value, .fixed-row .value{font-size:90px}
+  .label{font-size:16px}
+  .total-value{font-size:48px}
+  .radio-big{width:52px;height:52px}
+  .next-btn{font-size:17px}
+}

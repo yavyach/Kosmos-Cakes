@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>куинджи — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1779879077">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1779804907"></script>
+<script>
+renderTieredCake({
+  "id": "kuinji",
+  "name": "куинджи",
+  "title": "куинджи",
+  "desc": "Красота живой природы, перенесённая на торт. Узоры, цветы, листья, орнаменты.",
+  "subtitle": "Торт назван в честь выдающегося русского художника-пейзажиста. Стоимость декора зависит от сложности росписи.",
+  "decorPerTier": 3000,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "note": "Стоимость декора зависит от сложности — может быть выше.",
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+</script>
+</body>
+</html>

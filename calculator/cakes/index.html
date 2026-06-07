@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kosmos — все калькуляторы</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#eaeaea;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#222}
+  body{padding:24px}
+  h1{margin:0 0 6px;font-size:22px}
+  p.lead{margin:0 0 14px;color:#555;font-size:14px;max-width:760px}
+  p.lead a{color:#d83448}
+  .topbar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+  .topbar a{
+    text-decoration:none;background:#fff;border:1px solid #ddd;padding:7px 12px;
+    border-radius:6px;color:#222;font-size:13px;font-weight:500;
+  }
+  .topbar a.primary{background:#d83448;color:#fff;border-color:#d83448}
+  .topbar a:hover{filter:brightness(0.95)}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start}
+  .card{display:flex;flex-direction:column;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .card header{padding:8px 14px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:10px;font-size:12px}
+  .card .type{padding:2px 8px;background:#d83448;color:#fff;border-radius:999px;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
+  .card .name{font-weight:600;flex:1}
+  .card a.open{color:#999;text-decoration:none;font-size:14px}
+  .card a.open:hover{color:#d83448}
+  .frame-wrap{aspect-ratio:380/760;width:100%;background:#cfcfcf}
+  .frame-wrap object{display:block;width:100%;height:100%;border:0}
+
+  .snip{padding:10px 12px;border-top:1px solid #eee;background:#fafafa;display:flex;flex-direction:column;gap:6px}
+  .snip textarea{
+    width:100%;min-height:48px;resize:vertical;
+    font-family:Menlo,Consolas,monospace;font-size:11px;line-height:1.4;
+    border:1px solid #ddd;border-radius:5px;padding:6px;background:#fff;color:#333;
+  }
+  .snip-row{display:flex;gap:8px;align-items:center}
+  .snip button{
+    background:#d83448;color:#fff;border:0;border-radius:5px;padding:6px 12px;
+    font-size:12px;cursor:pointer;font-weight:600;
+  }
+  .snip button:hover{background:#b22937}
+  .snip .ok{font-size:11px;color:#3b9b4f;opacity:0;transition:opacity .25s}
+  .snip .ok.show{opacity:1}
+</style>
+</head>
+<body>
+<h1>Все торты — калькуляторы (адаптивные)</h1>
+<p class="lead">Каждая карточка — inline HTML для вставки в Readymag/Tilda (без iframe). Страницы тортов: <a href="../../site/cakes/">site/cakes</a>. Блок доставки: <a href="../delivery/preview.html">delivery</a>.</p>
+<div class="topbar">
+  <a class="primary" href="../delivery/preview.html">↗ блок доставки (превью + сниппеты)</a>
+  <a href="../../site/cakes/">↗ страницы тортов</a>
+  <a href="../">↗ на главную</a>
+</div>
+<div class="grid">
+
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">белль</span>
+        <a class="open" href="tiered/bell.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/bell.html" type="text/html" title="белль"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip0">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "bell",
+  "name": "белль",
+  "title": "белль",
+  "desc": "Многообразие форм, цветов, размеров и узоров. Вкупе с лентами и вишенками — полная тортовая феерия!",
+  "subtitle": "Торт назван в честь принцессы из мультфильма «Красавица и чудовище» компании Дисней.",
+  "decorPerTier": 3000,
+  "minWeight": 6,
+  "minTiers": 6,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip0">копировать сниппет</button>
+          <span class="ok" data-ok="snip0">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">люмьер</span>
+        <a class="open" href="tiered/lumiere.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/lumiere.html" type="text/html" title="люмьер"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip1">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "lumiere",
+  "name": "люмьер",
+  "title": "люмьер",
+  "desc": "Ещё более смелый и фееричный вариант торта Белль. Каждый ярус может быть с разной начинкой.",
+  "subtitle": "Торт назван в честь заколдованного персонажа мультфильма «Красавица и чудовище» компании Дисней.",
+  "decorPerTier": 3000,
+  "minWeight": 10,
+  "minTiers": 10,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip1">копировать сниппет</button>
+          <span class="ok" data-ok="snip1">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">fairy cake</span>
+        <a class="open" href="tiered/fairy-cake.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/fairy-cake.html" type="text/html" title="fairy cake"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip2">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "fairy-cake",
+  "name": "fairy cake",
+  "title": "fairy cake",
+  "desc": "По-настоящему сказочный большой торт, как из мультика. Мечта детства!",
+  "subtitle": "Для сохранения сказочного объёма при небольшом весе возможно использование фальш-ярусов.",
+  "decorPerTier": 3000,
+  "minWeight": 4,
+  "minTiers": 2,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip2">копировать сниппет</button>
+          <span class="ok" data-ok="snip2">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">big cherry fairy cake</span>
+        <a class="open" href="tiered/big-cherry-fairy-cake.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/big-cherry-fairy-cake.html" type="text/html" title="big cherry fairy cake"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip3">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "big-cherry-fairy-cake",
+  "name": "big cherry fairy cake",
+  "title": "big cherry fairy cake",
+  "desc": "Ещё больше усиливаем сказочность фэири кейка большой мультяшной вишней на макушке. Вот это действительно cherry on top!",
+  "subtitle": "Внутри вишенки — торт, поэтому она считается отдельным ярусом.",
+  "decorPerTier": 3000,
+  "minWeight": 4,
+  "minTiers": 3,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip3">копировать сниппет</button>
+          <span class="ok" data-ok="snip3">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">шапито</span>
+        <a class="open" href="tiered/chapito.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/chapito.html" type="text/html" title="шапито"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip4">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "chapito",
+  "name": "шапито",
+  "title": "шапито",
+  "desc": "Нет минимализму! Дофаминовый тортик в цирковом стиле.",
+  "subtitle": "Цвет и другие детали могут меняться по вашему желанию.",
+  "decorPerTier": 3000,
+  "minWeight": 6,
+  "minTiers": 2,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip4">копировать сниппет</button>
+          <span class="ok" data-ok="snip4">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">куинджи</span>
+        <a class="open" href="tiered/kuinji.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/kuinji.html" type="text/html" title="куинджи"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip5">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "kuinji",
+  "name": "куинджи",
+  "title": "куинджи",
+  "desc": "Красота живой природы, перенесённая на торт. Узоры, цветы, листья, орнаменты.",
+  "subtitle": "Торт назван в честь выдающегося русского художника-пейзажиста. Стоимость декора зависит от сложности росписи.",
+  "decorPerTier": 3000,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "note": "Стоимость декора зависит от сложности — может быть выше.",
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip5">копировать сниппет</button>
+          <span class="ok" data-ok="snip5">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">дарси</span>
+        <a class="open" href="tiered/darcy.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/darcy.html" type="text/html" title="дарси"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip6">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "darcy",
+  "name": "дарси",
+  "title": "дарси",
+  "desc": "Монохром, крем — и всё! Базовый, но в то же время породистый торт. Классическая классика.",
+  "subtitle": "Торт назван в честь одного из главных героев романа Джейн Остин «Гордость и предубеждение».",
+  "decorPerTier": 3000,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip6">копировать сниппет</button>
+          <span class="ok" data-ok="snip6">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">shine bright</span>
+        <a class="open" href="tiered/shine-bright.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/shine-bright.html" type="text/html" title="shine bright"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip7">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "shine-bright",
+  "name": "shine bright",
+  "title": "shine bright",
+  "desc": "Торт для тех, кто хочет сиять! Покрытие может быть серебряным, золотым или перламутровым.",
+  "subtitle": "Название торта вдохновлено строчкой из песни Рианны Diamonds.",
+  "decorPerTier": 3500,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip7">копировать сниппет</button>
+          <span class="ok" data-ok="snip7">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">келли</span>
+        <a class="open" href="tiered/kelly.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/kelly.html" type="text/html" title="келли"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip8">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "kelly",
+  "name": "келли",
+  "title": "келли",
+  "desc": "Ярусный торт может быть плоским и выглядеть эстетично и аккуратно! Утончённый декор и игра с цветом.",
+  "subtitle": "Торт назван в честь иконы Голливуда Грейс Келли.",
+  "decorPerTier": 2000,
+  "minWeight": 4,
+  "minTiers": 2,
+  "mobile": true,
+  "fillings": FILLING_SETS.TYPE3_LOVE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip8">копировать сниппет</button>
+          <span class="ok" data-ok="snip8">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">элизабет</span>
+        <a class="open" href="tiered/elizabeth.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/elizabeth.html" type="text/html" title="элизабет"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip9">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "elizabeth",
+  "name": "элизабет",
+  "title": "элизабет",
+  "desc": "Классическая классика! Но в отличии от «Дарси» более нарядный: ягоды, ленты, цветочки, бусины и многое другое!",
+  "subtitle": "Торт назван в честь главной героини романа Джейн Остин «Гордость и предубеждение».",
+  "decorPerTier": 3000,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip9">копировать сниппет</button>
+          <span class="ok" data-ok="snip9">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">tiered</span>
+        <span class="name">fuji</span>
+        <a class="open" href="tiered/fuji.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="tiered/fuji.html" type="text/html" title="fuji"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip10">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderTieredCake({
+  "id": "fuji",
+  "name": "fuji",
+  "title": "fuji",
+  "desc": "Объёмная шапка из крема, цветные полоски, бантики, ягоды. Азиатский стиль!",
+  "subtitle": "Торт назван в честь главного символа Японии.",
+  "decorPerTier": 3500,
+  "minWeight": 1.5,
+  "minTiers": 1,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip10">копировать сниппет</button>
+          <span class="ok" data-ok="snip10">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">fixed</span>
+        <span class="name">фаберже</span>
+        <a class="open" href="fixed/faberge.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="fixed/faberge.html" type="text/html" title="фаберже"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip11">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderFixedCake({
+  "id": "faberge",
+  "name": "фаберже",
+  "title": "фаберже",
+  "desc": "По-императорски величественный и роскошный торт с вензелями, рюшами и лепниной.",
+  "subtitle": "Торт назван в честь знаменитых ювелирных изделий Российского Императорского Дома, ставших символом роскоши и богатства.",
+  "decor": {
+    "2.5": 3000,
+    "3.5": 3500
+  },
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip11">копировать сниппет</button>
+          <span class="ok" data-ok="snip11">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">fixed</span>
+        <span class="name">secret garden</span>
+        <a class="open" href="fixed/secret-garden.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="fixed/secret-garden.html" type="text/html" title="secret garden"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip12">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderFixedCake({
+  "id": "secret-garden",
+  "name": "secret garden",
+  "title": "secret garden",
+  "desc": "Минималистично, необычно, аутентично. Цветы могут быть любые, главное — единая композиция!",
+  "subtitle": "Торт назван в честь романа Фрэнсис Бёрнетт о надежде и исцелении.",
+  "decor": {
+    "2.5": 3500,
+    "3.5": 4000
+  },
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip12">копировать сниппет</button>
+          <span class="ok" data-ok="snip12">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">fixed</span>
+        <span class="name">blueberry hill</span>
+        <a class="open" href="fixed/blueberry-hill.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="fixed/blueberry-hill.html" type="text/html" title="blueberry hill"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip13">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderFixedCake({
+  "id": "blueberry-hill",
+  "name": "blueberry hill",
+  "title": "blueberry hill",
+  "desc": "Тот случай, когда ягода — центральный (и единственный) элемент декора. Торт на 100% покрыт ягодами!",
+  "subtitle": "Торт назван в честь классического хита Фэтса Домино.",
+  "decor": {
+    "2.5": 5500,
+    "3.5": 6500
+  },
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip13">копировать сниппет</button>
+          <span class="ok" data-ok="snip13">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">fixed</span>
+        <span class="name">la la land</span>
+        <a class="open" href="fixed/la-la-land.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="fixed/la-la-land.html" type="text/html" title="la la land"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip14">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderFixedCake({
+  "id": "la-la-land",
+  "name": "la la land",
+  "title": "la la land",
+  "desc": "Изящные, необычные кремовые узоры, ягоды и ленты. Отличный вариант для небольшого дня рождения!",
+  "subtitle": "Торт назван в честь оскароносного мюзикла о несбывшейся любви.",
+  "decor": {
+    "2.5": 3000,
+    "3.5": 3500
+  },
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip14">копировать сниппет</button>
+          <span class="ok" data-ok="snip14">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">богемская рапсодия</span>
+        <a class="open" href="weight/bohemian-rhapsody.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/bohemian-rhapsody.html" type="text/html" title="богемская рапсодия"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip15">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "bohemian-rhapsody",
+  "name": "богемская рапсодия",
+  "title": "богемская рапсодия",
+  "desc": "Кремовые рюши, роскошный декор и элегантные сахарные фрукты. Настоящее тортовое барокко!",
+  "subtitle": "Торт назван в честь вечного хита группы Queen.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 8.5,
+      "price": 4500
+    },
+    {
+      "min": 9,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip15">копировать сниппет</button>
+          <span class="ok" data-ok="snip15">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">вавилон</span>
+        <a class="open" href="weight/babylon.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/babylon.html" type="text/html" title="вавилон"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip16">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "babylon",
+  "name": "вавилон",
+  "title": "вавилон",
+  "desc": "Высокий, грациозный, впечатляющий торт. Возможен только лёгкий кремовый декор или банты.",
+  "subtitle": "Название торта вдохновлено древним мифом о попытке людей построить высочайшую башню и добраться до небес.",
+  "decorTable": [
+    {
+      "min": 10,
+      "max": 14.5,
+      "price": 10000
+    },
+    {
+      "min": 15,
+      "max": 18.5,
+      "price": 15000
+    },
+    {
+      "min": 19,
+      "max": 30,
+      "price": 18500
+    }
+  ],
+  "minWeight": 10,
+  "maxWeight": 30,
+  "mobile": true,
+  "fillings": FILLING_SETS.NO_SNICKERS_NO_DORBLU
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip16">копировать сниппет</button>
+          <span class="ok" data-ok="snip16">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">лебединое озеро</span>
+        <a class="open" href="weight/swan-lake.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/swan-lake.html" type="text/html" title="лебединое озеро"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip17">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "swan-lake",
+  "name": "лебединое озеро",
+  "title": "лебединое озеро",
+  "desc": "Утончённый и глубокий, как русское искусство 19 века. Кремовые цветы, миндальные лепестки, лебеди из безе.",
+  "subtitle": "Торт назван в честь покорившего весь мир балета Петра Ильича Чайковского.",
+  "decorTable": [
+    {
+      "min": 2,
+      "max": 20,
+      "price": 2500
+    }
+  ],
+  "minWeight": 2,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHERNIKA
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip17">копировать сниппет</button>
+          <span class="ok" data-ok="snip17">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">green day</span>
+        <a class="open" href="weight/green-day.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/green-day.html" type="text/html" title="green day"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip18">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "green-day",
+  "name": "green day",
+  "title": "green day",
+  "desc": "Азиатский стиль, вписанный в современный праздничный торт. Виноград сорта шайн мускат дополняет почти любую начинку.",
+  "subtitle": "Торт назван в честь культовой американской панк-рок группы.",
+  "decorTable": [
+    {
+      "min": 3,
+      "max": 9.5,
+      "price": 4500
+    },
+    {
+      "min": 10,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 3,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip18">копировать сниппет</button>
+          <span class="ok" data-ok="snip18">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">вишневый сад</span>
+        <a class="open" href="weight/cherry-orchard.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/cherry-orchard.html" type="text/html" title="вишневый сад"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip19">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "cherry-orchard",
+  "name": "вишневый сад",
+  "title": "вишневый сад",
+  "desc": "Эффектный торт с поляной из черешни и эстетичными кремовыми рюшами.",
+  "subtitle": "Торт назван в честь пьесы Антона Павловича Чехова об уходящей эпохе и неизбежности перемен.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 7.5,
+      "price": 5500
+    },
+    {
+      "min": 8,
+      "max": 12,
+      "price": 8000
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 12500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip19">копировать сниппет</button>
+          <span class="ok" data-ok="snip19">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">любовное настроение</span>
+        <a class="open" href="weight/love-in-mood.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/love-in-mood.html" type="text/html" title="любовное настроение"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip20">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "love-in-mood",
+  "name": "любовное настроение",
+  "title": "любовное настроение",
+  "desc": "Любовь — лучшее, что случалось с этим миром! Поэтому и сердце должно быть большим. Классический вариант для свадьбы.",
+  "subtitle": "Торт назван в честь культовой мелодрамы Вонга Карвая.",
+  "decorTable": [
+    {
+      "min": 3,
+      "max": 6.5,
+      "price": 3500
+    },
+    {
+      "min": 7,
+      "max": 12,
+      "price": 5000
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 3,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.TYPE3_LOVE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip20">копировать сниппет</button>
+          <span class="ok" data-ok="snip20">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">анна</span>
+        <a class="open" href="weight/anna.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/anna.html" type="text/html" title="анна"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip21">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "anna",
+  "name": "анна",
+  "title": "анна",
+  "desc": "Аристократичный эффектный торт с рюшами, лентами и большим количеством свежих ягод или фруктов.",
+  "subtitle": "Торт назван в честь главной героини романа Льва Толстого «Анна Каренина».",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 7.5,
+      "price": 6000
+    },
+    {
+      "min": 8,
+      "max": 12,
+      "price": 10000
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 16000
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip21">копировать сниппет</button>
+          <span class="ok" data-ok="snip21">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">ягодные поля навсегда</span>
+        <a class="open" href="weight/berry-fields.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/berry-fields.html" type="text/html" title="ягодные поля навсегда"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip22">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "berry-fields",
+  "name": "ягодные поля навсегда",
+  "title": "ягодные поля",
+  "desc": "Свежая сочная ягода — чем не идеальное дополнение к торту? Особенно когда её ТАК много!",
+  "subtitle": "Название вдохновлено знаковой песней группы the Beatles.",
+  "decorTable": [
+    {
+      "min": 2,
+      "max": 2,
+      "price": 3000
+    },
+    {
+      "min": 2.5,
+      "max": 3,
+      "price": 5500
+    },
+    {
+      "min": 3.5,
+      "max": 4,
+      "price": 6000
+    },
+    {
+      "min": 4.5,
+      "max": 5,
+      "price": 7000
+    },
+    {
+      "min": 5.5,
+      "max": 6,
+      "price": 8000
+    },
+    {
+      "min": 6.5,
+      "max": 7,
+      "price": 9000
+    },
+    {
+      "min": 7.5,
+      "max": 8,
+      "price": 10000
+    },
+    {
+      "min": 8.5,
+      "max": 9,
+      "price": 11000
+    },
+    {
+      "min": 9.5,
+      "max": 10,
+      "price": 12000
+    },
+    {
+      "min": 10.5,
+      "max": 11,
+      "price": 13000
+    },
+    {
+      "min": 11.5,
+      "max": 12,
+      "price": 14000
+    },
+    {
+      "min": 12.5,
+      "max": 13,
+      "price": 15000
+    },
+    {
+      "min": 13.5,
+      "max": 14,
+      "price": 16000
+    },
+    {
+      "min": 14.5,
+      "max": 15,
+      "price": 17000
+    },
+    {
+      "min": 15.5,
+      "max": 16,
+      "price": 18000
+    },
+    {
+      "min": 16.5,
+      "max": 17,
+      "price": 19000
+    },
+    {
+      "min": 17.5,
+      "max": 18,
+      "price": 20000
+    },
+    {
+      "min": 18.5,
+      "max": 19,
+      "price": 22000
+    },
+    {
+      "min": 19.5,
+      "max": 20,
+      "price": 24000
+    }
+  ],
+  "minWeight": 2,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip22">копировать сниппет</button>
+          <span class="ok" data-ok="snip22">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">вам письмо</span>
+        <a class="open" href="weight/letter.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/letter.html" type="text/html" title="вам письмо"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip23">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "letter",
+  "name": "вам письмо",
+  "title": "вам письмо",
+  "desc": "Послание во вселенную прямо на торте! Лучше лаконично и ёмко.",
+  "subtitle": "Торт назван в честь культового ромкома 90-х.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 7.5,
+      "price": 3000
+    },
+    {
+      "min": 8,
+      "max": 12,
+      "price": 4500
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 5000
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip23">копировать сниппет</button>
+          <span class="ok" data-ok="snip23">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">орфей</span>
+        <a class="open" href="weight/orpheus.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/orpheus.html" type="text/html" title="орфей"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip24">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "orpheus",
+  "name": "орфей",
+  "title": "орфей",
+  "desc": "Классического вида, но необычный своей вытянутостью торт. Может быть только длинным, низким и/или узким.",
+  "subtitle": "Торт назван в честь божественного музыканта, героя древнегреческой мифологии, сына Аполлона.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 7.5,
+      "price": 3500
+    },
+    {
+      "min": 8,
+      "max": 12.5,
+      "price": 5000
+    },
+    {
+      "min": 13,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHERNIKA
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip24">копировать сниппет</button>
+          <span class="ok" data-ok="snip24">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">аполлон</span>
+        <a class="open" href="weight/apollo.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/apollo.html" type="text/html" title="аполлон"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip25">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "apollo",
+  "name": "аполлон",
+  "title": "аполлон",
+  "desc": "Величественный и изящный прямоугольный торт. В отличие от «орфея» более широкий и классический.",
+  "subtitle": "Торт назван в честь древнегреческого бога света, покровителя муз и искусств, отца Орфея.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 6.5,
+      "price": 4000
+    },
+    {
+      "min": 7,
+      "max": 12,
+      "price": 6000
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 7500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHERNIKA
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip25">копировать сниппет</button>
+          <span class="ok" data-ok="snip25">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">sailor moon</span>
+        <a class="open" href="weight/sailor-moon.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/sailor-moon.html" type="text/html" title="sailor moon"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip26">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "sailor-moon",
+  "name": "sailor moon",
+  "title": "sailor moon",
+  "desc": "Яркий и смелый, с множеством деталей и форм. Может быть в виде сердца, но не обязательно.",
+  "subtitle": "Торт назван в честь культового аниме-сериала. Только 1 ярус!",
+  "decorTable": [
+    {
+      "min": 1.5,
+      "max": 3.5,
+      "price": 3000
+    },
+    {
+      "min": 4,
+      "max": 5.5,
+      "price": 3500
+    },
+    {
+      "min": 6,
+      "max": 7,
+      "price": 5500
+    }
+  ],
+  "minWeight": 1.5,
+  "maxWeight": 7,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip26">копировать сниппет</button>
+          <span class="ok" data-ok="snip26">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">dancing queen</span>
+        <a class="open" href="weight/dancing-queen.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/dancing-queen.html" type="text/html" title="dancing queen"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip27">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "dancing-queen",
+  "name": "dancing queen",
+  "title": "dancing queen",
+  "desc": "Нестандартная форма и изящные кремовые изгибы. Это смотрится мило и благородно одновременно!",
+  "subtitle": "Торт назван в честь великого поп-хита группы ABBA. Декор выполнен из шоколадного крема.",
+  "decorTable": [
+    {
+      "min": 2,
+      "max": 4.5,
+      "price": 4000
+    },
+    {
+      "min": 5,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 2,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip27">копировать сниппет</button>
+          <span class="ok" data-ok="snip27">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">тоторо</span>
+        <a class="open" href="weight/totoro.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/totoro.html" type="text/html" title="тоторо"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip28">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "totoro",
+  "name": "тоторо",
+  "title": "тоторо",
+  "desc": "Торт не всегда должен быть эффектным или эстетичным, иногда он может быть просто милым или забавным.",
+  "subtitle": "Торт назван в честь героя анимационного фильма Хаяо Миядзаки о дружбе и доброте.",
+  "decorTable": [
+    {
+      "min": 1.5,
+      "max": 2.5,
+      "price": 2500
+    },
+    {
+      "min": 3,
+      "max": 5,
+      "price": 3500
+    }
+  ],
+  "minWeight": 1.5,
+  "maxWeight": 5,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip28">копировать сниппет</button>
+          <span class="ok" data-ok="snip28">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header>
+        <span class="type">weight</span>
+        <span class="name">тирамису</span>
+        <a class="open" href="weight/tiramisu.html" target="_blank" title="открыть в новой вкладке">↗</a>
+      </header>
+      <div class="frame-wrap"><object data="weight/tiramisu.html" type="text/html" title="тирамису"></object></div>
+      <div class="snip">
+        <textarea readonly id="snip29">&lt;link rel="stylesheet" href="https://ab-aacoop.github.io/kosmos_calc/calculator/style.css?v=1779878835">
+&lt;div class="calc-frame">
+  &lt;div class="calc-scroll" id="root">&lt;/div>
+&lt;/div>
+&lt;script src="https://ab-aacoop.github.io/kosmos_calc/calculator/core.js?v=1779804907">&lt;/script>
+&lt;script>
+renderWeightCake({
+  "id": "tiramisu",
+  "name": "тирамису",
+  "title": "тирамису",
+  "desc": "Mama mia, dolce vita, bellissimo! Настоящий итальянский тирамису.",
+  "subtitle": "Может быть круглым или длинным. Эффектно смотрится в большой ширине. Только начинка тирамису.",
+  "decorTable": [
+    {
+      "min": 1,
+      "max": 10,
+      "price": 0
+    }
+  ],
+  "minWeight": 1,
+  "maxWeight": 10,
+  "mobile": true,
+  "fillings": FILLING_SETS.TIRAMISU
+});
+&lt;/script></textarea>
+        <div class="snip-row">
+          <button type="button" data-copy="snip29">копировать сниппет</button>
+          <span class="ok" data-ok="snip29">✓ скопировано</span>
+        </div>
+      </div>
+    </div>
+</div>
+<script>
+document.addEventListener('click', function(e){
+  var b = e.target.closest('button[data-copy]');
+  if (!b) return;
+  var id = b.dataset.copy;
+  var ta = document.getElementById(id);
+  if (!ta) return;
+  ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(_){}
+  if (!ok && navigator.clipboard){
+    navigator.clipboard.writeText(ta.value).then(function(){ flash(id); });
+    return;
+  }
+  if (ok) flash(id);
+});
+function flash(id){
+  var el = document.querySelector('[data-ok="'+id+'"]');
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 1800);
+}
+</script>
+</body>
+</html>

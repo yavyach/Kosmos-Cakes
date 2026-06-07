@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>богемская рапсодия — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1779879077">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1779804907"></script>
+<script>
+renderWeightCake({
+  "id": "bohemian-rhapsody",
+  "name": "богемская рапсодия",
+  "title": "богемская рапсодия",
+  "desc": "Кремовые рюши, роскошный декор и элегантные сахарные фрукты. Настоящее тортовое барокко!",
+  "subtitle": "Торт назван в честь вечного хита группы Queen.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 8.5,
+      "price": 4500
+    },
+    {
+      "min": 9,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+</script>
+</body>
+</html>

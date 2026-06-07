@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 — космос кейк</title>
+<style>
+  /* ============================================================
+     ПАЛИТРА И ШРИФТЫ (та же, что в калькуляторе)
+     ============================================================ */
+  :root{
+    --bg:#cfcfcf;
+    --red:#D2363C;
+    --pink:#F16471;
+    --rose:#E55264;
+    --stem:#442216;
+    --display:'ALS Beast', system-ui, sans-serif;
+    --text:'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  @font-face{
+    font-family:'ALS Beast';
+    src: local('ALS Beast'), local('ALS Beast Ultra'),
+         url('https://ab-aacoop.github.io/kosmos_calc/calculator/assets/ALS_Beast_Ultra.otf') format('opentype'),
+         url('assets/ALS_Beast_Ultra.otf') format('opentype');
+    font-weight:900;font-style:normal;font-display:block;
+  }
+  @font-face{
+    font-family:'Golos Text';
+    src: local('Golos Text'),
+         url('https://ab-aacoop.github.io/kosmos_calc/calculator/assets/GolosText-Regular.ttf') format('truetype'),
+         url('assets/GolosText-Regular.ttf') format('truetype');
+    font-weight:400;font-display:swap;
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;padding:0;height:100%;
+    background:var(--bg);
+    color:var(--red);
+    font-family:var(--text);
+    overflow:hidden;
+  }
+
+  .page{
+    height:100%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;padding:24px;
+  }
+
+  /* сцена с цифрами */
+  .stage{
+    position:relative;
+    width:min(94vw, 1100px);
+    height:min(62vh, 420px);
+  }
+  /* в портретной мобилке — три цифры столбиком, сцена выше */
+  body.is-mobile .stage{
+    width:min(92vw, 520px);
+    height:min(72vh, 720px);
+  }
+
+  /* подпись «так не бывает» — белым жирным */
+  .sub{
+    font-family:var(--display);font-weight:900;
+    text-transform:lowercase;color:#fff;
+    font-size:clamp(22px, 4vw, 34px);
+    line-height:1;letter-spacing:.2px;
+    text-align:center;margin:0;
+  }
+  .sub::first-letter{text-transform:uppercase}
+
+  /* искра-разделитель */
+  .sep{
+    width:18px;height:18px;color:var(--red);
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .sep svg{width:100%;height:100%;fill:currentColor;display:block}
+
+  /* ссылка «перейти к каталогу» — красным жирным, без рамки */
+  .back{
+    background:none;border:0;padding:0;
+    color:var(--red);
+    font-family:var(--display);font-weight:900;
+    font-size:clamp(18px, 3vw, 26px);
+    text-transform:lowercase;letter-spacing:.2px;line-height:1;
+    text-decoration:none;cursor:pointer;
+    transition:color .15s ease, transform .08s ease;
+  }
+  .back:hover{color:var(--rose)}
+  .back:active{transform:scale(.97)}
+
+  /* одна вишня = три вложенности:
+       .cherry      — позиция (и появление через opacity/translate)
+       .cherry__rot — случайный наклон
+       .cherry__bob — лёгкое покачивание стеблем
+  */
+  .cherry{
+    position:absolute;
+    width:var(--cw, 22px);height:var(--ch, 42px);
+    opacity:0;
+    transform:translateY(-8px) scale(.85);
+    animation:cherryIn .55s ease-out forwards;
+    animation-delay:var(--delay, 0s);
+    pointer-events:none;
+  }
+  .cherry__rot{
+    width:100%;height:100%;
+    transform:rotate(var(--rot, 0deg));
+    transform-origin:50% 100%;
+  }
+  .cherry__bob{
+    width:100%;height:100%;
+    transform-origin:50% 100%;
+    animation:cherryBob 3.6s ease-in-out infinite;
+    animation-delay:var(--delay, 0s);
+  }
+  .cherry svg{display:block;width:100%;height:100%}
+
+  @keyframes cherryIn{
+    from{opacity:0; transform:translateY(-8px) scale(.85)}
+    to  {opacity:1; transform:translateY(0)     scale(1)}
+  }
+  @keyframes cherryBob{
+    0%, 100%{ transform: rotate(-1.5deg); }
+    50%     { transform: rotate( 1.5deg); }
+  }
+
+  /* служебный canvas (не виден) */
+  #probe{position:absolute;left:-99999px;top:-99999px;visibility:hidden}
+
+  @media (max-width:520px){
+    .page{gap:10px;padding:14px}
+    .stage{height:46vh}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="stage" id="stage"></div>
+  <p class="sub">так не бывает</p>
+  <span class="sep" aria-hidden="true">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 4 C52 38, 62 48, 96 50 C62 52, 52 62, 50 96 C48 62, 38 52, 4 50 C38 48, 48 38, 50 4 Z"/></svg>
+  </span>
+  <a class="back" href="/" id="back">перейти к каталогу</a>
+</div>
+
+<canvas id="probe"></canvas>
+
+<script>
+/* =========================================================
+   Параметры, которые легко крутить вдвоём:
+   ========================================================= */
+const CFG = {
+  text:      '404',
+  // десктоп — одна строка «404»
+  desktop:   { stepX:18, stepY:22, cherryW:16, cherryH:30, fzFactor:1.0  },
+  // мобилка — три строки «4 / 0 / 4»: цифры почти на всю высоту строки,
+  // сетка очень плотная, вишни мелкие
+  mobile:    { stepX:10, stepY:12, cherryW:10, cherryH:18, fzFactor:0.95 },
+  hex:       true, // сдвиг каждой второй строки на stepX/2 (соты)
+  rotMax:    14,   // макс. угол наклона стебля, ±°
+  alpha:     90,   // порог прозрачности пикселя из canvas (0..255)
+  inDelayPerCol: 0.010, // волна появления слева-направо, сек/колонка
+  inJitter:  0.25  // случайный разброс задержки появления
+};
+
+/* SVG вишни — это твой исходник 1:1 */
+const CHERRY_SVG = `<svg viewBox="0 0 19 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8.7963 35.889C13.6544 35.889 17.5926 31.9507 17.5926 27.0927C17.5926 22.2346 13.6544 18.2964 8.7963 18.2964C3.93824 18.2964 0 22.2346 0 27.0927C0 31.9507 3.93824 35.889 8.7963 35.889Z" fill="#D2373C"/>
+  <path d="M10.5356 25.3333L9.14795 24.7848L17.6121 0L18.9998 0.548568L10.5356 25.3333Z" fill="#442216"/>
+</svg>`;
+
+async function build(){
+  const stage = document.getElementById('stage');
+  stage.innerHTML = '';
+
+  // портретная мобилка → ставим маркер на body, чтобы сцена стала выше,
+  // а цифры рисуются построчно (4 / 0 / 4)
+  const isMobile = window.innerWidth < 640 || window.innerWidth < window.innerHeight * 0.85;
+  document.body.classList.toggle('is-mobile', isMobile);
+  const lines = isMobile ? CFG.text.split('') : [CFG.text];
+  const P = isMobile ? CFG.mobile : CFG.desktop;
+
+  // ждём, пока загрузится жирный ALS Beast — иначе canvas нарисует системным
+  try{
+    await document.fonts.load('900 280px "ALS Beast"');
+    await document.fonts.ready;
+  }catch(_){}
+
+  const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  const W = stage.clientWidth;
+  const H = stage.clientHeight;
+
+  // готовим canvas в физических пикселях
+  const probe = document.getElementById('probe');
+  probe.width  = W * dpr;
+  probe.height = H * dpr;
+  const ctx = probe.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.textBaseline = 'middle';
+  ctx.textAlign    = 'center';
+  ctx.fillStyle    = '#000';
+
+  // ищем максимальный шрифт, при котором все строки влезают и по ширине, и по высоте
+  const lineH = H / lines.length;
+  let fz = Math.floor(lineH * P.fzFactor);
+  while (fz > 40){
+    ctx.font = `900 ${fz}px "ALS Beast", system-ui, sans-serif`;
+    const maxW = Math.max(...lines.map(l => ctx.measureText(l).width));
+    if (maxW <= W * 0.92) break;
+    fz -= 4;
+  }
+  ctx.font = `900 ${fz}px "ALS Beast", system-ui, sans-serif`;
+  // утолщаем линии цифр — на случай, если шрифт-fallback тоньше ALS Beast.
+  // strokeText расширяет контур, и форма становится плотной независимо от шрифта.
+  ctx.strokeStyle = '#000';
+  ctx.lineJoin = 'round';
+  ctx.lineCap  = 'round';
+  ctx.lineWidth = Math.max(2, P.stepX * 0.6);
+  lines.forEach((line, i) => {
+    const yC = lineH * (i + 0.5);
+    ctx.fillText  (line, W/2, yC);
+    ctx.strokeText(line, W/2, yC);
+  });
+
+  // снимаем альфу
+  const data = ctx.getImageData(0, 0, W*dpr, H*dpr).data;
+
+  // bbox колонок — чтобы анимация шла волной слева-направо
+  let minX = Infinity, maxX = -Infinity;
+  for (let y = 0; y < H; y += P.stepY){
+    for (let x = 0; x < W; x += P.stepX){
+      const px = ((y*dpr|0) * (W*dpr) + (x*dpr|0)) * 4;
+      if (data[px + 3] > CFG.alpha){
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+      }
+    }
+  }
+  if (!isFinite(minX)) { minX = 0; maxX = W; }
+  const span = Math.max(1, maxX - minX);
+
+  // расставляем вишни только внутри контура «404»
+  const offsetX = CFG.hex ? P.stepX/2 : 0;
+  const jitterX = Math.min(4, P.stepX * 0.2);
+  const jitterY = Math.min(3, P.stepY * 0.15);
+  for (let y = P.stepY/2; y < H; y += P.stepY){
+    const row    = Math.floor(y / P.stepY);
+    const rowOff = (CFG.hex && (row % 2)) ? offsetX : 0;
+    for (let x = rowOff; x < W; x += P.stepX){
+      const jx = (Math.random() - 0.5) * jitterX;
+      const jy = (Math.random() - 0.5) * jitterY;
+      const sx = Math.max(0, Math.min(W-1, x + jx));
+      const sy = Math.max(0, Math.min(H-1, y + jy));
+      const px = ((sy*dpr|0) * (W*dpr) + (sx*dpr|0)) * 4;
+      if (data[px + 3] <= CFG.alpha) continue;
+
+      const rot   = ((Math.random()*2 - 1) * CFG.rotMax).toFixed(1);
+      const delay = (((sx - minX)/span) * (CFG.text.length * 0.25)
+                     + Math.random() * CFG.inJitter).toFixed(3);
+
+      const el = document.createElement('div');
+      el.className = 'cherry';
+      el.style.left  = (sx - P.cherryW/2)      + 'px';
+      el.style.top   = (sy - P.cherryH * 0.72) + 'px';
+      el.style.setProperty('--cw',    P.cherryW + 'px');
+      el.style.setProperty('--ch',    P.cherryH + 'px');
+      el.style.setProperty('--rot',   rot + 'deg');
+      el.style.setProperty('--delay', delay + 's');
+      el.innerHTML =
+        `<div class="cherry__rot"><div class="cherry__bob">${CHERRY_SVG}</div></div>`;
+      stage.appendChild(el);
+    }
+  }
+}
+
+let _rebuildTimer;
+function scheduleBuild(){
+  clearTimeout(_rebuildTimer);
+  _rebuildTimer = setTimeout(build, 120);
+}
+
+window.addEventListener('load',   build);
+window.addEventListener('resize', scheduleBuild);
+</script>
+
+</body>
+</html>

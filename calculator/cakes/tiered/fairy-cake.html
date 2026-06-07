@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>fairy cake — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1779879077">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1779804907"></script>
+<script>
+renderTieredCake({
+  "id": "fairy-cake",
+  "name": "fairy cake",
+  "title": "fairy cake",
+  "desc": "По-настоящему сказочный большой торт, как из мультика. Мечта детства!",
+  "subtitle": "Для сохранения сказочного объёма при небольшом весе возможно использование фальш-ярусов.",
+  "decorPerTier": 3000,
+  "minWeight": 4,
+  "minTiers": 2,
+  "mobile": true,
+  "fillings": FILLING_SETS.BASE
+});
+</script>
+</body>
+</html>

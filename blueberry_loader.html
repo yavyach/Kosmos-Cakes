@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Berry Loader</title>
+<style>
+  :root{
+    --bg:#cfcfcf;
+    --red:#D2363C;
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;padding:0;height:100%;width:100%;
+    background:var(--bg);
+    color:var(--red);
+    overflow:hidden;
+  }
+
+  .loader-container{
+    height:100vh;width:100vw;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:24px;
+    padding:24px;
+  }
+
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
+  }
+
+  .loader-text{
+    font-family: system-ui, sans-serif;
+    font-weight: 400;
+    color: var(--red);
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin: 0;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%, 100%{opacity:0.6}
+    50%{opacity:1}
+  }
+
+  .berry{
+    position:absolute;
+    width:var(--cw, 28px);height:var(--ch, 52px);
+    opacity:1;
+    transform:scale(1);
+    animation:none;
+    animation-delay:var(--delay, 0s);
+    pointer-events:none;
+  }
+  .berry__rot{
+    width:100%;height:100%;
+    transform:rotate(var(--rot, 0deg));
+    transform-origin:50% 100%;
+  }
+  .berry__bob{
+    width:100%;height:100%;
+    transform-origin:50% 100%;
+    animation:none;
+    animation-delay:var(--delay, 0s);
+  }
+  .berry svg{display:block;width:100%;height:100%}
+
+  @keyframes berryIn{
+    from{opacity:0; transform:translateY(-12px) scale(.85)}
+    to  {opacity:1; transform:translateY(0)     scale(1)}
+  }
+  @keyframes berryBob{
+    0%, 100%{ transform: rotate(-1.5deg); }
+    50%     { transform: rotate( 1.5deg); }
+  }
+
+  #probe{position:absolute;left:-99999px;top:-99999px;visibility:hidden}
+</style>
+</head>
+<body>
+
+<div class="loader-container">
+  <div class="stage" id="stage"></div>
+  <p class="loader-text">украшаем сайт ягодами...</p>
+</div>
+
+<canvas id="probe"></canvas>
+
+<script>
+const CFG = {
+  rotMax:    14,
+  alpha:     90,
+  totalDuration: 10,
+  desktop:   { stepX:28, stepY:34, cherryW:20, cherryH:38 },
+  hex:       true
+};
+
+const BLUEBERRY_SVG = `<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="90" cy="90" r="90" fill="url(#paint0_linear_1311_5560)"/>
+<path d="M69.6799 41.2648C64.9836 42.3503 57.4876 64.3324 54.3266 75.1878C40.6296 78.2032 10.1613 80.5 10.0747 86.0431C9.95035 94 35.5119 99.6124 49.811 105.492C45.2953 115.594 37.709 136.249 43.489 138.058C49.2691 139.868 63.358 126.751 69.6799 119.966C82.0227 127.655 106.799 140.501 107.16 130.369C107.612 117.705 90.0005 101.874 93.1614 100.969C96.3224 100.065 125.223 86.9477 123.868 79.7108C122.784 73.9213 97.2255 74.2832 84.5817 75.1878C81.5712 63.4278 74.3762 40.1792 69.6799 41.2648Z" fill="url(#paint1_radial_1311_5560)"/>
+<defs>
+<linearGradient id="paint0_linear_1311_5560" x1="180" y1="90" x2="0" y2="90" gradientUnits="userSpaceOnUse">
+<stop stop-color="#485E8A"/>
+<stop offset="1" stop-color="#8CB0FB"/>
+</linearGradient>
+<radialGradient id="paint1_radial_1311_5560" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(67 96.5) rotate(90.008) scale(41.728 62.0569)">
+<stop stop-color="#080F1F"/>
+<stop offset="0.182692" stop-color="#0B1428"/>
+<stop offset="0.25" stop-color="#234085"/>
+</radialGradient>
+</defs>
+</svg>`;
+
+async function build(){
+  const stage = document.getElementById('stage');
+  stage.innerHTML = '';
+
+  // TIGHT HONEYCOMB GRID - плотная сетка вишен с отступом -0.15
+  const gridSpacingX = 100;  // базовый размер сетки
+  const gridSpacingY = 100;
+  const tightness = 0.85;    // -0.15 = 85% от полного размера
+  const effectiveSpacingX = gridSpacingX * tightness;
+  const effectiveSpacingY = gridSpacingY * tightness;
+  const berrySize = 100;
+  
+  const offsetX = effectiveSpacingX / 2;
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  
+  const berries = [];
+  
+  // Create tight honeycomb grid
+  for (let y = -berrySize; y < H + berrySize; y += effectiveSpacingY) {
+    const row = Math.floor(y / effectiveSpacingY);
+    const rowOffset = (row % 2) * offsetX;
+    
+    for (let x = -berrySize + rowOffset; x < W + berrySize; x += effectiveSpacingX) {
+      berries.push({ x, y });
+    }
+  }
+  
+  // Assign delays with instant appearance (no fade in)
+  berries.forEach((berry, idx) => {
+    const progress = idx / Math.max(1, berries.length);
+    const delay = progress * (CFG.totalDuration - 0.01);  // instant
+    const rot = ((Math.random() * 2 - 1) * CFG.rotMax).toFixed(1);
+    
+    const el = document.createElement('div');
+    el.className = 'berry';
+    el.style.left = (berry.x - berrySize / 2) + 'px';
+    el.style.top = (berry.y - berrySize / 2) + 'px';
+    el.style.setProperty('--cw', berrySize + 'px');
+    el.style.setProperty('--ch', berrySize + 'px');
+    el.style.setProperty('--rot', rot + 'deg');
+    el.style.setProperty('--delay', delay.toFixed(3) + 's');
+    
+    // Use data-delay attribute to show berry at exact time
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0s';
+    
+    // Show immediately at delay time
+    setTimeout(() => {
+      el.style.opacity = '1';
+    }, delay * 1000);
+    
+    el.innerHTML = `<div class="berry__rot"><div class="berry__bob">${BLUEBERRY_SVG}</div></div>`;
+    stage.appendChild(el);
+  });
+}
+
+let _rebuildTimer;
+function scheduleBuild(){
+  clearTimeout(_rebuildTimer);
+  _rebuildTimer = setTimeout(build, 120);
+}
+
+window.addEventListener('load', build);
+window.addEventListener('resize', scheduleBuild);
+</script>
+
+</body>
+</html>
