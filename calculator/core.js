@@ -250,6 +250,7 @@ function renderHeader(cake){
       ${cake.title    ? `<h1 class="cake-title">${buildTitleHTML(cake.title)}</h1>` : ''}
       ${cake.desc     ? `<p class="cake-desc">${cake.desc}</p>` : ''}
       ${cake.subtitle ? `<p class="cake-subtitle">${cake.subtitle}</p>` : ''}
+      ${cake.details ? `<p class="cake-details">${cake.details}</p>` : ''}
     </header>
   `;
 }

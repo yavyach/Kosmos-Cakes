@@ -405,6 +405,11 @@ body.about-page{
   font-size:15px;line-height:1.2;color:var(--red);text-align:center;
   margin:8px 0 6px;max-width:420px;
 }
+
+.cake-details{
+    color: var(--red);
+    text-align: center;
+}
 .col-info .calc-frame{
   /* Inline-калькулятор: высота по контенту. */
   width:96%;max-width:440px;flex:none;

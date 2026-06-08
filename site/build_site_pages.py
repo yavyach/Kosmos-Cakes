@@ -479,6 +479,7 @@ __PHOTOS__
     <h1 class="cake-title">__H1__</h1>
     <p class="cake-desc">__DESC__</p>
     <p class="cake-sub">__SUB__</p>
+    <p class="cake-details">__DETAILS__</p>
     <div class="calc-frame">
       <div class="calc-scroll" id="root"></div>
     </div>
@@ -876,6 +877,7 @@ def render_cake_page(cake: dict) -> str:
     page_title = html.escape(f"{name} — kosmos")
     h1 = html.escape(name)
     desc = html.escape(cake.get("desc") or "")
+    details = cake.get("details") or ""
     sub = subtitle_html(cake)
     calc_init = f"{render_fn}({data_js});"
     js = PAGE_JS.replace("__CLASS_V__", str(get_class_assets_version()))
@@ -885,6 +887,7 @@ def render_cake_page(cake: dict) -> str:
         .replace("__H1__", h1)
         .replace("__DESC__", desc)
         .replace("__SUB__", sub)
+        .replace("__DETAILS__", details)
         .replace("__CALC_INIT__", calc_init)
         .replace("__CALC_CSS_V__", css_v)
         .replace("__CALC_JS_V__", js_v)
