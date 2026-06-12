@@ -183,35 +183,21 @@
     }
   }
 
-  /* Бесконечная авто-карусель (десктоп / вертикальные ленты): клонируем детей,
-     крутим через rAF, драг мышью с инерцией.
-     На мобилке горизонтальные карусели — только нативный свайп + scroll-snap,
-     без клонов, авто-прокрутки и pointer-драга (они конфликтовали с touch). */
+  /* Бесконечная авто-карусель: клонируем детей, крутим через rAF.
+     Свайп на таче — нативный (pointer-драг отключён), авто-прокрутка
+     ставится на паузу при касании и возобновляется через 5 с. */
   function kosmoLoop(el, vert, speed){
     if (!el) return null;
     if (el.__kLoop) return el.__kLoop;
     var kids = Array.prototype.slice.call(el.children);
     if (!kids.length) return null;
+    el.classList.add('k-loop-auto');
     function origSize(){
       var t = 0;
       for (var i = 0; i < kids.length; i++) t += vert ? kids[i].offsetHeight : kids[i].offsetWidth;
       return t;
     }
     function viewSize(){ return vert ? el.clientHeight : el.clientWidth; }
-
-    var nativeSwipe = !vert && (
-      window.matchMedia('(pointer: coarse)').matches ||
-      window.matchMedia('(hover: none)').matches
-    );
-    if (nativeSwipe){
-      el.classList.add('k-loop-native');
-      el.__kLoop = {
-        kids: kids,
-        origSize: origSize,
-        kill: function(){ el.classList.remove('k-loop-native'); }
-      };
-      return el.__kLoop;
-    }
 
     var safety = 0;
     while (origSize() < viewSize() * 2 + 4 && safety++ < 8){
@@ -351,6 +337,7 @@
       killed = true;
       clearTimeout(resumeTimer);
       if (rafId) cancelAnimationFrame(rafId);
+      el.classList.remove('k-loop-auto', 'k-loop-dragging');
     }
     el.__kLoop = { kids: kids, origSize: origSize, kill: kill };
     return el.__kLoop;
@@ -363,7 +350,10 @@
     _loopHandles = [];
     ['cake-photos','fillings-col'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) delete el.__kLoop;
+      if (el){
+        delete el.__kLoop;
+        el.classList.remove('k-loop-auto', 'k-loop-native', 'k-loop-dragging');
+      }
     });
     const cp = document.querySelector('.col-photo');
     if (cp) delete cp.__kLoop;

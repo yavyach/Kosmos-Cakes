@@ -666,7 +666,7 @@ body.cake-page-body{height:auto;min-height:100%;overflow-x:hidden;padding-bottom
     scroll-padding-inline:20px;
     touch-action:pan-x;overscroll-behavior-x:contain;
   }
-  .cake-photos.k-loop-native{scroll-behavior:auto}
+  .cake-photos.k-loop-auto{scroll-snap-type:none}
   .cake-photos .photo{
     flex:0 0 100%;width:100vw;
     aspect-ratio:1/1.25;scroll-snap-align:start;
@@ -677,7 +677,7 @@ body.cake-page-body{height:auto;min-height:100%;overflow-x:hidden;padding-bottom
     scroll-padding-inline:20px;
     touch-action:pan-x;overscroll-behavior-x:contain;
   }
-  #fillings-col.col-fillings.k-loop-native{scroll-behavior:auto}
+  #fillings-col.col-fillings.k-loop-auto{scroll-snap-type:none}
   #fillings-col.col-fillings:not(.col-fillings--photos) .slice-wrap{
     flex:0 0 100vw;width:100vw;scroll-snap-align:start;
   }
