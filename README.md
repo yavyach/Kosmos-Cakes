@@ -4,7 +4,7 @@
 
 Локально проект обычно открывается через OSPanel: `http://kosmoscakes.local/site/`
 
-На GitHub Pages: `https://ab-aacoop.github.io/kosmos_calc/site/`
+На GitHub Pages: `https://yavyach.github.io/Kosmos-Cakes/site/`
 
 ---
 

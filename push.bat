@@ -11,7 +11,7 @@ cd /d "%~dp0"
 if not exist ".git" (
   echo.
   echo [!] Это не git-репозиторий. Сначала запусти клонирование:
-  echo     git clone https://github.com/ab-aacoop/kosmos_calc.git
+  echo     git clone https://github.com/yavyach/Kosmos-Cakes.git
   echo.
   pause
   exit /b 1
@@ -53,6 +53,6 @@ if errorlevel 1 (
 
 echo.
 echo === Готово! Через 30-60 сек GitHub Pages обновится ===
-echo URL: https://ab-aacoop.github.io/kosmos_calc/calculator/
+echo URL: https://yavyach.github.io/Kosmos-Cakes/site/
 echo.
 timeout /t 5
