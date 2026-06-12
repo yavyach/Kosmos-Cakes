@@ -1,0 +1,24 @@
+/* Узкая колонка: три колонки остаются в ряд. */
+@media (min-width:901px) and (max-width:1280px){
+  .cake-page{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    grid-template-rows:minmax(0,1fr);
+  }
+  .cake-col{height:100%}
+  .col-photo,.col-third{overflow-y:auto}
+  .col-photo{padding:0}
+  .col-info{padding:0 22px 40px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;gap:0;scrollbar-width:none;-ms-overflow-style:none}
+  .col-info::-webkit-scrollbar{display:none;width:0;height:0}
+  .col-info .cake-title{
+    position:sticky;top:0;z-index:50;background:var(--bg);
+    font-size:56px;line-height:.7;padding:18px 0 14px;width:100%;
+  }
+  .cake-title .word{line-height:.7;padding-bottom:.05em}
+  .col-info .calc-frame{width:96%;max-width:440px;height:auto;min-height:0;flex:none;margin:8px auto 32px}
+  .col-third{overflow:hidden;height:100%;position:relative}
+  .col-third .col-fillings,.col-third .col-delivery{position:absolute;inset:0;height:auto;overflow-y:auto}
+  .col-third.is-delivery .col-delivery{display:flex;flex-direction:column}
+  .cake-page.is-delivery .col-third .col-fillings{display:none}
+  .delivery-back{position:absolute;right:18px;bottom:18px;left:auto;width:36px;height:36px}
+  .delivery-back svg{width:100%;height:100%}
+}

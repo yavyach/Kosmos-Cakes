@@ -296,9 +296,9 @@ body.mobile .fill-class{margin-top:8px}
 /* Cache-bust версия после ?v= автоматически обновляется build_site_pages.py
    по mtime файлов assets/class-*.svg, чтобы после ручной замены картинки
    браузер сразу подгружал новую версию, а не отдавал из кэша. */
-.fill-class__ico.is-base   {background-image:url('assets/class-base.svg?v=1779726900')}
-.fill-class__ico.is-classic{background-image:url('assets/class-classic.svg?v=1779726900')}
-.fill-class__ico.is-lux    {background-image:url('assets/class-lux.svg?v=1779726900')}
+.fill-class__ico.is-base   {background-image:url('assets/class-base.svg?v=1781264970')}
+.fill-class__ico.is-classic{background-image:url('assets/class-classic.svg?v=1781264970')}
+.fill-class__ico.is-lux    {background-image:url('assets/class-lux.svg?v=1781264970')}
 
 /* В ярусных — три рядом, чуть мельче чтобы умещались в одну линию */
 .fill-class--all{gap:12px;margin-top:18px}
