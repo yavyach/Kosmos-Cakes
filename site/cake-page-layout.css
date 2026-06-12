@@ -1,4 +1,4 @@
-/* Узкая колонка: три колонки остаются в ряд. */
+/* Планшет / узкий десктоп: три колонки в ряд, без пустоты по краям. */
 @media (min-width:901px) and (max-width:1280px){
   .cake-page{
     grid-template-columns:repeat(3, minmax(0, 1fr));
@@ -21,4 +21,12 @@
   .cake-page.is-delivery .col-third .col-fillings{display:none}
   .delivery-back{position:absolute;right:18px;bottom:18px;left:auto;width:36px;height:36px}
   .delivery-back svg{width:100%;height:100%}
+}
+
+/* Широкий десктоп (2K и выше): те же три колонки на всю ширину. */
+@media (min-width:1281px){
+  .cake-page{
+    width:100vw;max-width:100vw;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
 }

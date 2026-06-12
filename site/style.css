@@ -27,9 +27,10 @@
 
 *{box-sizing:border-box}
 html,body{
-  margin:0;padding:0;height:100%;
+  margin:0;padding:0;height:100%;width:100%;
   background:var(--bg);
   color:#1a1a1a;font-family:var(--text);
+  overflow-x:hidden;
 }
 
 /* глобально прячем скроллбары — скролл работает, но полосок не видно */
@@ -200,30 +201,36 @@ img{display:block;max-width:100%}
 }
 
 /* ============ ГЛАВНАЯ — ГРИД ОБЛОЖЕК ============
-   Сетка без зазоров и без верхней «серой полосы»: фото плотно встык от самого верха.
-   Название появляется по hover в нижней трети плитки, шириной с фото; точный размер
-   шрифта под каждое имя подбирается из JS (см. fitCovers в index.html). */
+   Сетка без зазоров: фото вплотную от верха. На широких экранах — больше колонок.
+   full-bleed: если каталог встроен в узкий блок (Tilda), растягиваем на всю ширину окна. */
 .cover-grid{
+  --cover-cols:3;
+  box-sizing:border-box;
+  width:100vw;
+  max-width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
   padding:0;
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(var(--cover-cols), minmax(0, 1fr));
   gap:0;
-  max-width:100%;margin:0;
 }
 .cover{
   position:relative;display:block;
+  min-width:0;width:100%;
   aspect-ratio:1/1.25;overflow:hidden;
   background:#222;text-decoration:none;
 }
 .cover img{
   width:100%;height:100%;object-fit:cover;display:block;
+  max-width:none;
 }
 .cover .cover-name{
   position:absolute;left:0;right:0;bottom:0;
   display:flex;align-items:flex-end;justify-content:center;
   padding:0 14px 18px;
   font-family:var(--display);font-weight:900;color:#fff;
-  font-size:clamp(20px, 2.2vw, 30px);line-height:.95;letter-spacing:.2px;
+  font-size:clamp(18px, 1.6vw, 32px);line-height:.95;letter-spacing:.2px;
   text-transform:lowercase;
   pointer-events:none;
   opacity:0;transition:opacity .2s ease;
@@ -231,13 +238,22 @@ img{display:block;max-width:100%}
 .cover:hover .cover-name,
 .cover:focus-within .cover-name{opacity:1}
 
-/* Сенсорные экраны и узкая мобилка — название всегда видно, потому что
-   hover не работает на тач-устройствах. */
+@media (min-width:1400px){
+  .cover-grid{--cover-cols:4}
+}
+@media (min-width:1900px){
+  .cover-grid{--cover-cols:5}
+}
+@media (min-width:2400px){
+  .cover-grid{--cover-cols:6}
+}
+
+/* Сенсорные экраны — название всегда видно (hover на таче нет). */
 @media (hover:none){
   .cover .cover-name{opacity:1}
 }
-@media (max-width:780px){
-  .cover-grid{grid-template-columns:repeat(2, 1fr);padding:0}
+@media (max-width:900px){
+  .cover-grid{--cover-cols:2}
   .cover .cover-name{opacity:1;font-size:18px;padding:0 12px 14px}
 }
 
@@ -346,9 +362,9 @@ body.about-page{
 /* ============ СТРАНИЦА ТОРТА — ТРИ КОЛОНКИ ============ */
 .cake-page{
   position:fixed;inset:0;
+  width:100vw;max-width:100vw;
   display:grid;
-  /* Три равные трети. Размер заголовка подбирается JS-ом под ширину центра,
-     поэтому он не «срезает» соседние колонки. */
+  /* Три равные трети на всю ширину окна (в т.ч. 2K+). */
   grid-template-columns:repeat(3, minmax(0, 1fr));
   background:var(--bg);
 }
@@ -815,6 +831,12 @@ body.mob-page .menu-list{top:80px;left:14px}
   .cake-page.is-delivery .col-third .col-delivery{display:flex}
   .delivery-back{position:fixed;right:14px;bottom:14px;left:auto;width:30px;height:30px}
   .delivery-back svg{width:100%;height:100%}
+
+  .col-delivery,.col-delivery .delivery-inline{
+    max-width:100%;overflow-x:hidden;box-sizing:border-box;
+  }
+  /* На экране доставки мешает кнопке «назад» у панели и контенту */
+  .cake-page.is-delivery .back-to-catalog{display:none}
 }
 
 @media (max-width: 960px){

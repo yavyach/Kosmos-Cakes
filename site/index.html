@@ -5,15 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>kosmos cake — каталог</title>
 <link rel="stylesheet" href="style.css">
-<style>
-  /* Адаптивный единый каталог: 3 колонки → 2 при ширине ≤900px.
-     Живой ресайз без перезагрузки страницы. */
-  .cover-grid{grid-template-columns:repeat(3, 1fr);gap:0;padding:0;max-width:100%}
-  @media (max-width:900px){
-    .cover-grid{grid-template-columns:repeat(2, 1fr)}
-    .cover{aspect-ratio:1/1.25}
-  }
-</style>
 </head>
 <body>
 <main class="cover-grid">
