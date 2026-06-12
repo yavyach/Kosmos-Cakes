@@ -1,0 +1,80 @@
+/* Общий компонент «полоска точек» — карусели и зоны доставки. */
+.kosmos-dots{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:var(--kosmos-dots-gap, 8px);
+  width:100%;
+  max-width:100%;
+  margin:0 auto;
+  box-sizing:border-box;
+}
+.kosmos-dots--empty{display:none}
+
+.kosmos-dot{
+  border:0;outline:0;padding:0;margin:0;
+  appearance:none;-webkit-appearance:none;
+  flex:0 0 auto;
+  border-radius:50%;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease,
+    background-color .2s ease, width .2s ease, height .2s ease;
+}
+.kosmos-dot.is-hidden{display:none !important}
+.kosmos-dot[disabled]{opacity:.35;cursor:not-allowed}
+.kosmos-dot[disabled]:hover{transform:none}
+
+/* --- карусель (мобильные фото / начинки) --- */
+.kosmos-dots--carousel{
+  --kosmos-dots-gap:7px;
+  padding:10px 0 6px;
+  pointer-events:none;
+}
+.kosmos-dots--carousel .kosmos-dot{
+  width:9px;height:9px;
+  background:rgba(210,54,60,.28);
+  pointer-events:auto;
+}
+.kosmos-dots--carousel .kosmos-dot.is-active{
+  background:var(--red, #D2363C);
+  width:11px;height:11px;
+}
+.kosmos-dots--carousel.kosmos-dots--small .kosmos-dot{width:8px;height:8px}
+.kosmos-dots--carousel.kosmos-dots--small .kosmos-dot.is-active{width:10px;height:10px}
+
+/* --- зоны доставки (цветные кружки как на карте) --- */
+.kosmos-dots--zones{
+  --kosmos-dots-gap:clamp(6px, 2.2vw, 12px);
+  padding:0 6px;
+}
+.kosmos-dots--zones .kosmos-dot{
+  width:clamp(34px, 10.5vw, 44px);
+  height:clamp(34px, 10.5vw, 44px);
+  box-shadow:0 0 0 0 transparent;
+}
+.kosmos-dots--zones .kosmos-dot:not([disabled]):hover{transform:scale(1.06)}
+.kosmos-dots--zones .kosmos-dot.is-active{
+  box-shadow:0 0 0 2px #fff, 0 0 0 4px currentColor;
+}
+.kosmos-dot--green {background:#A8D8B0;color:#3FA94E}
+.kosmos-dot--orange{background:#F5C58A;color:#E89A2E}
+.kosmos-dot--red   {background:#EFA6AA;color:#D2363C}
+.kosmos-dot--blue  {background:#A8CFE5;color:#3A9DD8}
+.kosmos-dot--brown {background:#D8C2A8;color:#A98968}
+.kosmos-dot--purple{background:#C8AEE3;color:#9558C9}
+
+/* алиасы старых классов dlv-z-* */
+.dlv-z-green{background:#A8D8B0;color:#3FA94E}
+.dlv-z-orange{background:#F5C58A;color:#E89A2E}
+.dlv-z-red{background:#EFA6AA;color:#D2363C}
+.dlv-z-blue{background:#A8CFE5;color:#3A9DD8}
+.dlv-z-brown{background:#D8C2A8;color:#A98968}
+.dlv-z-purple{background:#C8AEE3;color:#9558C9}
+
+@media (max-width:480px){
+  .kosmos-dots--zones .kosmos-dot{
+    width:clamp(30px, 9.5vw, 40px);
+    height:clamp(30px, 9.5vw, 40px);
+  }
+}

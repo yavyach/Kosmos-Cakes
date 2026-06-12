@@ -1,0 +1,47 @@
+# OSPanel — локальная привязка домена (kosmoscakes.local)
+.osp/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+
+# Генерируется: python site/_build_tilda_embed.py
+site/tilda-catalog-embed.html
+site/_inject*
+site/_tmp*
+
+# Исходники фото для импорта (локально, не на GitHub Pages)
+site/photos raw/
+
+# Случайные офисные файлы рядом с медиа
+site/photos/**/*.docx
+site/photos/**/*.doc
+site/photos/**/*.xlsx
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.bak
+*~
+
+# ОС
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Секреты
+.env
+.env.*

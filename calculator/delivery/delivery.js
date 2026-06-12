@@ -45,25 +45,9 @@
     return EMBEDDED_DELIVERY_ZONES;
   }
 
-  var ZONES = [
-    {key:'orange', cls:'dlv-z-orange', rate:1000, name:'оранжевая зона'},
-    {key:'green',  cls:'dlv-z-green',  rate:600, name:'зелёная зона'},
-    {key:'purple', cls:'dlv-z-purple', rate:0,    name:'самовывоз', pickup:true},
-    {key:'brown',  cls:'dlv-z-brown',  rate:3500, name:'коричневая зона'},
-    {key:'blue',   cls:'dlv-z-blue',   rate:2000, name:'голубая зона'},
-    {key:'red',    cls:'dlv-z-red',    rate:1500, name:'красная зона'}
-  ];
-
-  var ZONE_STYLE = {
-    orange: {fill:'#F5C58A', stroke:'#E89A2E'},
-    green:  {fill:'#A8D8B0', stroke:'#3FA94E'},
-    brown:  {fill:'#D8C2A8', stroke:'#A98968'},
-    blue:   {fill:'#A8CFE5', stroke:'#3A9DD8'},
-    red:    {fill:'#EFA6AA', stroke:'#D2363C'}
-  };
-
-  /* от центра к периферии — для определения зоны по клику/адресу */
-  var ZONE_HIT_ORDER = ['green', 'orange', 'red', 'blue', 'brown'];
+  var ZONES = global.KOSMOS_DELIVERY_ZONE_META || [];
+  var ZONE_STYLE = global.KOSMOS_DELIVERY_ZONE_STYLE || {};
+  var ZONE_HIT_ORDER = global.KOSMOS_DELIVERY_ZONE_HIT_ORDER || [];
 
   function pointInRing(point, ring){
     var x = point[0], y = point[1], inside = false, i, j;
@@ -147,6 +131,7 @@
   }
 
   function zoneMeta(key){
+    if (global.Kosmos && global.Kosmos.zoneMeta) return global.Kosmos.zoneMeta(key);
     for (var i = 0; i < ZONES.length; i++){
       if (ZONES[i].key === key) return ZONES[i];
     }
@@ -154,12 +139,6 @@
   }
 
   function buildTemplate(){
-    var zonesHTML = ZONES.map(function(z){
-      var pickup = z.pickup ? ' data-pickup="1"' : '';
-      return '<button class="dlv-zone ' + z.cls +'" data-key="'+z.key+
-             '" data-rate="'+z.rate+'" data-name="'+z.name+'"'+pickup+
-             ' type="button">'+(z.label||'')+'</button>';
-    }).join('');
     return ''+
 '<div class="dlv-frame">'+
 '  <div class="dlv-map" data-role="map"><div class="dlv-map-canvas" data-role="map-canvas"></div></div>'+
@@ -169,7 +148,7 @@
 '  </div>'+
 '  <p class="dlv-title">Мы бережно доставляем торты по всей Москве и до 20 км от МКАД.</p>'+
 '  <div class="dlv-zone-label">выберите зону</div>'+
-'  <div class="dlv-zones" data-role="zones">'+zonesHTML+'</div>'+
+'  <div class="dlv-zones kosmos-dots kosmos-dots--zones" data-role="zones"></div>'+
 '  <div class="dlv-cost"><div class="lbl" data-role="delivery-lbl">стоимость доставки</div><div class="val" data-role="delivery-val">—</div></div>'+
 '  <div class="dlv-total"><div class="lbl">итоговая стоимость</div>'+
 '    <div class="val-row"><span class="sparkle">'+SPARKLE_SVG+'</span><div class="val" data-role="final-val">—</div><span class="sparkle">'+SPARKLE_SVG+'</span></div>'+
@@ -224,6 +203,10 @@
     host.innerHTML = buildTemplate();
 
     var $zones      = host.querySelector('[data-role="zones"]');
+    var zoneStrip   = null;
+    if (global.Kosmos && global.Kosmos.Dots && $zones){
+      zoneStrip = global.Kosmos.Dots.mount($zones, {variant:'zones', items: ZONES});
+    }
     var $mapCanvas  = host.querySelector('[data-role="map-canvas"]');
     var $address    = host.querySelector('[data-role="address"]');
     var $addressBtn = host.querySelector('[data-role="address-btn"]');
@@ -256,10 +239,12 @@
     }
 
     function applyTieredLock(){
-      var purple = $zones.querySelector('[data-key="purple"]');
+      var purple = zoneStrip ? zoneStrip.getButton('purple') :
+        $zones.querySelector('[data-key="purple"]');
       if (!purple) return;
       if (state.params.tiered){
-        purple.style.display = 'none';
+        if (zoneStrip) zoneStrip.setHidden('purple', true);
+        else purple.classList.add('is-hidden');
         if (purple.classList.contains('is-active')){
           purple.classList.remove('is-active');
           state.rate = null; state.name = null; state.pickup = false;
@@ -267,7 +252,8 @@
           highlightMapZone(null);
         }
       } else {
-        purple.style.display = '';
+        if (zoneStrip) zoneStrip.setHidden('purple', false);
+        else purple.classList.remove('is-hidden');
         purple.removeAttribute('disabled');
         purple.removeAttribute('title');
       }
@@ -308,8 +294,10 @@
 
     function selectZone(key){
       var btn = $zones.querySelector('[data-key="'+key+'"]');
-      if (!btn || btn.hasAttribute('disabled') || btn.style.display === 'none') return;
-      $zones.querySelectorAll('.dlv-zone').forEach(function(b){ b.classList.remove('is-active'); });
+      if (!btn || btn.hasAttribute('disabled') || btn.classList.contains('is-hidden')) return;
+      $zones.querySelectorAll('.kosmos-dot, .dlv-zone').forEach(function(b){
+        b.classList.remove('is-active');
+      });
       btn.classList.add('is-active');
       state.rate   = parseInt(btn.dataset.rate, 10) || 0;
       state.name   = btn.dataset.name || '';
@@ -462,8 +450,8 @@
     setTimeout(ensureMap, 120);
 
     $zones.addEventListener('click', function(e){
-      var btn = e.target.closest('.dlv-zone');
-      if (!btn || btn.hasAttribute('disabled')) return;
+      var btn = e.target.closest('.kosmos-dot, .dlv-zone');
+      if (!btn || btn.hasAttribute('disabled') || btn.classList.contains('is-hidden')) return;
       selectZone(btn.dataset.key);
     });
 
@@ -477,44 +465,45 @@
       });
     }
 
+    function cakeParamsText(p){
+      var bits = [];
+      if (p.weight) bits.push(p.weight + ' кг');
+      if (p.tiers) bits.push(p.tiers + ' ярусов');
+      if (p.pieces) bits.push(p.pieces + ' порций');
+      if (p.filling) bits.push('начинка «' + p.filling + '»');
+      return bits.join(', ');
+    }
+
+    function deliveryText(){
+      if (state.pickup) return 'Самовывоз';
+      if (state.rate === null) return '';
+      if (state.address){
+        var line = 'Адрес доставки: ' + state.address;
+        if (state.name) line += ' (' + state.name + ')';
+        return line;
+      }
+      if (state.name) return 'Адрес доставки: ' + state.name;
+      return '';
+    }
+
     function buildOrderText(){
       var p = state.params;
-      var lines = [];
-      lines.push('Здравствуйте! Хочу оформить заказ на торт.');
-      if (p.cake)    lines.push('Торт: ' + p.cake);
-      if (p.weight)  lines.push('Кг: ' + p.weight);
-      if (p.tiers)   lines.push('Ярусов: ' + p.tiers);
-      if (p.pieces)  lines.push('Порций: ' + p.pieces);
-      if (p.filling) lines.push('Начинка: ' + p.filling);
-      if (state.address) lines.push('Адрес: ' + state.address);
-      if (state.pickup){
-        lines.push('Доставка: самовывоз (бесплатно)');
-      } else {
-        lines.push('Доставка: ' + state.name + ' — ' + fmtRub(state.rate));
-      }
-      lines.push('Итого: ' + fmtRub(p.total + (state.rate || 0)));
-      return lines.join('\n');
+      var cake = p.cake || 'торт';
+      var params = cakeParamsText(p);
+      var msg = 'Добрый день, заинтересовал торт «' + cake + '»';
+      if (params) msg += ': ' + params;
+      var dlv = deliveryText();
+      if (dlv) msg += '. ' + dlv;
+      var total = (parseInt(p.total, 10) || 0) + (state.rate === null ? 0 : (state.rate || 0));
+      if (total > 0) msg += '. Итого: ' + fmtRub(total);
+      return msg;
     }
 
     $cta.addEventListener('click', function(){
       if ($cta.hasAttribute('disabled')) return;
       var text = buildOrderText();
-      function done(ok){
-        toast(ok ? 'Сообщение скопировано — вставьте его в чате'
-                 : 'Перешлите детали администратору');
-        setTimeout(function(){ window.open(TELEGRAM_URL, '_blank', 'noopener'); }, 400);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(function(){ done(true); }).catch(function(){ done(false); });
-        return;
-      }
-      var ta = document.createElement('textarea');
-      ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
-      document.body.appendChild(ta); ta.select();
-      var ok = false;
-      try { ok = document.execCommand('copy'); } catch(_){}
-      document.body.removeChild(ta);
-      done(ok);
+      var url = TELEGRAM_URL + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener');
     });
 
     function setPayload(payload){

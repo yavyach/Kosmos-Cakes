@@ -183,13 +183,10 @@
     }
   }
 
-  /* Бесконечная авто-карусель: клонируем оригинальный набор детей один раз
-     и крутим только в одну сторону. При прохождении длины оригинала вычитаем
-     её — позиция «обнуляется» без рывка, потому что клон выглядит идентично.
-     Используется и для горизонтальных карусели (mob-photos, mob-fillings),
-     и для вертикальной «колбасы» начинок и фото на десктопе.
-     Взаимодействие (клик, колесо, драг) ставит авто-прокрутку на паузу на 5 с,
-     затем плавно возвращает обычную скорость. Драг ЛКМ даёт инерцию с затуханием. */
+  /* Бесконечная авто-карусель (десктоп / вертикальные ленты): клонируем детей,
+     крутим через rAF, драг мышью с инерцией.
+     На мобилке горизонтальные карусели — только нативный свайп + scroll-snap,
+     без клонов, авто-прокрутки и pointer-драга (они конфликтовали с touch). */
   function kosmoLoop(el, vert, speed){
     if (!el) return null;
     if (el.__kLoop) return el.__kLoop;
@@ -201,6 +198,21 @@
       return t;
     }
     function viewSize(){ return vert ? el.clientHeight : el.clientWidth; }
+
+    var nativeSwipe = !vert && (
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(hover: none)').matches
+    );
+    if (nativeSwipe){
+      el.classList.add('k-loop-native');
+      el.__kLoop = {
+        kids: kids,
+        origSize: origSize,
+        kill: function(){ el.classList.remove('k-loop-native'); }
+      };
+      return el.__kLoop;
+    }
+
     var safety = 0;
     while (origSize() < viewSize() * 2 + 4 && safety++ < 8){
       kids.forEach(function(c){ el.appendChild(c.cloneNode(true)); });
@@ -281,6 +293,7 @@
 
     el.addEventListener('pointerdown', function(e){
       if (e.button !== 0) return;
+      if (e.pointerType === 'touch') return;
       if (isInteractive(e.target)){
         pauseNow();
         scheduleResume();
@@ -375,6 +388,9 @@
   else if (_loopMq.addListener) _loopMq.addListener(kosmoLoopScroll);
 
   function kosmoDots(carouselId, dotsId){
+    if (window.Kosmos && window.Kosmos.Dots && window.Kosmos.Dots.bindCarousel){
+      return window.Kosmos.Dots.bindCarousel(carouselId, dotsId);
+    }
     const car = document.getElementById(carouselId);
     const dotsBox = document.getElementById(dotsId);
     if (!car || !dotsBox) return;

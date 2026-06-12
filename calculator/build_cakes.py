@@ -381,10 +381,14 @@ def delivery_inline_block(
     with_stylesheet: bool = False,
 ) -> str:
     css = _v(f"{dlv_prefix}/delivery.css", css_v)
+    zcfg = _v(f"{dlv_prefix}/zones-config.js", js_v)
+    kdots = _v(f"{dlv_prefix}/kosmos-dots.js", js_v)
     js = _v(f"{dlv_prefix}/delivery.js", js_v)
     link = f'<link rel="stylesheet" href="{css}">\n' if with_stylesheet else ""
     return (
         f"{link}<div class=\"delivery-inline\" id=\"{root_id}\"></div>\n"
+        f'<script src="{zcfg}"></script>\n'
+        f'<script src="{kdots}"></script>\n'
         f'<script src="{js}"></script>\n'
         f"<script>Kosmos.mountDelivery(document.getElementById('{root_id}'));</script>"
     )

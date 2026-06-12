@@ -3,6 +3,7 @@
    Используется inline на странице торта и на delivery/index.html.
    и встроенным в адаптивные страницы тортов (site/cakes/).
    ============================================================ */
+@import url('kosmos-dots.css');
 
 /* Шрифты, цвета и пропорции — те же что в калькуляторе:
    var(--display)=ALS Beast (заголовки), var(--text)=Golos Text (мелочь),
@@ -81,36 +82,8 @@
 }
 .dlv-zone-label::first-letter{text-transform:uppercase}
 
-/* шесть зон в один ряд — доли ширины, чтобы влезало на узком экране */
-.dlv-zones{
-  display:grid;
-  grid-template-columns:repeat(6, minmax(0, 1fr));
-  gap:clamp(4px, 1.8vw, 8px);
-  margin:0 auto;width:100%;max-width:100%;
-}
-.dlv-zone{
-  aspect-ratio:1/1;
-  width:100%;max-width:44px;justify-self:center;
-  border-radius:50%;
-  border:0;outline:0;padding:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--display);font-weight:900;color:#fff;font-size:16px;
-  position:relative;
-  transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
-  box-shadow:0 0 0 0 transparent;
-}
-.dlv-zone:hover{transform:scale(1.06)}
-.dlv-zone.is-active{box-shadow:0 0 0 2px #fff, 0 0 0 4px currentColor}
-.dlv-zone[disabled]{opacity:.35;cursor:not-allowed}
-.dlv-zone[disabled]:hover{transform:none}
-
-/* пастельные тона: те же оттенки, но мягче — кружки выглядят бережнее */
-.dlv-z-orange{background:#F5C58A;color:#E89A2E}
-.dlv-z-green {background:#A8D8B0;color:#3FA94E}
-.dlv-z-purple{background:#C8AEE3;color:#9558C9}
-.dlv-z-brown {background:#D8C2A8;color:#A98968}
-.dlv-z-blue  {background:#A8CFE5;color:#3A9DD8}
-.dlv-z-red   {background:#EFA6AA;color:#D2363C}
+/* зоны — компонент .kosmos-dots--zones (см. kosmos-dots.css) */
+.dlv-zones{margin:0 auto}
 
 /* «стоимость доставки» — лейбл Beast pink 20px (как .total-meta),
    значение Beast red 60px (как .total-value на мобиле). */
