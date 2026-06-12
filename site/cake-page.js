@@ -393,7 +393,10 @@
     var fc = document.getElementById('fillings-col');
     var mode = _loopMq.matches ? 'mob' : 'desk';
     var fcNeeded = !!(fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos')));
-    if (_loopMode === mode && ph && ph.__kLoop && (!fcNeeded || (fc && fc.__kLoop))) return;
+    var vert = !_loopMq.matches;
+    var phReady = carouselReady(ph, vert);
+    var fcReady = !fcNeeded || carouselReady(fc, vert);
+    if (_loopMode === mode && ph && ph.__kLoop && phReady && (!fcNeeded || (fc && fc.__kLoop && fcReady))) return;
     _loopMode = mode;
     killLoops();
     if (_loopMq.matches){
@@ -420,8 +423,28 @@
       });
     });
   }
+  function carouselReady(el, vert){
+    if (!el) return false;
+    if (vert) return el.clientHeight > 40 && el.scrollHeight > el.clientHeight + 8;
+    return el.clientWidth > 40 && el.scrollWidth > el.clientWidth + 8;
+  }
+  function layoutReady(cb){
+    var tries = 0;
+    var vert = !_loopMq.matches;
+    function go(){
+      var ph = document.getElementById('cake-photos');
+      if (carouselReady(ph, vert)){
+        cb();
+        return;
+      }
+      if (++tries < 80) requestAnimationFrame(go);
+      else cb();
+    }
+    go();
+  }
+
   function startLoopsWhenReady(){
-    function boot(){ kosmoLoopScroll(); }
+    function boot(){ layoutReady(kosmoLoopScroll); }
     watchCarouselImages(boot);
     if (document.fonts && document.fonts.ready){
       document.fonts.ready.then(boot).catch(boot);
@@ -432,10 +455,23 @@
     window.requestAnimationFrame(function(){
       window.requestAnimationFrame(boot);
     });
+    if (new URLSearchParams(location.search).get('embed') === 'kosmos'){
+      [120, 400, 1000, 2500].forEach(function(ms){
+        setTimeout(boot, ms);
+      });
+    }
+    var page = document.querySelector('.cake-page');
+    if (page && window.ResizeObserver){
+      var roTimer;
+      new ResizeObserver(function(){
+        clearTimeout(roTimer);
+        roTimer = setTimeout(boot, 80);
+      }).observe(page);
+    }
   }
   startLoopsWhenReady();
-  if (_loopMq.addEventListener) _loopMq.addEventListener('change', kosmoLoopScroll);
-  else if (_loopMq.addListener) _loopMq.addListener(kosmoLoopScroll);
+  if (_loopMq.addEventListener) _loopMq.addEventListener('change', function(){ layoutReady(kosmoLoopScroll); });
+  else if (_loopMq.addListener) _loopMq.addListener(function(){ layoutReady(kosmoLoopScroll); });
 
   function kosmoDots(carouselId, dotsId){
     if (window.Kosmos && window.Kosmos.Dots && window.Kosmos.Dots.bindCarousel){
