@@ -32,6 +32,18 @@ html,body{
   color:#1a1a1a;font-family:var(--text);
   overflow-x:hidden;
 }
+/* каталог: страница прокручивается (standalone + Tilda embed) */
+html.catalog-page,
+body.catalog-page,
+html:has(body > .cover-grid),
+html:has(body > .cover-grid) body{
+  height:auto !important;min-height:100%;
+  overflow-y:auto !important;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+body.catalog-page .cover-grid{
+  min-height:100vh;
+}
 
 /* глобально прячем скроллбары — скролл работает, но полосок не видно */
 *{scrollbar-width:none;-ms-overflow-style:none}
@@ -380,14 +392,42 @@ body.about-page{
   margin:0;
 }
 @media (min-width:901px){
+  .cake-col.col-photo{overflow:hidden}
+  .col-photo.cake-col{
+    overflow:hidden;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  #cake-photos.cake-photos{
+    display:block;
+    flex:1 1 auto;
+    min-height:0;
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  #cake-photos.cake-photos.k-loop-auto{scroll-snap-type:none}
+  #fillings-col.col-fillings{
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  #fillings-col.col-fillings.k-loop-auto{scroll-snap-type:none}
   .col-photo,
+  #cake-photos.cake-photos,
   .col-third .col-fillings,
+  #fillings-col.col-fillings,
   .col-fillings--photos{
     cursor:grab;
     touch-action:pan-y;
   }
   .col-photo.k-loop-dragging,
+  #cake-photos.k-loop-dragging,
   .col-third .col-fillings.k-loop-dragging,
+  #fillings-col.k-loop-dragging,
   .col-fillings--photos.k-loop-dragging{
     cursor:grabbing;
     user-select:none;
@@ -666,7 +706,10 @@ body.cake-page-body{height:auto;min-height:100%;overflow-x:hidden;padding-bottom
     scroll-padding-inline:20px;
     touch-action:pan-x;overscroll-behavior-x:contain;
   }
-  .cake-photos.k-loop-auto{scroll-snap-type:none}
+  .cake-photos.k-loop-auto{
+    scroll-snap-type:none;
+    -webkit-overflow-scrolling:auto;
+  }
   .cake-photos .photo{
     flex:0 0 100%;width:100vw;
     aspect-ratio:1/1.25;scroll-snap-align:start;
@@ -677,7 +720,10 @@ body.cake-page-body{height:auto;min-height:100%;overflow-x:hidden;padding-bottom
     scroll-padding-inline:20px;
     touch-action:pan-x;overscroll-behavior-x:contain;
   }
-  #fillings-col.col-fillings.k-loop-auto{scroll-snap-type:none}
+  #fillings-col.col-fillings.k-loop-auto{
+    scroll-snap-type:none;
+    -webkit-overflow-scrolling:auto;
+  }
   #fillings-col.col-fillings:not(.col-fillings--photos) .slice-wrap{
     flex:0 0 100vw;width:100vw;scroll-snap-align:start;
   }

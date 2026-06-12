@@ -811,18 +811,19 @@ def write_unified_catalog_entrypoint(by_id: dict) -> None:
         '</svg>'
     )
     html_out = f"""<!doctype html>
-<html lang="ru">
+<html lang="ru" class="catalog-page">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>kosmos cake — каталог</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="catalog-page">
 <main class="cover-grid">
 {grid}
 </main>
-
+<script src="catalog-scroll.js"></script>
 </body>
 </html>
 """
@@ -859,6 +860,12 @@ def write_unified_about() -> None:
         'content="width=1280"',
         'content="width=device-width, initial-scale=1, viewport-fit=cover"',
     )
+    if 'rel="icon"' not in new:
+        new = new.replace(
+            "<title>",
+            '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">\n<title>',
+            1,
+        )
     new = patch_static_page_content(new, catalog_href="index.html")
     if new != text:
         path.write_text(new, encoding="utf-8")

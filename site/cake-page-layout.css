@@ -5,7 +5,8 @@
     grid-template-rows:minmax(0,1fr);
   }
   .cake-col{height:100%}
-  .col-photo,.col-third{overflow-y:auto}
+  .col-photo{overflow:hidden}
+  .col-third{overflow:hidden}
   .col-photo{padding:0}
   .col-info{padding:0 22px 40px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;gap:0;scrollbar-width:none;-ms-overflow-style:none}
   .col-info::-webkit-scrollbar{display:none;width:0;height:0}

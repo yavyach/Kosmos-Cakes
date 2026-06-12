@@ -16,8 +16,9 @@ main = re.sub(
 
 scroll_fix = (
     "<style>"
-    "html,body{overflow-x:hidden!important;overflow-y:auto!important;"
-    "height:auto!important;min-height:100%}"
+    "html,body,#allrecords{overflow-x:hidden!important;overflow-y:auto!important;"
+    "height:auto!important;min-height:100%!important}"
+    "html.catalog-page,body.catalog-page{overflow-y:auto!important;height:auto!important}"
     "#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;"
     "background:#cfcfcf}"
     "#kosmos-cake-viewer.is-open{display:block}"
@@ -80,10 +81,13 @@ viewer = (
 )
 
 embed = (
+    f'<link rel="icon" href="{PUBLIC}assets/favicon.svg" type="image/svg+xml">\n'
     f'<link rel="stylesheet" href="{PUBLIC}style.css">\n'
     + scroll_fix
+    + '<div class="kosmos-catalog-embed">\n'
     + main
-    + "\n"
+    + "\n</div>\n"
+    + f'<script src="{PUBLIC}catalog-scroll.js"></script>\n'
     + viewer
 )
 (SITE / "tilda-catalog-embed.html").write_text(embed, encoding="utf-8")

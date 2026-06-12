@@ -221,6 +221,7 @@
       if (sz < 8) return;
       while (c >= sz) c -= sz;
       while (c < 0) c += sz;
+      c = Math.round(c);
       if (vert) el.scrollTop = c; else el.scrollLeft = c;
     }
     function pauseNow(){
@@ -242,7 +243,7 @@
       if (killed) return;
       rafId = requestAnimationFrame(tick);
       if (!lastTs){ lastTs = ts; return; }
-      var dt = Math.min(ts - lastTs, 48) / 30;
+      var dt = Math.min(ts - lastTs, 48) / 16;
       lastTs = ts;
       if (origSize() < 8) return;
 
@@ -266,16 +267,44 @@
     var lastDragTs = 0;
     var dragVel = 0;
 
+    var touchEngaged = false;
+    var touchStartPos = 0;
+
     el.addEventListener('wheel', function(){
       momentum = 0;
       pauseNow();
       scheduleResume();
     }, {passive:true});
-    el.addEventListener('touchstart', function(){
+
+    el.addEventListener('touchstart', function(e){
       momentum = 0;
-      pauseNow();
+      touchEngaged = false;
+      if (e.changedTouches && e.changedTouches[0]){
+        touchStartPos = vert ? e.changedTouches[0].clientY : e.changedTouches[0].clientX;
+      }
+    }, {passive:true});
+    el.addEventListener('touchmove', function(e){
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      var pos = vert ? e.changedTouches[0].clientY : e.changedTouches[0].clientX;
+      if (!touchEngaged && Math.abs(pos - touchStartPos) > 8){
+        touchEngaged = true;
+        pauseNow();
+      }
+      if (touchEngaged) scheduleResume();
+    }, {passive:true});
+    el.addEventListener('touchend', function(){
+      touchEngaged = false;
       scheduleResume();
     }, {passive:true});
+    el.addEventListener('touchcancel', function(){
+      touchEngaged = false;
+      scheduleResume();
+    }, {passive:true});
+
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) pauseNow();
+      else { paused = false; ramp = 1; }
+    });
 
     el.addEventListener('pointerdown', function(e){
       if (e.button !== 0) return;
@@ -285,7 +314,6 @@
         scheduleResume();
         return;
       }
-      pauseNow();
       dragPointerId = e.pointerId;
       dragActive = false;
       dragStartPos = vert ? e.clientY : e.clientX;
@@ -302,6 +330,7 @@
       var delta = pos - dragStartPos;
       if (!dragActive && Math.abs(delta) > 5){
         dragActive = true;
+        pauseNow();
         el.classList.add('k-loop-dragging');
         try { el.setPointerCapture(e.pointerId); } catch (_) {}
       }
@@ -326,9 +355,9 @@
         if (momentum > cap) momentum = cap;
         if (momentum < -cap) momentum = -cap;
         ramp = 0;
+        scheduleResume();
       }
       dragActive = false;
-      scheduleResume();
     }
     el.addEventListener('pointerup', endDrag);
     el.addEventListener('pointercancel', endDrag);
@@ -358,22 +387,53 @@
     const cp = document.querySelector('.col-photo');
     if (cp) delete cp.__kLoop;
   }
+  var _loopMode = '';
   function kosmoLoopScroll(){
-    killLoops();
     var ph = document.getElementById('cake-photos');
-    var cp = document.querySelector('.col-photo');
     var fc = document.getElementById('fillings-col');
+    var mode = _loopMq.matches ? 'mob' : 'desk';
+    var fcNeeded = !!(fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos')));
+    if (_loopMode === mode && ph && ph.__kLoop && (!fcNeeded || (fc && fc.__kLoop))) return;
+    _loopMode = mode;
+    killLoops();
     if (_loopMq.matches){
-      if (ph){ var h = kosmoLoop(ph, false, 1.0); if (h) _loopHandles.push(h); }
-      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 0.9); if (h2) _loopHandles.push(h2); }
+      if (ph){ var h = kosmoLoop(ph, false, 2.8); if (h) _loopHandles.push(h); }
+      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 2.4); if (h2) _loopHandles.push(h2); }
     } else {
-      if (cp){ var h3 = kosmoLoop(cp, true, 0.55); if (h3) _loopHandles.push(h3); }
+      if (ph){ var h3 = kosmoLoop(ph, true, 1.8); if (h3) _loopHandles.push(h3); }
       if (fc && (fc.classList.contains('col-fillings--photos') || fc.dataset.fillings)){
-        var h4 = kosmoLoop(fc, true, 0.55); if (h4) _loopHandles.push(h4);
+        var h4 = kosmoLoop(fc, true, 1.6); if (h4) _loopHandles.push(h4);
       }
     }
   }
-  kosmoLoopScroll();
+  function watchCarouselImages(cb){
+    ['cake-photos','fillings-col'].forEach(function(id){
+      var root = document.getElementById(id);
+      if (!root) return;
+      root.querySelectorAll('img').forEach(function(img){
+        if (img.complete) return;
+        function retry(){
+          if (!root.__kLoop) cb();
+        }
+        img.addEventListener('load', retry, {once:true});
+        img.addEventListener('error', retry, {once:true});
+      });
+    });
+  }
+  function startLoopsWhenReady(){
+    function boot(){ kosmoLoopScroll(); }
+    watchCarouselImages(boot);
+    if (document.fonts && document.fonts.ready){
+      document.fonts.ready.then(boot).catch(boot);
+    } else {
+      boot();
+    }
+    window.addEventListener('load', boot, {once:true});
+    window.requestAnimationFrame(function(){
+      window.requestAnimationFrame(boot);
+    });
+  }
+  startLoopsWhenReady();
   if (_loopMq.addEventListener) _loopMq.addEventListener('change', kosmoLoopScroll);
   else if (_loopMq.addListener) _loopMq.addListener(kosmoLoopScroll);
 

@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="catalog-page">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>kosmos cake — каталог</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="catalog-page">
 <main class="cover-grid">
   <a class="cover" data-cake="fairy cake" href="cakes/fairy-cake.html"><img src="photos/fairy-cake/cover.webp" alt="fairy cake"   onerror="if(!this.dataset.fbk){this.dataset.fbk=1;this.src=this.src.replace(/cover\.(jpg|jpeg|png|webp)$/i,'cover.' + ((RegExp.$1||'jpg').toUpperCase()));}"><div class="cover-name">fairy cake</div></a>
   <a class="cover" data-cake="тирамису" href="cakes/tiramisu.html"><img src="photos/tiramisu/cover.webp" alt="тирамису"   onerror="if(!this.dataset.fbk){this.dataset.fbk=1;this.src=this.src.replace(/cover\.(jpg|jpeg|png|webp)$/i,'cover.' + ((RegExp.$1||'jpg').toUpperCase()));}"><div class="cover-name">тирамису</div></a>
@@ -39,6 +40,6 @@
   <a class="cover" data-cake="blueberry hill" href="cakes/blueberry-hill.html"><img src="photos/blueberry-hill/cover.webp" alt="blueberry hill"   onerror="if(!this.dataset.fbk){this.dataset.fbk=1;this.src=this.src.replace(/cover\.(jpg|jpeg|png|webp)$/i,'cover.' + ((RegExp.$1||'jpg').toUpperCase()));}"><div class="cover-name">blueberry hill</div></a>
   <a class="cover" data-cake="fuji" href="cakes/fuji.html"><img src="photos/fuji/cover.webp" alt="fuji"   onerror="if(!this.dataset.fbk){this.dataset.fbk=1;this.src=this.src.replace(/cover\.(jpg|jpeg|png|webp)$/i,'cover.' + ((RegExp.$1||'jpg').toUpperCase()));}"><div class="cover-name">fuji</div></a>
 </main>
-
+<script src="catalog-scroll.js"></script>
 </body>
 </html>
