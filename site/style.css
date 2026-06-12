@@ -379,6 +379,26 @@ body.about-page{
   display:block;width:100%;height:auto;object-fit:cover;
   margin:0;
 }
+@media (min-width:901px){
+  .col-photo,
+  .col-third .col-fillings,
+  .col-fillings--photos{
+    cursor:grab;
+    touch-action:pan-y;
+  }
+  .col-photo.k-loop-dragging,
+  .col-third .col-fillings.k-loop-dragging,
+  .col-fillings--photos.k-loop-dragging{
+    cursor:grabbing;
+    user-select:none;
+  }
+  .col-photo .photo,
+  .col-fillings .slice,
+  .col-fillings--photos img{
+    -webkit-user-drag:none;
+    user-drag:none;
+  }
+}
 
 /* ----- колонка 2: описание + калькулятор -----
    Заголовок «прибит» к верху (sticky). Калькулятор имеет фикс высоту,
@@ -672,7 +692,10 @@ body.mob-page .menu-list{top:80px;left:14px}
   display:flex;width:100vw;overflow-x:auto;
   scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
   scroll-padding-inline:20px;
+  cursor:grab;
+  touch-action:pan-x;
 }
+.mob-photos.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-photos::after{
   content:'';flex:0 0 28px;width:28px;scroll-snap-align:end;
 }
@@ -760,7 +783,10 @@ body.mob-page .menu-list{top:80px;left:14px}
   display:flex;overflow-x:auto;
   scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
   scroll-padding-inline:20px;
+  cursor:grab;
+  touch-action:pan-x;
 }
+.mob-fillings.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-fillings::after{
   content:'';flex:0 0 28px;width:28px;scroll-snap-align:end;
 }

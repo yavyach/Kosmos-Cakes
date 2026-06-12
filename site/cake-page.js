@@ -1,5 +1,17 @@
 /* Меню удалено: кнопка «К» теперь — простая ссылка-каталог (см. шаблон). */
 
+  (function setupEmbedBack(){
+    const back = document.querySelector('.back-to-catalog');
+    if (!back) return;
+    if (new URLSearchParams(location.search).get('embed') !== 'kosmos') return;
+    back.setAttribute('href', '#');
+    back.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.parent !== window) window.parent.postMessage('kosmos-close-cake', '*');
+      else location.href = 'https://kosmos-cake.ru/';
+    });
+  })();
+
   (function fitCakeTitle(){
     const title = document.querySelector('.col-info .cake-title');
     if (!title) return;
@@ -175,7 +187,9 @@
      и крутим только в одну сторону. При прохождении длины оригинала вычитаем
      её — позиция «обнуляется» без рывка, потому что клон выглядит идентично.
      Используется и для горизонтальных карусели (mob-photos, mob-fillings),
-     и для вертикальной «колбасы» начинок и фото на десктопе. */
+     и для вертикальной «колбасы» начинок и фото на десктопе.
+     Взаимодействие (клик, колесо, драг) ставит авто-прокрутку на паузу на 5 с,
+     затем плавно возвращает обычную скорость. Драг ЛКМ даёт инерцию с затуханием. */
   function kosmoLoop(el, vert, speed){
     if (!el) return null;
     if (el.__kLoop) return el.__kLoop;
@@ -187,26 +201,144 @@
       return t;
     }
     function viewSize(){ return vert ? el.clientHeight : el.clientWidth; }
-    /* Клонируем, пока общая длина не превысит видимую область как минимум в 2 раза,
-       иначе при wrap-around будут мелькать пустоты на широких контейнерах. */
     var safety = 0;
     while (origSize() < viewSize() * 2 + 4 && safety++ < 8){
       kids.forEach(function(c){ el.appendChild(c.cloneNode(true)); });
     }
-    var dead = 0, sp = speed || (vert ? 0.55 : 0.9);
-    var id = setInterval(function(){
-      if (dead) return;
+
+    var baseSp = speed || (vert ? 0.55 : 0.9);
+    var RESUME_MS = 5000;
+    var RAMP_FRAMES = 48;
+    var killed = false;
+    var paused = false;
+    var ramp = 1;
+    var momentum = 0;
+    var resumeTimer = null;
+    var rafId = null;
+    var lastTs = 0;
+
+    function getScroll(){ return vert ? el.scrollTop : el.scrollLeft; }
+    function setScroll(c){
       var sz = origSize();
       if (sz < 8) return;
-      var c = vert ? el.scrollTop : el.scrollLeft;
-      c += sp;
-      if (c >= sz) c -= sz;
+      while (c >= sz) c -= sz;
+      while (c < 0) c += sz;
       if (vert) el.scrollTop = c; else el.scrollLeft = c;
-    }, 30);
-    function kill(){ dead = 1; clearInterval(id); }
-    el.addEventListener('touchstart', kill, {passive:true});
-    el.addEventListener('wheel', kill, {passive:true});
-    el.addEventListener('pointerdown', kill, {passive:true});
+    }
+    function pauseNow(){
+      clearTimeout(resumeTimer);
+      paused = true;
+      ramp = 0;
+    }
+    function scheduleResume(){
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(function(){
+        paused = false;
+      }, RESUME_MS);
+    }
+    function isInteractive(target){
+      return target && target.closest && target.closest('.info-dot, .filling-bubble, button, a, .close');
+    }
+
+    function tick(ts){
+      if (killed) return;
+      rafId = requestAnimationFrame(tick);
+      if (!lastTs){ lastTs = ts; return; }
+      var dt = Math.min(ts - lastTs, 48) / 30;
+      lastTs = ts;
+      if (origSize() < 8) return;
+
+      if (Math.abs(momentum) > baseSp * 0.12){
+        setScroll(getScroll() + momentum * dt);
+        momentum *= Math.pow(0.94, dt);
+        if (Math.abs(momentum) <= baseSp * 0.12) momentum = 0;
+      } else if (!paused && !dragActive){
+        if (ramp < 1) ramp = Math.min(1, ramp + dt / RAMP_FRAMES);
+        var ease = ramp * ramp * (3 - 2 * ramp);
+        setScroll(getScroll() + baseSp * ease * dt);
+      }
+    }
+    rafId = requestAnimationFrame(tick);
+
+    var dragActive = false;
+    var dragPointerId = null;
+    var dragStartPos = 0;
+    var dragStartScroll = 0;
+    var lastDragPos = 0;
+    var lastDragTs = 0;
+    var dragVel = 0;
+
+    el.addEventListener('wheel', function(){
+      momentum = 0;
+      pauseNow();
+      scheduleResume();
+    }, {passive:true});
+    el.addEventListener('touchstart', function(){
+      momentum = 0;
+      pauseNow();
+      scheduleResume();
+    }, {passive:true});
+
+    el.addEventListener('pointerdown', function(e){
+      if (e.button !== 0) return;
+      if (isInteractive(e.target)){
+        pauseNow();
+        scheduleResume();
+        return;
+      }
+      pauseNow();
+      dragPointerId = e.pointerId;
+      dragActive = false;
+      dragStartPos = vert ? e.clientY : e.clientX;
+      dragStartScroll = getScroll();
+      lastDragPos = dragStartPos;
+      lastDragTs = e.timeStamp;
+      dragVel = 0;
+      momentum = 0;
+    });
+
+    el.addEventListener('pointermove', function(e){
+      if (e.pointerId !== dragPointerId) return;
+      var pos = vert ? e.clientY : e.clientX;
+      var delta = pos - dragStartPos;
+      if (!dragActive && Math.abs(delta) > 5){
+        dragActive = true;
+        el.classList.add('k-loop-dragging');
+        try { el.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      if (!dragActive) return;
+      e.preventDefault();
+      setScroll(dragStartScroll - delta);
+      var now = e.timeStamp;
+      var dt = now - lastDragTs;
+      if (dt > 0) dragVel = (pos - lastDragPos) / dt;
+      lastDragPos = pos;
+      lastDragTs = now;
+    }, {passive:false});
+
+    function endDrag(e){
+      if (e.pointerId !== dragPointerId) return;
+      dragPointerId = null;
+      if (dragActive){
+        el.classList.remove('k-loop-dragging');
+        try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+        momentum = -dragVel * 30 * 2.8;
+        var cap = baseSp * 28;
+        if (momentum > cap) momentum = cap;
+        if (momentum < -cap) momentum = -cap;
+        ramp = 0;
+      }
+      dragActive = false;
+      scheduleResume();
+    }
+    el.addEventListener('pointerup', endDrag);
+    el.addEventListener('pointercancel', endDrag);
+
+    function kill(){
+      killed = true;
+      clearTimeout(resumeTimer);
+      if (rafId) cancelAnimationFrame(rafId);
+    }
     el.__kLoop = { kids: kids, origSize: origSize, kill: kill };
     return el.__kLoop;
   }
