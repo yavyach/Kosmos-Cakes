@@ -65,6 +65,7 @@
     scrollEl: viewport,
     stripEl: grid,
     axis: 'y',
-    speed: 2
+    speed: 2,
+    pauseOnHidden: false
   });
 })();

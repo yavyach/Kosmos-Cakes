@@ -133,7 +133,10 @@
       }, {passive: true});
     }
 
+    var pauseOnHidden = opts.pauseOnHidden !== false;
+
     function onVisibility() {
+      if (!pauseOnHidden) return;
       if (document.hidden) paused = true;
       else paused = false;
     }

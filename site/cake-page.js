@@ -156,11 +156,23 @@
   }
 
   function mountFillings(el){
-    if (!el || !el.dataset.fillings) return;
+    if (!el || !el.dataset.fillings || el.dataset.mounted === '1') return;
+    if (!window.KOSMOS_FILLINGS || !window.KOSMOS_FILLING_SETS) return false;
+    el.dataset.mounted = '1';
     resolveFillings(el.dataset.fillings).forEach(name => el.appendChild(buildSlice(name)));
     bindFillingDelegation(el);
+    return true;
   }
-  mountFillings(document.getElementById('fillings-col'));
+  (function bootFillings(){
+    var el = document.getElementById('fillings-col');
+    if (!el || !el.dataset.fillings) return;
+    if (mountFillings(el)) return;
+    var n = 0;
+    (function retry(){
+      if (mountFillings(el) || ++n > 60) return;
+      setTimeout(retry, 50);
+    })();
+  })();
 
   const page = document.querySelector('.cake-page');
   const deliveryCol = document.getElementById('delivery-col');

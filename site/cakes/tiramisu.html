@@ -7,7 +7,7 @@
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../style.css?v=1781418979">
 <link rel="stylesheet" href="../cake-page-layout.css?v=1781418979">
-<link rel="stylesheet" href="../../calculator/style.css?v=1781420163">
+<link rel="stylesheet" href="../../calculator/style.css?v=1781420766">
 <link rel="stylesheet" href="../../calculator/delivery/delivery.css?v=1781275030">
 </head>
 <body class="cake-page-body">
@@ -25,6 +25,8 @@
       <img class="photo" src="../photos/tiramisu/levo1.webp" alt="тирамису — деталь" loading="eager">
       <img class="photo" src="../photos/tiramisu/levo2.webp" alt="тирамису — деталь" loading="lazy">
       <img class="photo" src="../photos/tiramisu/pravo1.webp" alt="тирамису — деталь" loading="lazy">
+      <img class="photo" src="../photos/tiramisu/pravo2.webp" alt="тирамису — деталь" loading="lazy">
+      <img class="photo" src="../photos/tiramisu/cover.webp" alt="тирамису" loading="lazy">
     </div>
     <div class="cake-photo-dots mob-dots" id="cake-photo-dots" aria-hidden="true"></div>
   </section>
@@ -40,10 +42,11 @@
   </section>
 
   <section class="cake-col col-third" aria-label="третья колонка">
-    <div class="col-fillings col-fillings--photos" id="fillings-col" data-fillings="">
-      <img class="photo" src="../photos/tiramisu/pravo1.webp" alt="тирамису">
-      <img class="photo" src="../photos/tiramisu/pravo2.webp" alt="тирамису">
+    <div class="cake-fill-head">
+      <h2 class="mob-section-title">Что внутри?<img class="mob-section-cherry" src="../assets/cherry.svg" alt="" aria-hidden="true"></h2>
     </div>
+
+    <div class="col-fillings" id="fillings-col" data-fillings="TIRAMISU"></div>
     <div class="cake-fillings-dots mob-dots mob-dots--small" id="cake-fillings-dots" aria-hidden="true"></div>
     <div class="col-delivery" id="delivery-col" aria-hidden="true">
       <button class="delivery-back" id="delivery-back" type="button" aria-label="закрыть доставку">
@@ -84,7 +87,7 @@ renderWeightCake({
 <script>Kosmos.mountDelivery(document.getElementById('dlv-root'));</script>
 <script src="../fillings/data.js"></script>
 <script>window.KOSMOS_CLASS_V='1781264970';</script>
-<script src="../kosmo-drum.js?v=1781420163"></script>
-<script src="../cake-page.js?v=1781420163"></script>
+<script src="../kosmo-drum.js?v=1781422124"></script>
+<script src="../cake-page.js?v=1781422124"></script>
 </body>
 </html>

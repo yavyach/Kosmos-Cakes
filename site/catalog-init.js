@@ -133,7 +133,10 @@
       }, {passive: true});
     }
 
+    var pauseOnHidden = opts.pauseOnHidden !== false;
+
     function onVisibility() {
+      if (!pauseOnHidden) return;
       if (document.hidden) paused = true;
       else paused = false;
     }
@@ -264,7 +267,8 @@
     scrollEl: viewport,
     stripEl: grid,
     axis: 'y',
-    speed: 2
+    speed: 2,
+    pauseOnHidden: false
   });
 })();
 

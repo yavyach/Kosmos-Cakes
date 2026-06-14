@@ -1,8 +1,18 @@
+"""Сборка HTML-блока каталога для вставки в Tilda (inline JS — без внешнего catalog-init.js)."""
 import re
 from pathlib import Path
 
 SITE = Path(__file__).resolve().parent
 PUBLIC = "https://yavyach.github.io/Kosmos-Cakes/site/"
+
+
+def _mtime(name: str) -> str:
+    p = SITE / name
+    return str(int(p.stat().st_mtime)) if p.exists() else ""
+
+
+css_v = _mtime("style.css")
+js_v = _mtime("catalog-init.js")
 
 text = (SITE / "index.html").read_text(encoding="utf-8")
 m = re.search(r'<main class="cover-grid">[\s\S]*?</main>', text)
@@ -16,17 +26,35 @@ main = re.sub(
 
 scroll_fix = (
     "<style>"
-    "html,body{overflow:hidden!important;height:100%!important}"
+    "html,body{margin:0;padding:0;width:100%;}"
+    "html.catalog-page,body.catalog-page{height:100%;max-height:100dvh;}"
+    "body{overflow:hidden!important;}"
     "#allrecords{overflow:visible!important;height:auto!important;min-height:100%!important}"
-    ".catalog-scroll-viewport{position:relative;height:100vh;max-height:100dvh;"
-    "overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;"
-    "overscroll-behavior-y:contain;touch-action:pan-y}"
-    "#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;"
-    "background:#cfcfcf}"
+    ".kosmos-catalog-embed{"
+    "display:block;width:100%;height:100vh;height:100dvh;max-height:100dvh;"
+    "overflow:hidden;position:relative;"
+    "}"
+    ".kosmos-catalog-embed:not(:has(.catalog-scroll-viewport)){"
+    "overflow-y:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-y;"
+    "}"
+    ".catalog-scroll-viewport{"
+    "position:relative!important;inset:auto!important;"
+    "width:100%!important;height:100%!important;max-height:100dvh!important;"
+    "overflow-x:hidden!important;overflow-y:auto!important;"
+    "-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;"
+    "}"
+    "#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;background:#cfcfcf}"
     "#kosmos-cake-viewer.is-open{display:block}"
     "#kosmos-cake-viewer iframe{width:100%;height:100%;border:0;display:block}"
     "body.kosmos-cake-open{overflow:hidden!important}"
     "</style>\n"
+)
+
+boot_class = (
+    "<script>"
+    "document.documentElement.classList.add('catalog-page');"
+    "document.body.classList.add('catalog-page');"
+    "</script>\n"
 )
 
 viewer = (
@@ -82,14 +110,18 @@ viewer = (
     "</script>\n"
 )
 
+catalog_js = (SITE / "catalog-init.js").read_text(encoding="utf-8")
+catalog_script = f"<script>\n/* catalog-init.js v={js_v} */\n{catalog_js}\n</script>\n"
+
 embed = (
     f'<link rel="icon" href="{PUBLIC}assets/favicon.svg" type="image/svg+xml">\n'
-    f'<link rel="stylesheet" href="{PUBLIC}style.css">\n'
+    f'<link rel="stylesheet" href="{PUBLIC}style.css?v={css_v}">\n'
     + scroll_fix
+    + boot_class
     + '<div class="kosmos-catalog-embed">\n'
     + main
     + "\n</div>\n"
-    + f'<script src="{PUBLIC}catalog-init.js"></script>\n'
+    + catalog_script
     + viewer
 )
 (SITE / "tilda-catalog-embed.html").write_text(embed, encoding="utf-8")

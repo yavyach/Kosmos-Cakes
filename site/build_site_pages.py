@@ -493,7 +493,7 @@ def fill_head_markup() -> str:
 
 
 
-PHOTO_GRID_CAKES = {"tiramisu"}
+PHOTO_GRID_CAKES: set[str] = set()
 
 
 def photo_paths_split(cid: str) -> tuple[list[str], list[str], list[str], list[str]]:
@@ -610,7 +610,7 @@ def sync_kosmos_filling_sets() -> None:
     fs_end = core.index("window.fmtMoney", fs_start)
     filling_sets = core[fs_start:fs_end].strip()
     filling_sets = filling_sets.replace("window.FILLING_SETS", "window.KOSMOS_FILLING_SETS", 1)
-    extracted = filling_sets
+    extracted = base_block + "\n" + filling_sets
     data_path = SITE / "fillings" / "data.js"
     data = data_path.read_text(encoding="utf-8")
     m_start = "/* >>> SYNC_FILLING_SETS"
