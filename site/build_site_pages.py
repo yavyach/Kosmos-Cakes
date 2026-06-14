@@ -82,13 +82,28 @@ def calc_asset_versions() -> tuple[str, str, str, str]:
 
 
 def site_asset_versions() -> tuple[str, str]:
-    """mtime cake-page.js и cake-page-layout.css."""
-    js = SITE / "cake-page.js"
+    """mtime layout.css и max(site JS, включая catalog-init.js)."""
+    js_files = (
+        SITE / "cake-page.js",
+        SITE / "kosmo-drum.js",
+        SITE / "catalog-scroll.js",
+        SITE / "catalog-init.js",
+    )
     css = SITE / "cake-page-layout.css"
+    js_v = max((int(f.stat().st_mtime) for f in js_files if f.exists()), default=0)
     return (
         str(int(css.stat().st_mtime)) if css.exists() else "",
-        str(int(js.stat().st_mtime)) if js.exists() else "",
+        str(js_v) if js_v else "",
     )
+
+
+def write_catalog_bundle() -> Path:
+    """Один файл для главной: kosmo-drum + catalog-scroll (без гонки загрузки)."""
+    drum = (SITE / "kosmo-drum.js").read_text(encoding="utf-8")
+    scroll = (SITE / "catalog-scroll.js").read_text(encoding="utf-8")
+    out = SITE / "catalog-init.js"
+    out.write_text(drum + "\n" + scroll + "\n", encoding="utf-8")
+    return out
 
 
 _TEMPLATE_CACHE: dict[str, str] = {}
@@ -810,6 +825,7 @@ def write_unified_catalog_entrypoint(by_id: dict) -> None:
         '<path d="M21.5183 26.4696C21.6112 26.4696 21.7061 26.4146 21.7357 26.3215C22.5312 23.2215 24.6898 15.7815 26.055 13.0814C27.8169 9.58359 30.7331 4.22365 35.8564 2.85457C44.0267 0.670814 49.705 4.96003 50.952 9.56666C51.9818 13.3692 50.0173 17.6881 47.5295 20.1067C45.0417 22.5317 37.9074 25.8348 32.9023 28.3847C27.397 31.1863 24.8164 29.8786 30.9694 31.4275C38.0108 33.1966 47.3818 32.5998 52.2856 43.9863C53.7437 47.3825 53.9146 52.9371 52.3553 56.4202C49.5087 62.8127 39.4668 67.9759 31.1003 61.45C26.7176 58.0305 24.2931 51.7712 23.4132 45.8018C23.0165 43.1568 22.3286 37.6635 22.1345 36.1611C22.1113 35.9897 21.9467 35.8797 21.7757 35.9114H21.7378C21.5901 35.9432 21.4951 36.0765 21.5035 36.2246C21.7209 38.7512 21.7694 40.262 21.9002 42.3273C22.1429 45.9648 22.6324 49.5811 22.835 53.2186C22.9047 54.5644 22.6557 56.0117 22.2336 57.311C19.8935 64.5881 11.9722 66.2619 6.8025 60.629C3.83149 57.3893 2.10965 53.5085 1.39222 49.2531C-0.93944 35.3951 -0.667231 21.7339 4.72195 8.51076C5.30645 7.06338 5.89095 5.56945 6.81939 4.32521C8.65939 1.87695 11.3266 -0.376626 14.9833 0.0529308C18.5156 0.467676 20.6912 2.71279 21.5099 5.93764C22.0627 8.14468 21.9066 10.5549 21.877 12.8783C21.8538 14.3955 21.4318 24.1293 21.2145 26.2348C21.206 26.3511 21.2841 26.4464 21.3938 26.4527C21.4318 26.4527 21.4803 26.4527 21.5183 26.4612H21.5099L21.5183 26.4696Z"/>'
         '</svg>'
     )
+    site_css_v, site_js_v = site_asset_versions()
     html_out = f"""<!doctype html>
 <html lang="ru" class="catalog-page">
 <head>
@@ -817,13 +833,13 @@ def write_unified_catalog_entrypoint(by_id: dict) -> None:
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>kosmos cake — каталог</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v={site_css_v}">
 </head>
 <body class="catalog-page">
 <main class="cover-grid">
 {grid}
 </main>
-<script src="catalog-scroll.js"></script>
+<script src="catalog-init.js?v={site_js_v}"></script>
 </body>
 </html>
 """
@@ -905,6 +921,7 @@ def main():
     bust_class_svg_cache()
     bust_calc_asset_cache()
     sync_kosmos_filling_sets()
+    write_catalog_bundle()
     write_unified_catalog_entrypoint(by_id)
     write_unified_about()
     write_site_preview_index(cakes, by_id)

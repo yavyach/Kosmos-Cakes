@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Импорт фото начинок: исходники → site/fillings/photos/ (имена латиницей)."""
+"""Импорт фото начинок: исходники → site/fillings/photos/ (имена как в data.js)."""
 from __future__ import annotations
 
 import re
@@ -10,25 +10,25 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC_DEFAULT = Path.home() / "Downloads" / "Telegram Desktop" / "nachinki11"
 OUT = ROOT / "site" / "fillings" / "photos"
 
-# нормализованное имя файла (без пробелов/« 1») → целевое имя webp
+# нормализованное имя файла (без пробелов/« 1») → целевое имя в data.js
 FILE_TO_PHOTO: dict[str, str] = {
-    "апельсинмангомаракуйя": "apelsin-mango-marakuyya.webp",
-    "ванильныйсклубникой": "vanilnyy-s-klubnikoy.webp",
-    "ванильныйсвишней": "vanilnyy-s-vishney.webp",
-    "дорблюгруша-грецкийорех": "dorblu-grusha-gretskiy-orex.webp",
-    "кукисэндкрим": "kukis-end-krim.webp",
-    "маклимон": "mak-limon.webp",
-    "морковный": "morkovnyy.webp",
-    "сникерс": "snikers.webp",
-    "фисташкамалина": "fistashka-malina.webp",
-    "фисташковыйчизкейк": "fistashkovyy-chizkeyk.webp",
-    "фундуккофешоколад": "funduk-kofe-shokolad.webp",
-    "черникашоколад": "chernika-shokolad.webp",
-    "чизкейкньюйорк": "chizkeyk-nyu-york.webp",
-    "чизкейкорео": "chizkeyk-oreo.webp",
-    "шоколадкокос": "shokolad-kokos.webp",
-    "шоколадныйсшоколадом": "shokoladnyy-s-shokoladom.webp",
-    "яблочныйсиннабон": "yablochnyy-sinnabon.webp",
+    "апельсинмангомаракуйя": "orangemangomarakua.webp",
+    "ванильныйсклубникой": "vanillastrawberry.webp",
+    "ванильныйсвишней": "vanillacherry.webp",
+    "дорблюгруша-грецкийорех": "dorbluepearwalnut.jpg",
+    "кукисэндкрим": "cookiesandcream.webp",
+    "маклимон": "poppylemon.webp",
+    "морковный": "carrot.webp",
+    "сникерс": "sneakers.webp",
+    "фисташкамалина": "phistachiorasberry.webp",
+    "фисташковыйчизкейк": "phistachiocheesecakes.webp",
+    "фундуккофешоколад": "fundukcoffeechocolate.webp",
+    "черникашоколад": "chernikachocolate.webp",
+    "чизкейкньюйорк": "newyorkcheesecake.webp",
+    "чизкейкорео": "oreocheesecake.webp",
+    "шоколадкокос": "coconutchoco.webp",
+    "шоколадныйсшоколадом": "chocolatechoco.webp",
+    "яблочныйсиннабон": "applacinnabon.webp",
 }
 
 
@@ -45,7 +45,7 @@ def import_photos(src_dir: Path) -> list[str]:
     log: list[str] = []
     used_dest: set[str] = set()
     for f in sorted(src_dir.iterdir()):
-        if not f.is_file() or f.suffix.lower() != ".webp":
+        if not f.is_file() or f.suffix.lower() not in {".webp", ".jpg", ".jpeg"}:
             continue
         key = norm_name(f.name)
         dest_name = FILE_TO_PHOTO.get(key)
@@ -61,6 +61,11 @@ def import_photos(src_dir: Path) -> list[str]:
     missing = set(FILE_TO_PHOTO.values()) - used_dest
     for m in sorted(missing):
         log.append(f"  WARN: нет исходника для {m}")
+    # отдельный срез «Сникерс» (с заглавной) для особых тортов
+    sn = OUT / "сникерс 1.webp"
+    if "sneakers.webp" in used_dest and not sn.exists():
+        shutil.copy2(OUT / "sneakers.webp", sn)
+        log.append("  sneakers.webp -> сникерс 1.webp (копия)")
     return log
 
 

@@ -183,193 +183,16 @@
     }
   }
 
-  /* Бесконечная авто-карусель: клонируем детей, крутим через rAF.
-     Свайп на таче — нативный (pointer-драг отключён), авто-прокрутка
-     ставится на паузу при касании и возобновляется через 5 с. */
+  /* Боковые колонки — тот же Kosmo.Drum, что и на главной. */
   function kosmoLoop(el, vert, speed){
-    if (!el) return null;
-    if (el.__kLoop) return el.__kLoop;
-    var kids = Array.prototype.slice.call(el.children);
-    if (!kids.length) return null;
-    el.classList.add('k-loop-auto');
-    function origSize(){
-      var t = 0;
-      for (var i = 0; i < kids.length; i++) t += vert ? kids[i].offsetHeight : kids[i].offsetWidth;
-      return t;
-    }
-    function viewSize(){ return vert ? el.clientHeight : el.clientWidth; }
-
-    var safety = 0;
-    while (origSize() < viewSize() * 2 + 4 && safety++ < 8){
-      kids.forEach(function(c){ el.appendChild(c.cloneNode(true)); });
-    }
-
-    var baseSp = speed || (vert ? 0.55 : 0.9);
-    var RESUME_MS = 5000;
-    var RAMP_FRAMES = 48;
-    var killed = false;
-    var paused = false;
-    var ramp = 1;
-    var momentum = 0;
-    var resumeTimer = null;
-    var rafId = null;
-    var lastTs = 0;
-
-    function getScroll(){ return vert ? el.scrollTop : el.scrollLeft; }
-    function setScroll(c){
-      var sz = origSize();
-      if (sz < 8) return;
-      while (c >= sz) c -= sz;
-      while (c < 0) c += sz;
-      c = Math.round(c);
-      if (vert) el.scrollTop = c; else el.scrollLeft = c;
-    }
-    function pauseNow(){
-      clearTimeout(resumeTimer);
-      paused = true;
-      ramp = 0;
-    }
-    function scheduleResume(){
-      clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(function(){
-        paused = false;
-      }, RESUME_MS);
-    }
-    function isInteractive(target){
-      return target && target.closest && target.closest('.info-dot, .filling-bubble, button, a, .close');
-    }
-
-    function tick(ts){
-      if (killed) return;
-      rafId = requestAnimationFrame(tick);
-      if (!lastTs){ lastTs = ts; return; }
-      var dt = Math.min(ts - lastTs, 48) / 16;
-      lastTs = ts;
-      if (origSize() < 8) return;
-
-      if (Math.abs(momentum) > baseSp * 0.12){
-        setScroll(getScroll() + momentum * dt);
-        momentum *= Math.pow(0.94, dt);
-        if (Math.abs(momentum) <= baseSp * 0.12) momentum = 0;
-      } else if (!paused && !dragActive){
-        if (ramp < 1) ramp = Math.min(1, ramp + dt / RAMP_FRAMES);
-        var ease = ramp * ramp * (3 - 2 * ramp);
-        setScroll(getScroll() + baseSp * ease * dt);
-      }
-    }
-    rafId = requestAnimationFrame(tick);
-
-    var dragActive = false;
-    var dragPointerId = null;
-    var dragStartPos = 0;
-    var dragStartScroll = 0;
-    var lastDragPos = 0;
-    var lastDragTs = 0;
-    var dragVel = 0;
-
-    var touchEngaged = false;
-    var touchStartPos = 0;
-
-    el.addEventListener('wheel', function(){
-      momentum = 0;
-      pauseNow();
-      scheduleResume();
-    }, {passive:true});
-
-    el.addEventListener('touchstart', function(e){
-      momentum = 0;
-      touchEngaged = false;
-      if (e.changedTouches && e.changedTouches[0]){
-        touchStartPos = vert ? e.changedTouches[0].clientY : e.changedTouches[0].clientX;
-      }
-    }, {passive:true});
-    el.addEventListener('touchmove', function(e){
-      if (!e.changedTouches || !e.changedTouches[0]) return;
-      var pos = vert ? e.changedTouches[0].clientY : e.changedTouches[0].clientX;
-      if (!touchEngaged && Math.abs(pos - touchStartPos) > 8){
-        touchEngaged = true;
-        pauseNow();
-      }
-      if (touchEngaged) scheduleResume();
-    }, {passive:true});
-    el.addEventListener('touchend', function(){
-      touchEngaged = false;
-      scheduleResume();
-    }, {passive:true});
-    el.addEventListener('touchcancel', function(){
-      touchEngaged = false;
-      scheduleResume();
-    }, {passive:true});
-
-    document.addEventListener('visibilitychange', function(){
-      if (document.hidden) pauseNow();
-      else { paused = false; ramp = 1; }
+    if (!el || !window.Kosmo || !Kosmo.Drum) return null;
+    return Kosmo.Drum.bind({
+      scrollEl: el,
+      stripEl: el,
+      axis: vert ? 'y' : 'x',
+      speed: speed,
+      pauseOnClick: '.info-dot, .filling-bubble, button, a, .close'
     });
-
-    el.addEventListener('pointerdown', function(e){
-      if (e.button !== 0) return;
-      if (e.pointerType === 'touch') return;
-      if (isInteractive(e.target)){
-        pauseNow();
-        scheduleResume();
-        return;
-      }
-      dragPointerId = e.pointerId;
-      dragActive = false;
-      dragStartPos = vert ? e.clientY : e.clientX;
-      dragStartScroll = getScroll();
-      lastDragPos = dragStartPos;
-      lastDragTs = e.timeStamp;
-      dragVel = 0;
-      momentum = 0;
-    });
-
-    el.addEventListener('pointermove', function(e){
-      if (e.pointerId !== dragPointerId) return;
-      var pos = vert ? e.clientY : e.clientX;
-      var delta = pos - dragStartPos;
-      if (!dragActive && Math.abs(delta) > 5){
-        dragActive = true;
-        pauseNow();
-        el.classList.add('k-loop-dragging');
-        try { el.setPointerCapture(e.pointerId); } catch (_) {}
-      }
-      if (!dragActive) return;
-      e.preventDefault();
-      setScroll(dragStartScroll - delta);
-      var now = e.timeStamp;
-      var dt = now - lastDragTs;
-      if (dt > 0) dragVel = (pos - lastDragPos) / dt;
-      lastDragPos = pos;
-      lastDragTs = now;
-    }, {passive:false});
-
-    function endDrag(e){
-      if (e.pointerId !== dragPointerId) return;
-      dragPointerId = null;
-      if (dragActive){
-        el.classList.remove('k-loop-dragging');
-        try { el.releasePointerCapture(e.pointerId); } catch (_) {}
-        momentum = -dragVel * 30 * 2.8;
-        var cap = baseSp * 28;
-        if (momentum > cap) momentum = cap;
-        if (momentum < -cap) momentum = -cap;
-        ramp = 0;
-        scheduleResume();
-      }
-      dragActive = false;
-    }
-    el.addEventListener('pointerup', endDrag);
-    el.addEventListener('pointercancel', endDrag);
-
-    function kill(){
-      killed = true;
-      clearTimeout(resumeTimer);
-      if (rafId) cancelAnimationFrame(rafId);
-      el.classList.remove('k-loop-auto', 'k-loop-dragging');
-    }
-    el.__kLoop = { kids: kids, origSize: origSize, kill: kill };
-    return el.__kLoop;
   }
 
   var _loopMq = window.matchMedia('(max-width:900px)');
@@ -380,6 +203,7 @@
     ['cake-photos','fillings-col'].forEach(id => {
       const el = document.getElementById(id);
       if (el){
+        delete el.__kDrum;
         delete el.__kLoop;
         el.classList.remove('k-loop-auto', 'k-loop-native', 'k-loop-dragging');
       }
@@ -394,18 +218,16 @@
     var mode = _loopMq.matches ? 'mob' : 'desk';
     var fcNeeded = !!(fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos')));
     var vert = !_loopMq.matches;
-    var phReady = carouselReady(ph, vert);
-    var fcReady = !fcNeeded || carouselReady(fc, vert);
-    if (_loopMode === mode && ph && ph.__kLoop && phReady && (!fcNeeded || (fc && fc.__kLoop && fcReady))) return;
+    if (_loopMode === mode && ph && ph.__kLoop && (!fcNeeded || (fc && fc.__kLoop))) return;
     _loopMode = mode;
     killLoops();
     if (_loopMq.matches){
-      if (ph){ var h = kosmoLoop(ph, false, 2.8); if (h) _loopHandles.push(h); }
-      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 2.4); if (h2) _loopHandles.push(h2); }
+      if (ph){ var h = kosmoLoop(ph, false, 2.6); if (h) _loopHandles.push(h); }
+      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 2.2); if (h2) _loopHandles.push(h2); }
     } else {
-      if (ph){ var h3 = kosmoLoop(ph, true, 1.8); if (h3) _loopHandles.push(h3); }
+      if (ph){ var h3 = kosmoLoop(ph, true, 1.6); if (h3) _loopHandles.push(h3); }
       if (fc && (fc.classList.contains('col-fillings--photos') || fc.dataset.fillings)){
-        var h4 = kosmoLoop(fc, true, 1.6); if (h4) _loopHandles.push(h4);
+        var h4 = kosmoLoop(fc, true, 1.4); if (h4) _loopHandles.push(h4);
       }
     }
   }
