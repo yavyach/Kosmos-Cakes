@@ -605,11 +605,13 @@ def sync_kosmos_filling_sets() -> None:
     core = (ROOT / "calculator" / "core.js").read_text(encoding="utf-8")
     base_start = core.index("const _BASE =")
     base_end = core.index("window.FILLING_SETS", base_start)
-    base_block = core[base_start:base_end].strip()
+    # _KOSMOS_BASE — не _BASE: на карточках core.js уже объявляет const _BASE.
+    base_block = core[base_start:base_end].strip().replace("const _BASE", "const _KOSMOS_BASE", 1)
     fs_start = core.index("window.FILLING_SETS =")
     fs_end = core.index("window.fmtMoney", fs_start)
     filling_sets = core[fs_start:fs_end].strip()
     filling_sets = filling_sets.replace("window.FILLING_SETS", "window.KOSMOS_FILLING_SETS", 1)
+    filling_sets = filling_sets.replace("_BASE", "_KOSMOS_BASE")
     extracted = base_block + "\n" + filling_sets
     data_path = SITE / "fillings" / "data.js"
     data = data_path.read_text(encoding="utf-8")

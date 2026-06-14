@@ -114,9 +114,12 @@
     bubble.addEventListener('click', () => closeWrap(wrap));
   }
 
+  function fillingSets(){
+    return window.KOSMOS_FILLING_SETS || window.FILLING_SETS || {};
+  }
   function resolveFillings(raw){
     if (!raw) return [];
-    const sets = window.KOSMOS_FILLING_SETS || {};
+    const sets = fillingSets();
     const list = sets[raw] ? sets[raw] : raw.split(',').map(s => s.trim()).filter(Boolean);
     return typeof window.sortByCanonical === 'function' ? window.sortByCanonical(list) : list;
   }
@@ -157,10 +160,11 @@
 
   function mountFillings(el){
     if (!el || !el.dataset.fillings || el.dataset.mounted === '1') return;
-    if (!window.KOSMOS_FILLINGS || !window.KOSMOS_FILLING_SETS) return false;
+    if (!window.KOSMOS_FILLINGS || !Object.keys(fillingSets()).length) return false;
     el.dataset.mounted = '1';
     resolveFillings(el.dataset.fillings).forEach(name => el.appendChild(buildSlice(name)));
     bindFillingDelegation(el);
+    layoutReady(kosmoLoopScroll);
     return true;
   }
   (function bootFillings(){
@@ -169,7 +173,7 @@
     if (mountFillings(el)) return;
     var n = 0;
     (function retry(){
-      if (mountFillings(el) || ++n > 60) return;
+      if (mountFillings(el) || ++n > 120) return;
       setTimeout(retry, 50);
     })();
   })();
