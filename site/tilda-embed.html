@@ -1,5 +1,5 @@
 <link rel="icon" href="https://yavyach.github.io/Kosmos-Cakes/site/assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://yavyach.github.io/Kosmos-Cakes/site/style.css?v=1781420090">
+<link rel="stylesheet" href="https://yavyach.github.io/Kosmos-Cakes/site/style.css?v=1781433540">
 <style>html,body{margin:0;padding:0;width:100%;}html.catalog-page,body.catalog-page{height:100%;max-height:100dvh;}body{overflow:hidden!important;}#allrecords{overflow:visible!important;height:auto!important;min-height:100%!important}.kosmos-catalog-embed{display:block;width:100%;height:100vh;height:100dvh;max-height:100dvh;overflow:hidden;position:relative;}.kosmos-catalog-embed:not(:has(.catalog-scroll-viewport)){overflow-y:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-y;}.catalog-scroll-viewport{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;max-height:100dvh!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;}#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;background:#cfcfcf}#kosmos-cake-viewer.is-open{display:block}#kosmos-cake-viewer iframe{width:100%;height:100%;border:0;display:block}body.kosmos-cake-open{overflow:hidden!important}</style>
 <script>document.documentElement.classList.add('catalog-page');document.body.classList.add('catalog-page');</script>
 <div class="kosmos-catalog-embed">
@@ -37,7 +37,7 @@
 </main>
 </div>
 <script>
-/* catalog-init.js v=1781422139 */
+/* catalog-init.js v=1781433541 */
 /* Общий «барабан»: бесшовный автоскролл + пауза при жесте пользователя. */
 (function (global) {
   var Kosmo = global.Kosmo = global.Kosmo || {};
@@ -69,6 +69,8 @@
       var clone = node.cloneNode(true);
       clone.classList.add(cloneClass);
       clone.setAttribute('aria-hidden', 'true');
+      clone.removeAttribute('data-cake');
+      clone.removeAttribute('data-kosmos-cake');
       stripEl.appendChild(clone);
     });
 
