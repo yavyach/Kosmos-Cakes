@@ -125,4 +125,5 @@ embed = (
     + viewer
 )
 (SITE / "tilda-catalog-embed.html").write_text(embed, encoding="utf-8")
+(SITE / "tilda-embed.html").write_text(embed, encoding="utf-8")
 print(len(embed))
