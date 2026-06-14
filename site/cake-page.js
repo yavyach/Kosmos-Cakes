@@ -164,19 +164,9 @@
     el.dataset.mounted = '1';
     resolveFillings(el.dataset.fillings).forEach(name => el.appendChild(buildSlice(name)));
     bindFillingDelegation(el);
-    layoutReady(kosmoLoopScroll);
+    scheduleLoopRefresh();
     return true;
   }
-  (function bootFillings(){
-    var el = document.getElementById('fillings-col');
-    if (!el || !el.dataset.fillings) return;
-    if (mountFillings(el)) return;
-    var n = 0;
-    (function retry(){
-      if (mountFillings(el) || ++n > 120) return;
-      setTimeout(retry, 50);
-    })();
-  })();
 
   const page = document.querySelector('.cake-page');
   const deliveryCol = document.getElementById('delivery-col');
@@ -269,9 +259,13 @@
   function layoutReady(cb){
     var tries = 0;
     var vert = !_loopMq.matches;
+    var fc = document.getElementById('fillings-col');
+    var fcNeeded = !!(fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos')));
     function go(){
       var ph = document.getElementById('cake-photos');
-      if (carouselReady(ph, vert)){
+      var phReady = carouselReady(ph, vert);
+      var fcReady = !fcNeeded || carouselReady(fc, vert);
+      if (phReady && fcReady){
         cb();
         return;
       }
@@ -279,6 +273,10 @@
       else cb();
     }
     go();
+  }
+
+  function scheduleLoopRefresh(){
+    layoutReady(kosmoLoopScroll);
   }
 
   function startLoopsWhenReady(){
@@ -310,6 +308,17 @@
   startLoopsWhenReady();
   if (_loopMq.addEventListener) _loopMq.addEventListener('change', function(){ layoutReady(kosmoLoopScroll); });
   else if (_loopMq.addListener) _loopMq.addListener(function(){ layoutReady(kosmoLoopScroll); });
+
+  (function bootFillings(){
+    var el = document.getElementById('fillings-col');
+    if (!el || !el.dataset.fillings) return;
+    if (mountFillings(el)) return;
+    var n = 0;
+    (function retry(){
+      if (mountFillings(el) || ++n > 120) return;
+      setTimeout(retry, 50);
+    })();
+  })();
 
   function kosmoDots(carouselId, dotsId){
     if (window.Kosmos && window.Kosmos.Dots && window.Kosmos.Dots.bindCarousel){
