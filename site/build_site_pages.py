@@ -82,17 +82,18 @@ def calc_asset_versions() -> tuple[str, str, str, str]:
 
 
 def site_asset_versions() -> tuple[str, str]:
-    """mtime layout.css и max(site JS, включая catalog-init.js)."""
+    """mtime style.css + layout.css; max(site JS, включая catalog-init.js)."""
     js_files = (
         SITE / "cake-page.js",
         SITE / "kosmo-drum.js",
         SITE / "catalog-scroll.js",
         SITE / "catalog-init.js",
     )
-    css = SITE / "cake-page-layout.css"
+    css_files = (SITE / "style.css", SITE / "cake-page-layout.css")
     js_v = max((int(f.stat().st_mtime) for f in js_files if f.exists()), default=0)
+    css_v = max((int(f.stat().st_mtime) for f in css_files if f.exists()), default=0)
     return (
-        str(int(css.stat().st_mtime)) if css.exists() else "",
+        str(css_v) if css_v else "",
         str(js_v) if js_v else "",
     )
 
