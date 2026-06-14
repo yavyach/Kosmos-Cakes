@@ -29,6 +29,8 @@
       var clone = node.cloneNode(true);
       clone.classList.add(cloneClass);
       clone.setAttribute('aria-hidden', 'true');
+      clone.removeAttribute('data-cake');
+      clone.removeAttribute('data-kosmos-cake');
       stripEl.appendChild(clone);
     });
 

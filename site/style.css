@@ -1111,6 +1111,11 @@ body.mob-page .menu-list{top:80px;left:14px}
   }  
   .cover[data-cake='куинджи']{
     order: 29;
-  }  
-  
+  }
+
+  /* Клоны барабана — после всех оригиналов; иначе совпадает data-cake/order → в ряду 2 одинаковых */
+  .cover.k-loop-clone{
+    order:1000 !important;
+  }
+
 }
