@@ -756,7 +756,6 @@ body.cake-page-body{
     height:auto !important;min-height:100vh;
     overflow-y:auto !important;overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
-    touch-action:pan-y;
   }
 }
 @media (min-width:901px){
@@ -778,9 +777,9 @@ body.cake-page-body{
   .col-photo{padding:0;overflow:visible}
   .cake-photos{
     display:flex;width:100vw;overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scroll-padding-inline:20px;
-    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scroll-padding-inline:0;
+    touch-action:manipulation;
   }
   .cake-photos.k-loop-auto{
     scroll-snap-type:none;
@@ -792,9 +791,9 @@ body.cake-page-body{
   }
   #fillings-col.col-fillings:not(.col-fillings--photos){
     position:relative;width:100vw;display:flex;overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scroll-padding-inline:20px;
-    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scroll-padding-inline:0;
+    touch-action:manipulation;
   }
   #fillings-col.col-fillings.k-loop-auto{
     scroll-snap-type:none;
@@ -806,9 +805,9 @@ body.cake-page-body{
   /* тирамису: третья колонка — горизонтальная карусель, как верхняя лента */
   #fillings-col.col-fillings--photos{
     display:flex;width:100vw;max-width:100vw;overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scroll-padding-inline:20px;
-    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scroll-padding-inline:0;
+    touch-action:manipulation;
     height:auto;
   }
   #fillings-col.col-fillings--photos .photo{
@@ -829,10 +828,10 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-photos-wrap{position:relative;width:100vw}
 .mob-photos{
   display:flex;width:100vw;overflow-x:auto;overflow-y:hidden;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-  scroll-padding-inline:20px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  scroll-padding-inline:0;
   cursor:grab;
-  touch-action:pan-x pan-y pinch-zoom;
+  touch-action:manipulation;
 }
 .mob-photos.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-photos::after{
@@ -920,10 +919,10 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-fillings{
   position:relative;width:100vw;
   display:flex;overflow-x:auto;overflow-y:hidden;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-  scroll-padding-inline:20px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  scroll-padding-inline:0;
   cursor:grab;
-  touch-action:pan-x pan-y pinch-zoom;
+  touch-action:manipulation;
 }
 .mob-fillings.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-fillings::after{
@@ -1000,14 +999,15 @@ body.mob-page .menu-list{top:80px;left:14px}
   .col-third .col-fillings,
   .col-third .col-delivery{
     position:relative;inset:auto;transform:none;transition:none;opacity:1;
-    height:auto;overflow:visible;
+    height:auto;
   }
+  .col-third .col-delivery{overflow:visible}
   .col-third .col-fillings.col-fillings--photos,
   #fillings-col.col-fillings--photos{
     display:flex;width:100vw;overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scroll-padding-inline:20px;
-    touch-action:pan-x pan-y pinch-zoom;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scroll-padding-inline:0;
+    touch-action:manipulation;
   }
   .col-third .col-delivery{display:none;min-height:80vh}
   .cake-page.is-delivery .col-third .col-fillings{display:none}
