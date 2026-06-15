@@ -93,8 +93,25 @@
     close.className = 'close';
     close.setAttribute('aria-label', 'закрыть');
     close.innerHTML = CLOSE_X;
+    close.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeWrap(wrap);
+    });
     bubble.appendChild(close);
     return bubble;
+  }
+  function syncFillingsDrumPause(){
+    const fc = document.getElementById('fillings-col');
+    const api = fc && fc.__kDrum;
+    if (!api || !api.hold || !api.release) return;
+    const need = openStack.length > 0;
+    if (need && !fc.__kFillingsHeld) {
+      fc.__kFillingsHeld = true;
+      api.hold();
+    } else if (!need && fc.__kFillingsHeld) {
+      fc.__kFillingsHeld = false;
+      api.release();
+    }
   }
   function closeWrap(wrap){
     wrap.classList.remove('is-open');
@@ -102,6 +119,7 @@
     if (b) b.remove();
     const i = openStack.indexOf(wrap);
     if (i !== -1) openStack.splice(i, 1);
+    syncFillingsDrumPause();
   }
   function openWrap(wrap, name){
     if (wrap.classList.contains('is-open')) return;
@@ -111,7 +129,10 @@
     wrap.appendChild(bubble);
     wrap.classList.add('is-open');
     openStack.push(wrap);
-    bubble.addEventListener('click', () => closeWrap(wrap));
+    syncFillingsDrumPause();
+    if (wrap.scrollIntoView) {
+      wrap.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+    }
   }
 
   function fillingSets(){

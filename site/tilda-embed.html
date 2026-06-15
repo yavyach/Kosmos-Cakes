@@ -1,6 +1,6 @@
 <link rel="icon" href="https://yavyach.github.io/Kosmos-Cakes/site/assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="https://yavyach.github.io/Kosmos-Cakes/site/style.css?v=1781433540">
-<style>html,body{margin:0;padding:0;width:100%;}html.catalog-page,body.catalog-page{height:100%;max-height:100dvh;}body{overflow:hidden!important;}#allrecords{overflow:visible!important;height:auto!important;min-height:100%!important}.kosmos-catalog-embed{display:block;width:100%;height:100vh;height:100dvh;max-height:100dvh;overflow:hidden;position:relative;}.kosmos-catalog-embed:not(:has(.catalog-scroll-viewport)){overflow-y:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-y;}.catalog-scroll-viewport{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;max-height:100dvh!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y;}#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;background:#cfcfcf}#kosmos-cake-viewer.is-open{display:block}#kosmos-cake-viewer iframe{width:100%;height:100%;border:0;display:block}body.kosmos-cake-open{overflow:hidden!important}</style>
+<link rel="stylesheet" href="https://yavyach.github.io/Kosmos-Cakes/site/style.css?v=1781513579">
+<style>html,body{margin:0;padding:0;width:100%;}html.catalog-page,body.catalog-page{height:auto;min-height:100%;}body.catalog-page{overflow-y:auto!important;overflow-x:hidden!important;}#allrecords{overflow:visible!important;height:auto!important;min-height:100%!important}.kosmos-catalog-embed{display:block;width:100%;min-height:100vh;min-height:100dvh;overflow:visible;position:relative;}#kosmos-cake-viewer{position:fixed;inset:0;z-index:99999;display:none;background:#cfcfcf}#kosmos-cake-viewer.is-open{display:block}#kosmos-cake-viewer iframe{width:100%;height:100%;border:0;display:block}body.kosmos-cake-open{overflow:hidden!important}</style>
 <script>document.documentElement.classList.add('catalog-page');document.body.classList.add('catalog-page');</script>
 <div class="kosmos-catalog-embed">
 <main class="cover-grid">
@@ -37,7 +37,7 @@
 </main>
 </div>
 <script>
-/* catalog-init.js v=1781433680 */
+/* catalog-init.js v=1781513602 */
 /* Общий «барабан»: бесшовный автоскролл + пауза при жесте пользователя. */
 (function (global) {
   var Kosmo = global.Kosmo = global.Kosmo || {};
@@ -116,10 +116,28 @@
       byCode = false;
     }
 
-    function schedulePause() {
+    var holdLevel = 0;
+
+    function hold() {
+      holdLevel++;
       paused = true;
       clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(function () { paused = false; }, userPauseMs);
+      pauseTimer = null;
+    }
+
+    function release() {
+      holdLevel = Math.max(0, holdLevel - 1);
+      if (holdLevel === 0 && !pauseTimer) paused = false;
+    }
+
+    function schedulePause() {
+      if (holdLevel > 0) return;
+      paused = true;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(function () {
+        pauseTimer = null;
+        if (holdLevel === 0) paused = false;
+      }, userPauseMs);
     }
 
     function tick(ts) {
@@ -233,7 +251,7 @@
     global.addEventListener('load', boot, {once: true});
     global.requestAnimationFrame(function () { global.requestAnimationFrame(boot); });
 
-    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot };
+    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot, hold: hold, release: release };
     scrollEl.__kDrum = api;
     scrollEl.__kLoop = api;
     return api;
@@ -242,13 +260,13 @@
   Kosmo.Drum = { bind: bind };
 })(typeof window !== 'undefined' ? window : this);
 
-/* Каталог: viewport + Tilda unlock → Kosmo.Drum */
+/* Каталог: разблокировка Tilda, без автоскролла (барабан только на карточках торта). */
 (function () {
   var grid = document.querySelector('.cover-grid');
   if (!grid) return;
 
-  document.documentElement.classList.add('catalog-page');
-  document.body.classList.add('catalog-page');
+  document.documentElement.classList.add('catalog-page', 'catalog-ready');
+  document.body.classList.add('catalog-page', 'catalog-ready');
 
   function unlock(el) {
     if (!el) return;
@@ -261,25 +279,18 @@
 
   unlock(document.getElementById('allrecords'));
 
-  var parent = grid.parentElement;
-  var embed = parent && parent.classList.contains('kosmos-catalog-embed') ? parent : null;
   var viewport = document.getElementById('catalog-scroll-viewport');
-  if (!viewport) {
-    viewport = document.createElement('div');
-    viewport.id = 'catalog-scroll-viewport';
-    viewport.className = 'catalog-scroll-viewport';
-    if (embed) {
-      embed.insertBefore(viewport, grid);
-    } else {
-      document.body.insertBefore(viewport, grid);
-    }
-    viewport.appendChild(grid);
+  if (viewport && grid.parentElement === viewport) {
+    viewport.parentElement.insertBefore(grid, viewport);
+    viewport.remove();
   }
 
-  document.documentElement.classList.add('catalog-ready');
-  document.body.classList.add('catalog-ready');
+  grid.querySelectorAll('.cover-grid__clone, .k-loop-clone').forEach(function (node) {
+    node.remove();
+  });
+  grid.classList.remove('k-loop-auto', 'k-loop-dragging');
 
-  var el = viewport.parentElement;
+  var el = grid.parentElement;
   for (var i = 0; i < 16 && el; i++, el = el.parentElement) {
     if (el === document.documentElement) break;
     if (el.id === 'allrecords') {
@@ -297,21 +308,6 @@
       el.style.setProperty('max-height', 'none', 'important');
     }
   }
-
-  grid.querySelectorAll('.cover-grid__clone').forEach(function (node) { node.remove(); });
-
-  if (!window.Kosmo || !Kosmo.Drum) {
-    console.error('Kosmos.Drum не загружен — проверьте catalog-init.js / kosmo-drum.js');
-    return;
-  }
-
-  Kosmo.Drum.bind({
-    scrollEl: viewport,
-    stripEl: grid,
-    axis: 'y',
-    speed: 2,
-    pauseOnHidden: false
-  });
 })();
 
 

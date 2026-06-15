@@ -76,10 +76,28 @@
       byCode = false;
     }
 
-    function schedulePause() {
+    var holdLevel = 0;
+
+    function hold() {
+      holdLevel++;
       paused = true;
       clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(function () { paused = false; }, userPauseMs);
+      pauseTimer = null;
+    }
+
+    function release() {
+      holdLevel = Math.max(0, holdLevel - 1);
+      if (holdLevel === 0 && !pauseTimer) paused = false;
+    }
+
+    function schedulePause() {
+      if (holdLevel > 0) return;
+      paused = true;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(function () {
+        pauseTimer = null;
+        if (holdLevel === 0) paused = false;
+      }, userPauseMs);
     }
 
     function tick(ts) {
@@ -193,7 +211,7 @@
     global.addEventListener('load', boot, {once: true});
     global.requestAnimationFrame(function () { global.requestAnimationFrame(boot); });
 
-    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot };
+    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot, hold: hold, release: release };
     scrollEl.__kDrum = api;
     scrollEl.__kLoop = api;
     return api;

@@ -76,10 +76,28 @@
       byCode = false;
     }
 
-    function schedulePause() {
+    var holdLevel = 0;
+
+    function hold() {
+      holdLevel++;
       paused = true;
       clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(function () { paused = false; }, userPauseMs);
+      pauseTimer = null;
+    }
+
+    function release() {
+      holdLevel = Math.max(0, holdLevel - 1);
+      if (holdLevel === 0 && !pauseTimer) paused = false;
+    }
+
+    function schedulePause() {
+      if (holdLevel > 0) return;
+      paused = true;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(function () {
+        pauseTimer = null;
+        if (holdLevel === 0) paused = false;
+      }, userPauseMs);
     }
 
     function tick(ts) {
@@ -193,7 +211,7 @@
     global.addEventListener('load', boot, {once: true});
     global.requestAnimationFrame(function () { global.requestAnimationFrame(boot); });
 
-    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot };
+    var api = { kids: kids, origSize: origSize, kill: kill, boot: boot, hold: hold, release: release };
     scrollEl.__kDrum = api;
     scrollEl.__kLoop = api;
     return api;
@@ -202,13 +220,13 @@
   Kosmo.Drum = { bind: bind };
 })(typeof window !== 'undefined' ? window : this);
 
-/* Каталог: viewport + Tilda unlock → Kosmo.Drum */
+/* Каталог: разблокировка Tilda, без автоскролла (барабан только на карточках торта). */
 (function () {
   var grid = document.querySelector('.cover-grid');
   if (!grid) return;
 
-  document.documentElement.classList.add('catalog-page');
-  document.body.classList.add('catalog-page');
+  document.documentElement.classList.add('catalog-page', 'catalog-ready');
+  document.body.classList.add('catalog-page', 'catalog-ready');
 
   function unlock(el) {
     if (!el) return;
@@ -221,25 +239,18 @@
 
   unlock(document.getElementById('allrecords'));
 
-  var parent = grid.parentElement;
-  var embed = parent && parent.classList.contains('kosmos-catalog-embed') ? parent : null;
   var viewport = document.getElementById('catalog-scroll-viewport');
-  if (!viewport) {
-    viewport = document.createElement('div');
-    viewport.id = 'catalog-scroll-viewport';
-    viewport.className = 'catalog-scroll-viewport';
-    if (embed) {
-      embed.insertBefore(viewport, grid);
-    } else {
-      document.body.insertBefore(viewport, grid);
-    }
-    viewport.appendChild(grid);
+  if (viewport && grid.parentElement === viewport) {
+    viewport.parentElement.insertBefore(grid, viewport);
+    viewport.remove();
   }
 
-  document.documentElement.classList.add('catalog-ready');
-  document.body.classList.add('catalog-ready');
+  grid.querySelectorAll('.cover-grid__clone, .k-loop-clone').forEach(function (node) {
+    node.remove();
+  });
+  grid.classList.remove('k-loop-auto', 'k-loop-dragging');
 
-  var el = viewport.parentElement;
+  var el = grid.parentElement;
   for (var i = 0; i < 16 && el; i++, el = el.parentElement) {
     if (el === document.documentElement) break;
     if (el.id === 'allrecords') {
@@ -257,20 +268,5 @@
       el.style.setProperty('max-height', 'none', 'important');
     }
   }
-
-  grid.querySelectorAll('.cover-grid__clone').forEach(function (node) { node.remove(); });
-
-  if (!window.Kosmo || !Kosmo.Drum) {
-    console.error('Kosmos.Drum не загружен — проверьте catalog-init.js / kosmo-drum.js');
-    return;
-  }
-
-  Kosmo.Drum.bind({
-    scrollEl: viewport,
-    stripEl: grid,
-    axis: 'y',
-    speed: 2,
-    pauseOnHidden: false
-  });
 })();
 
