@@ -274,6 +274,13 @@ img{display:block;max-width:100%}
 }
 .cover:nth-child(3n+2) img{animation-delay:-5s}
 .cover:nth-child(3n) img{animation-delay:-10s}
+body.catalog-page .cover img,
+.kosmos-catalog-embed .cover img{
+  height:100%;
+  animation:none;
+  transform:none;
+  will-change:auto;
+}
 @keyframes coverPan{
   from{transform:translateY(0)}
   to{transform:translateY(-10%)}

@@ -38,6 +38,7 @@ scroll_fix = (
     "#kosmos-cake-viewer.is-open{display:block}"
     "#kosmos-cake-viewer iframe{width:100%;height:100%;border:0;display:block}"
     "body.kosmos-cake-open{overflow:hidden!important}"
+    ".kosmos-catalog-embed .cover img{height:100%;animation:none!important;transform:none!important;will-change:auto}"
     "</style>\n"
 )
 

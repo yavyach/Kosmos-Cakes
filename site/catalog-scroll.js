@@ -18,6 +18,7 @@
   unlock(document.getElementById('allrecords'));
 
   var viewport = document.getElementById('catalog-scroll-viewport');
+  if (viewport && viewport.__kDrum && viewport.__kDrum.kill) viewport.__kDrum.kill();
   if (viewport && grid.parentElement === viewport) {
     viewport.parentElement.insertBefore(grid, viewport);
     viewport.remove();
@@ -27,6 +28,14 @@
     node.remove();
   });
   grid.classList.remove('k-loop-auto', 'k-loop-dragging');
+  if (grid.__kDrum && grid.__kDrum.kill) grid.__kDrum.kill();
+
+  grid.querySelectorAll('.cover img').forEach(function (img) {
+    img.style.animation = 'none';
+    img.style.transform = 'none';
+    img.style.willChange = 'auto';
+    img.style.height = '100%';
+  });
 
   var el = grid.parentElement;
   for (var i = 0; i < 16 && el; i++, el = el.parentElement) {

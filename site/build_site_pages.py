@@ -99,11 +99,10 @@ def site_asset_versions() -> tuple[str, str]:
 
 
 def write_catalog_bundle() -> Path:
-    """Один файл для главной: kosmo-drum + catalog-scroll (без гонки загрузки)."""
-    drum = (SITE / "kosmo-drum.js").read_text(encoding="utf-8")
+    """Один файл для главной: только catalog-scroll (статичный каталог, без барабана)."""
     scroll = (SITE / "catalog-scroll.js").read_text(encoding="utf-8")
     out = SITE / "catalog-init.js"
-    out.write_text(drum + "\n" + scroll + "\n", encoding="utf-8")
+    out.write_text(scroll + "\n", encoding="utf-8")
     return out
 
 
