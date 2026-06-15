@@ -46,14 +46,10 @@
 /* --- зоны доставки (цветные кружки как на карте) --- */
 .kosmos-dots--zones{
   --kosmos-dots-gap:clamp(6px, 2.2vw, 12px);
-  padding:0 6px;
-  flex-wrap:wrap;
-  row-gap:10px;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  padding:6px 6px;
+  flex-wrap:nowrap;
+  overflow:visible;
 }
-.kosmos-dots--zones::-webkit-scrollbar{display:none}
 .kosmos-dots--zones .kosmos-dot{
   width:clamp(34px, 10.5vw, 44px);
   height:clamp(34px, 10.5vw, 44px);
@@ -79,6 +75,15 @@
 .dlv-z-purple{background:#C8AEE3;color:#9558C9}
 
 @media (max-width:480px){
+  .kosmos-dots--zones{
+    flex-wrap:wrap;
+    row-gap:10px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding:8px 6px;
+  }
+  .kosmos-dots--zones::-webkit-scrollbar{display:none}
   .kosmos-dots--zones .kosmos-dot{
     width:clamp(30px, 9.5vw, 40px);
     height:clamp(30px, 9.5vw, 40px);
