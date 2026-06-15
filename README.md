@@ -114,9 +114,9 @@ python site/build_site_pages.py
 
 ### Деплой на GitHub
 
-1. Один раз в **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-2. `push.bat` (сборка локально только для проверки; на Pages собирает CI) или `git push`.
-3. Workflow `.github/workflows/pages.yml` запускает `python build.py` и выкладывает сайт.
+1. Workflow публикует сборку в ветку **gh-pages** (HTML в git не хранится).
+2. В **Settings → Pages → Branch: `gh-pages` / `/ (root)`** (если ещё не так).
+3. `push.bat` или `git push` — CI соберёт и выложит сайт за 1–2 мин.
 
 ---
 
