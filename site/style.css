@@ -781,6 +781,7 @@ body.cake-page-body{
     display:flex;width:100%;max-width:100%;
     overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scroll-padding:0;
     touch-action:manipulation;
     overscroll-behavior-x:contain;
   }

@@ -408,6 +408,58 @@
     }
   }, 30);
 
+  /* Мобильные карусели: нативный инерционный скролл + мягкая доводка,
+     если остановились между слайдами (proximity сам не всегда докручивает). */
+  (function bindGentleCarouselFinish(){
+    const mq = window.matchMedia('(max-width: 900px)');
+
+    function slideItems(el){
+      if (!el) return [];
+      const meta = el.__kLoop;
+      if (meta && meta.kids && meta.kids.length) return meta.kids;
+      return Array.prototype.filter.call(el.children, (c) => !c.classList.contains('k-loop-clone'));
+    }
+
+    function finishIfNeeded(el){
+      if (!el || !mq.matches || el.__kGentleBusy) return;
+      const items = slideItems(el);
+      if (items.length < 2) return;
+      const step = items[0].offsetWidth || el.clientWidth || 1;
+      const left = el.scrollLeft;
+      const idx = Math.round(left / step);
+      const clamped = Math.max(0, Math.min(items.length - 1, idx));
+      const target = items[clamped].offsetLeft;
+      const dist = Math.abs(left - target);
+      if (dist <= Math.max(4, step * 0.05)) return;
+      el.__kGentleBusy = true;
+      el.scrollTo({left: target, behavior: 'smooth'});
+      window.setTimeout(() => { el.__kGentleBusy = false; }, 480);
+    }
+
+    function bind(el){
+      if (!el || el.__kGentleFinish) return;
+      el.__kGentleFinish = true;
+      let timer;
+      const onSettle = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => finishIfNeeded(el), 140);
+      };
+      el.addEventListener('scroll', onSettle, {passive: true});
+      el.addEventListener('scrollend', onSettle, {passive: true});
+    }
+
+    function boot(){
+      if (!mq.matches) return;
+      bind(document.getElementById('cake-photos'));
+      bind(document.getElementById('fillings-col'));
+    }
+
+    boot();
+    window.addEventListener('load', boot, {once: true});
+    if (mq.addEventListener) mq.addEventListener('change', boot);
+    else if (mq.addListener) mq.addListener(boot);
+  })();
+
   (function syncCalcMobileCtx(){
     const mq = window.matchMedia('(max-width: 900px)');
     function apply(){
