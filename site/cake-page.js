@@ -259,17 +259,14 @@
     var mode = _loopMq.matches ? 'mob' : 'desk';
     var fcNeeded = !!(fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos')));
     var vert = !_loopMq.matches;
-    if (_loopMode === mode && ph && ph.__kLoop && (!fcNeeded || (fc && fc.__kLoop))) return;
+    if (_loopMode === mode) {
+      if (_loopMq.matches) return;
+      if (ph && ph.__kLoop && (!fcNeeded || (fc && fc.__kLoop))) return;
+    }
     _loopMode = mode;
     killLoops();
-    if (_loopMq.matches){
-      if (ph){ var h = kosmoLoop(ph, false, 1.3); if (h) _loopHandles.push(h); }
-      if (fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos'))){
-        var mirrorMob = fc.dataset.photoMirror === '1';
-        var h2 = kosmoLoop(fc, false, 1.1, mirrorMob ? { initialOffset: 0.38 } : null);
-        if (h2) _loopHandles.push(h2);
-      }
-    } else {
+    /* На мобилке — только ручной свайп, без автоскролла (k-loop). */
+    if (!_loopMq.matches){
       if (ph){ var h3 = kosmoLoop(ph, true, 0.8); if (h3) _loopHandles.push(h3); }
       if (fc && (fc.classList.contains('col-fillings--photos') || fc.dataset.fillings)){
         var mirror = fc.dataset.photoMirror === '1';

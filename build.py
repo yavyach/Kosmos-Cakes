@@ -18,6 +18,7 @@ def main() -> None:
     scripts = (
         ROOT / "site" / "build_site_pages.py",
         ROOT / "site" / "_build_tilda_embed.py",
+        ROOT / "site" / "_build_tilda_delivery_embed.py",
     )
     for script in scripts:
         print(f"\n=== {script.relative_to(ROOT)} ===")

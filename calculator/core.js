@@ -256,8 +256,8 @@ function renderHeader(cake){
 }
 
 /* ================================================================
-   На узком экране (≤900px) вместо «далее» — заголовок «мы бережно
-   доставляем тортики». На десктопе «далее» открывает блок доставки.
+   На узком экране (≤900px) блок доставки идёт сразу под калькулятором
+   (см. style.css). На десктопе «далее» открывает блок доставки.
    ================================================================ */
 function isMobileCtx(){
   try {
@@ -274,11 +274,7 @@ window.setKosmosMobileCtx = function(on){
 
 function nextBtnHTML(){
   if (isMobileCtx()) {
-    return `
-      <div class="mob-delivery-headline" aria-hidden="false">
-        мы бережно доставляем тортики
-      </div>
-    `;
+    return '';
   }
   return `
     <div class="send-row">

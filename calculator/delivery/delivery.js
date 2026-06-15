@@ -243,8 +243,8 @@
         $zones.querySelector('[data-key="purple"]');
       if (!purple) return;
       if (state.params.tiered){
-        if (zoneStrip) zoneStrip.setHidden('purple', true);
-        else purple.classList.add('is-hidden');
+        purple.setAttribute('disabled', 'disabled');
+        purple.setAttribute('title', 'Самовывоз недоступен для ярусных тортов');
         if (purple.classList.contains('is-active')){
           purple.classList.remove('is-active');
           state.rate = null; state.name = null; state.pickup = false;

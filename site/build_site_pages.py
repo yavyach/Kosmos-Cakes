@@ -462,8 +462,8 @@ def photo_paths(cid: str, rel: str = PHOTO_REL) -> tuple[list[str], list[str]]:
 def cake_photos_html(cid: str, cname: str) -> str:
     """Одна лента фото: на десктопе — вертикальный скролл, на мобилке — карусель."""
     if cid in PHOTO_GRID_CAKES:
-        desk, _ = photo_paths(cid)
-        paths = desk
+        left_d, right_d, _, _ = photo_paths_split(cid)
+        paths = left_d
     else:
         _, paths = photo_paths(cid)
     lines = []
@@ -511,10 +511,11 @@ def third_col_inner_html(cake: dict) -> str:
     cid = cake["id"]
     fill = html.escape(cake.get("fillings") or "BASE")
     if cid in PHOTO_GRID_CAKES:
-        desk, _ = photo_paths(cid)
+        _, right_d, _, _ = photo_paths_split(cid)
+        paths = right_d
         items = "\n".join(
             f'      <img class="photo" src="{html.escape(p)}" alt="{html.escape(cake["name"])}">'
-            for p in desk
+            for p in paths
         )
         return (
             '    <div class="col-fillings col-fillings--photos col-fillings--mirror" id="fillings-col" data-fillings="" data-photo-mirror="1">\n'

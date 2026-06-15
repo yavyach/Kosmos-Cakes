@@ -15,6 +15,7 @@ env/
 # Генерируется: python site/_build_tilda_embed.py
 site/tilda-catalog-embed.html
 site/tilda-embed.html
+site/tilda-delivery-embed.html
 site/_inject*
 site/_tmp*
 
