@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>green day — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1781515608">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1781420765"></script>
+<script>
+renderWeightCake({
+  "id": "green-day",
+  "name": "green day",
+  "title": "green day",
+  "desc": "Азиатский стиль, вписанный в современный праздничный торт. Виноград сорта шайн мускат отлично дополняет почти любую начинку внутри.",
+  "subtitle": "Цвет и другие детали могут меняться по вашему желанию.",
+  "details": "Торт назван в честь культовой американской панк-рок группы.",
+  "decorTable": [
+    {
+      "min": 3,
+      "max": 9.5,
+      "price": 4500
+    },
+    {
+      "min": 10,
+      "max": 20,
+      "price": 6500
+    }
+  ],
+  "minWeight": 3,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHEESECAKE
+});
+</script>
+</body>
+</html>

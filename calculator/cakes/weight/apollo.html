@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>аполлон — калькулятор</title>
+<link rel="stylesheet" href="../../style.css?v=1781515608">
+</head>
+<body class="mobile">
+<div class="calc-frame">
+  <div class="calc-scroll" id="root"></div>
+</div>
+<script src="../../core.js?v=1781420765"></script>
+<script>
+renderWeightCake({
+  "id": "apollo",
+  "name": "аполлон",
+  "title": "аполлон",
+  "desc": "Величественный и изящный прямоугольный торт. В отличие от «орфея» более широкий и классический, может иметь большую высоту и/или несколько ярусов.",
+  "subtitle": "Цвет и другие детали могут меняться по вашему желанию.",
+  "details": "Торт назван в честь древнегреческого бога света, покровителя муз и искусств, отца Орфея.",
+  "decorTable": [
+    {
+      "min": 4,
+      "max": 6.5,
+      "price": 4000
+    },
+    {
+      "min": 7,
+      "max": 12,
+      "price": 6000
+    },
+    {
+      "min": 12.5,
+      "max": 20,
+      "price": 7500
+    }
+  ],
+  "minWeight": 4,
+  "maxWeight": 20,
+  "mobile": true,
+  "fillings": FILLING_SETS.PLUS_CHERNIKA
+});
+</script>
+</body>
+</html>
