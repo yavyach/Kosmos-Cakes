@@ -408,10 +408,12 @@
     }
   }, 30);
 
-  /* Мобильные карусели: нативный инерционный скролл + мягкая доводка,
-     если остановились между слайдами (proximity сам не всегда докручивает). */
+  /* Мобильные карусели: нативный инерционный скролл + доводка после остановки.
+     iOS: scrollend/scrollTo(smooth) ненадёжны — touchend + scrollIntoView + fallback. */
   (function bindGentleCarouselFinish(){
     const mq = window.matchMedia('(max-width: 900px)');
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     function slideItems(el){
       if (!el) return [];
@@ -420,20 +422,58 @@
       return Array.prototype.filter.call(el.children, (c) => !c.classList.contains('k-loop-clone'));
     }
 
+    function snapIndex(el, count){
+      const w = el.clientWidth || 1;
+      const idx = Math.round(el.scrollLeft / w);
+      return Math.max(0, Math.min(count - 1, idx));
+    }
+
     function finishIfNeeded(el){
       if (!el || !mq.matches || el.__kGentleBusy) return;
       const items = slideItems(el);
       if (items.length < 2) return;
-      const step = items[0].offsetWidth || el.clientWidth || 1;
-      const left = el.scrollLeft;
-      const idx = Math.round(left / step);
-      const clamped = Math.max(0, Math.min(items.length - 1, idx));
-      const target = items[clamped].offsetLeft;
-      const dist = Math.abs(left - target);
-      if (dist <= Math.max(4, step * 0.05)) return;
+      const w = el.clientWidth || 1;
+      const idx = snapIndex(el, items.length);
+      const target = idx * w;
+      const dist = Math.abs(el.scrollLeft - target);
+      if (dist <= Math.max(3, w * 0.035)) return;
+
       el.__kGentleBusy = true;
-      el.scrollTo({left: target, behavior: 'smooth'});
-      window.setTimeout(() => { el.__kGentleBusy = false; }, 480);
+      const before = el.scrollLeft;
+      const item = items[idx];
+
+      if (item && item.scrollIntoView){
+        item.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'start'});
+      } else {
+        el.scrollTo({left: target, behavior: 'smooth'});
+      }
+
+      window.setTimeout(() => {
+        const left = el.scrollLeft;
+        const stillOff = Math.abs(left - target) > Math.max(3, w * 0.035);
+        const smoothFailed = Math.abs(left - before) < 2;
+        if (stillOff && (smoothFailed || isIOS)){
+          el.scrollLeft = target;
+        }
+        el.__kGentleBusy = false;
+        if (Math.abs(el.scrollLeft - target) > Math.max(3, w * 0.035)){
+          window.setTimeout(() => finishIfNeeded(el), 80);
+        }
+      }, isIOS ? 160 : 300);
+    }
+
+    function waitForScrollEnd(el, cb){
+      let last = el.scrollLeft;
+      let still = 0;
+      let frames = 0;
+      (function tick(){
+        frames++;
+        const cur = el.scrollLeft;
+        if (cur === last) still++;
+        else { still = 0; last = cur; }
+        if (still >= 3 || frames > 72) cb();
+        else requestAnimationFrame(tick);
+      })();
     }
 
     function bind(el){
@@ -442,10 +482,15 @@
       let timer;
       const onSettle = () => {
         clearTimeout(timer);
-        timer = setTimeout(() => finishIfNeeded(el), 140);
+        timer = setTimeout(() => finishIfNeeded(el), isIOS ? 50 : 130);
       };
       el.addEventListener('scroll', onSettle, {passive: true});
-      el.addEventListener('scrollend', onSettle, {passive: true});
+      if ('onscrollend' in window){
+        el.addEventListener('scrollend', () => finishIfNeeded(el), {passive: true});
+      }
+      const onTouchEnd = () => waitForScrollEnd(el, () => finishIfNeeded(el));
+      el.addEventListener('touchend', onTouchEnd, {passive: true});
+      el.addEventListener('touchcancel', onTouchEnd, {passive: true});
     }
 
     function boot(){

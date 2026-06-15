@@ -793,13 +793,23 @@ body.cake-page-body{
   .cake-photos .photo,
   #fillings-col.col-fillings--photos .photo,
   #fillings-col.col-fillings:not(.col-fillings--photos) .slice-wrap{
-    flex:0 0 100%;width:100%;min-width:100%;max-width:100%;
+    flex:none;width:100%;min-width:100%;max-width:100%;
     scroll-snap-align:start;
     box-sizing:border-box;
   }
   .cake-photos .photo,
   #fillings-col.col-fillings--photos .photo{
     aspect-ratio:1/1.25;object-fit:cover;
+  }
+}
+
+/* iOS Safari: proximity часто не докручивает — mandatory только там */
+@supports (-webkit-touch-callout: none){
+  @media (max-width:900px){
+    .cake-photos,
+    #fillings-col.col-fillings{
+      scroll-snap-type:x mandatory;
+    }
   }
 }
 
