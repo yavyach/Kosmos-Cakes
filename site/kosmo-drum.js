@@ -16,6 +16,9 @@
     var userScrollMin = opts.userScrollMin != null ? opts.userScrollMin : 2;
     var touchThreshold = opts.touchThreshold != null ? opts.touchThreshold : 8;
     var pauseOnClick = opts.pauseOnClick;
+    var initialOffset = opts.initialOffset != null ? opts.initialOffset : 0;
+    var initialOffsetApplied = false;
+    var enableMouseDrag = opts.enableMouseDrag !== false;
 
     Array.prototype.slice.call(stripEl.children).forEach(function (c) {
       if (c.classList.contains(cloneClass)) c.remove();
@@ -153,6 +156,44 @@
       }, {passive: true});
     }
 
+    var dragActive = false;
+    var dragStart = 0;
+    var dragScrollStart = 0;
+
+    function onDragMove(e) {
+      if (!dragActive) return;
+      var pos = vert ? e.clientY : e.clientX;
+      var delta = dragStart - pos;
+      paused = true;
+      clearTimeout(pauseTimer);
+      writeScroll(dragScrollStart + delta);
+    }
+
+    function onDragEnd() {
+      if (!dragActive) return;
+      dragActive = false;
+      scrollEl.classList.remove('k-loop-dragging');
+      scrollPos = getScroll();
+      lastUserPos = scrollPos;
+      schedulePause();
+    }
+
+    if (enableMouseDrag) {
+      scrollEl.addEventListener('mousedown', function (e) {
+        if (e.button !== 0) return;
+        if (pauseOnClick && e.target.closest && e.target.closest(pauseOnClick)) return;
+        dragActive = true;
+        scrollEl.classList.add('k-loop-dragging');
+        dragStart = vert ? e.clientY : e.clientX;
+        dragScrollStart = getScroll();
+        paused = true;
+        clearTimeout(pauseTimer);
+        e.preventDefault();
+      });
+      global.document.addEventListener('mousemove', onDragMove);
+      global.document.addEventListener('mouseup', onDragEnd);
+    }
+
     var pauseOnHidden = opts.pauseOnHidden !== false;
 
     function onVisibility() {
@@ -162,9 +203,18 @@
     }
     document.addEventListener('visibilitychange', onVisibility);
 
+    function applyInitialOffset() {
+      if (!initialOffset || initialOffsetApplied) return;
+      var sz = origSize();
+      if (sz < 8) return;
+      writeScroll(sz * initialOffset);
+      initialOffsetApplied = true;
+    }
+
     function boot() {
       scrollPos = getScroll();
       lastUserPos = scrollPos;
+      applyInitialOffset();
       var dim = vert ? scrollEl.clientHeight : scrollEl.clientWidth;
       if (dim < 40 || origSize() < 8) return;
       if (!rafId && !killed) {
@@ -177,6 +227,10 @@
       killed = true;
       clearTimeout(pauseTimer);
       document.removeEventListener('visibilitychange', onVisibility);
+      if (enableMouseDrag) {
+        global.document.removeEventListener('mousemove', onDragMove);
+        global.document.removeEventListener('mouseup', onDragEnd);
+      }
       if (rafId) global.cancelAnimationFrame(rafId);
       rafId = null;
       Array.prototype.slice.call(stripEl.children).forEach(function (c) {
@@ -189,6 +243,7 @@
 
     scrollPos = getScroll();
     lastUserPos = scrollPos;
+    applyInitialOffset();
     rafId = global.requestAnimationFrame(tick);
 
     if (opts.watchResize !== false) {

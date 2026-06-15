@@ -462,8 +462,8 @@ def photo_paths(cid: str, rel: str = PHOTO_REL) -> tuple[list[str], list[str]]:
 def cake_photos_html(cid: str, cname: str) -> str:
     """Одна лента фото: на десктопе — вертикальный скролл, на мобилке — карусель."""
     if cid in PHOTO_GRID_CAKES:
-        left, _, _, _ = photo_paths_split(cid)
-        paths = left
+        desk, _ = photo_paths(cid)
+        paths = desk
     else:
         _, paths = photo_paths(cid)
     lines = []
@@ -506,20 +506,18 @@ def photo_paths_split(cid: str) -> tuple[list[str], list[str], list[str], list[s
 
 def third_col_inner_html(cake: dict) -> str:
     """Содержимое третьей колонки на десктопе.
-    Для PHOTO_GRID_CAKES — вертикальный стек больших фото (как .col-photo слева).
+    Для PHOTO_GRID_CAKES — те же фото, что слева (зеркало карусели, со смещением в JS).
     Для остальных — обычный контейнер начинок, который JS заполняет срезами. """
     cid = cake["id"]
     fill = html.escape(cake.get("fillings") or "BASE")
     if cid in PHOTO_GRID_CAKES:
-        _left, right, _, _ = photo_paths_split(cid)
-        if not right:
-            right = _left[-1:] or [f"{PHOTO_REL}/fairy-cake/cover.jpg"]
+        desk, _ = photo_paths(cid)
         items = "\n".join(
             f'      <img class="photo" src="{html.escape(p)}" alt="{html.escape(cake["name"])}">'
-            for p in right
+            for p in desk
         )
         return (
-            '    <div class="col-fillings col-fillings--photos" id="fillings-col" data-fillings="">\n'
+            '    <div class="col-fillings col-fillings--photos col-fillings--mirror" id="fillings-col" data-fillings="" data-photo-mirror="1">\n'
             f"{items}\n"
             '    </div>'
         )

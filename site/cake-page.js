@@ -219,15 +219,20 @@
   }
 
   /* Боковые колонки — тот же Kosmo.Drum, что и на главной. */
-  function kosmoLoop(el, vert, speed){
+  function kosmoLoop(el, vert, speed, extra){
     if (!el || !window.Kosmo || !Kosmo.Drum) return null;
-    return Kosmo.Drum.bind({
+    var opts = {
       scrollEl: el,
       stripEl: el,
       axis: vert ? 'y' : 'x',
       speed: speed,
-      pauseOnClick: '.info-dot, .filling-bubble, button, a'
-    });
+      pauseOnClick: '.info-dot, .filling-bubble, button, a',
+      enableMouseDrag: true
+    };
+    if (extra) {
+      Object.keys(extra).forEach(function (k) { opts[k] = extra[k]; });
+    }
+    return Kosmo.Drum.bind(opts);
   }
 
   var _loopMq = window.matchMedia('(max-width:900px)');
@@ -259,11 +264,17 @@
     killLoops();
     if (_loopMq.matches){
       if (ph){ var h = kosmoLoop(ph, false, 1.3); if (h) _loopHandles.push(h); }
-      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 1.1); if (h2) _loopHandles.push(h2); }
+      if (fc && (fc.dataset.fillings || fc.classList.contains('col-fillings--photos'))){
+        var mirrorMob = fc.dataset.photoMirror === '1';
+        var h2 = kosmoLoop(fc, false, 1.1, mirrorMob ? { initialOffset: 0.38 } : null);
+        if (h2) _loopHandles.push(h2);
+      }
     } else {
       if (ph){ var h3 = kosmoLoop(ph, true, 0.8); if (h3) _loopHandles.push(h3); }
       if (fc && (fc.classList.contains('col-fillings--photos') || fc.dataset.fillings)){
-        var h4 = kosmoLoop(fc, true, 0.7); if (h4) _loopHandles.push(h4);
+        var mirror = fc.dataset.photoMirror === '1';
+        var h4 = kosmoLoop(fc, true, 0.7, mirror ? { initialOffset: 0.38 } : null);
+        if (h4) _loopHandles.push(h4);
       }
     }
     syncFillingsDrumPause();
