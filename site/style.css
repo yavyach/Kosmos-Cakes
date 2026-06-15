@@ -780,9 +780,9 @@ body.cake-page-body{
   #fillings-col.col-fillings{
     display:flex;width:100%;max-width:100%;
     overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    touch-action:pan-x pan-y;
-    overscroll-behavior-y:auto;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    touch-action:manipulation;
+    overscroll-behavior-x:contain;
   }
   .cake-photos.k-loop-auto,
   #fillings-col.col-fillings.k-loop-auto{
@@ -793,7 +793,7 @@ body.cake-page-body{
   #fillings-col.col-fillings--photos .photo,
   #fillings-col.col-fillings:not(.col-fillings--photos) .slice-wrap{
     flex:0 0 100%;width:100%;min-width:100%;max-width:100%;
-    scroll-snap-align:start;scroll-snap-stop:always;
+    scroll-snap-align:start;
     box-sizing:border-box;
   }
   .cake-photos .photo,
@@ -813,9 +813,10 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-photos-wrap{position:relative;width:100vw}
 .mob-photos{
   display:flex;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
   cursor:grab;
-  touch-action:pan-x pan-y;
+  touch-action:manipulation;
+  overscroll-behavior-x:contain;
 }
 .mob-photos.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-photos::after{
@@ -824,7 +825,7 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-photos img{
   flex:0 0 100%;width:100%;min-width:100%;
   aspect-ratio:1/1.25;object-fit:cover;
-  scroll-snap-align:start;scroll-snap-stop:always;display:block;
+  scroll-snap-align:start;display:block;
 }
 .mob-swipe-hint{display:none}
 
@@ -903,9 +904,10 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-fillings{
   position:relative;width:100%;max-width:100%;
   display:flex;overflow-x:auto;overflow-y:hidden;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
   cursor:grab;
-  touch-action:pan-x pan-y;
+  touch-action:manipulation;
+  overscroll-behavior-x:contain;
 }
 .mob-fillings.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-fillings::after{
@@ -913,7 +915,7 @@ body.mob-page .menu-list{top:80px;left:14px}
 }
 .mob-fillings .slice-wrap{
   flex:0 0 100%;width:100%;min-width:100%;
-  scroll-snap-align:start;scroll-snap-stop:always;
+  scroll-snap-align:start;
 }
 
 @media (max-width:900px){
