@@ -233,6 +233,7 @@
         delete el.__kDrum;
         delete el.__kLoop;
         el.classList.remove('k-loop-auto', 'k-loop-native', 'k-loop-dragging');
+        if (id === 'fillings-col') el.__kFillingsHeld = false;
       }
     });
     const cp = document.querySelector('.col-photo');
@@ -257,6 +258,7 @@
         var h4 = kosmoLoop(fc, true, 1.4); if (h4) _loopHandles.push(h4);
       }
     }
+    syncFillingsDrumPause();
   }
   function watchCarouselImages(cb){
     ['cake-photos','fillings-col'].forEach(function(id){
