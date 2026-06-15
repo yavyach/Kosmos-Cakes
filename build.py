@@ -15,7 +15,10 @@ ROOT = Path(__file__).resolve().parent
 
 
 def main() -> None:
-    scripts = (ROOT / "site" / "build_site_pages.py",)
+    scripts = (
+        ROOT / "site" / "build_site_pages.py",
+        ROOT / "site" / "_build_tilda_embed.py",
+    )
     for script in scripts:
         print(f"\n=== {script.relative_to(ROOT)} ===")
         subprocess.run([sys.executable, str(script)], check=True, cwd=str(ROOT))

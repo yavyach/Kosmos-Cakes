@@ -17,6 +17,15 @@ if not exist ".git" (
   exit /b 1
 )
 
+echo === Сборка (HTML генерируется локально, в git не попадает) ===
+python build.py
+if errorlevel 1 (
+  echo.
+  echo [!] Ошибка сборки. Исправь и повтори.
+  pause
+  exit /b 1
+)
+
 echo === Проверяю что изменилось ===
 git status --short
 
@@ -52,7 +61,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo === Готово! Через 30-60 сек GitHub Pages обновится ===
+echo === Готово! GitHub Actions соберёт сайт и обновит Pages (1-3 мин) ===
 echo URL: https://yavyach.github.io/Kosmos-Cakes/site/
 echo.
 timeout /t 5

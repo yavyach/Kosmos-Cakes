@@ -14,8 +14,20 @@ env/
 
 # Генерируется: python site/_build_tilda_embed.py
 site/tilda-catalog-embed.html
+site/tilda-embed.html
 site/_inject*
 site/_tmp*
+
+# === Сгенерировано сборкой (python build.py) — не коммитить ===
+site/cakes/*.html
+site/index.html
+site/preview.html
+site/catalog-init.js
+
+calculator/cakes/fixed/*.html
+calculator/cakes/tiered/*.html
+calculator/cakes/weight/*.html
+calculator/cakes/index.html
 
 # Исходники фото для импорта (локально, не на GitHub Pages)
 site/photos raw/

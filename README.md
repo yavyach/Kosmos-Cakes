@@ -103,11 +103,20 @@ python site/build_site_pages.py
 | Фото торта | `site/photos/<id>/` или импорт из `photos raw/` | см. ниже |
 | Порядок в каталоге | `site/build_site_pages.py` → `CATALOG_ORDER` | `python build.py` |
 
-### ⚠️ Не редактировать вручную
+### ⚠️ Не редактировать вручную (генерируется, в git не хранится)
 
-- `site/cakes/*.html` — **генерируются** из шаблонов и данных
-- `site/index.html`, `site/preview.html` — тоже перезаписываются сборкой
-- `calculator/cakes/**/*.html` — генерируются из `build_cakes.py`
+- `site/cakes/*.html` — из шаблонов и данных
+- `site/index.html`, `site/preview.html`, `site/catalog-init.js`
+- `site/tilda-embed.html` — для Tilda (`python build.py`)
+- `calculator/cakes/**/*.html` — из `build_cakes.py`
+
+После `git clone` запусти `python build.py` для локальной работы.
+
+### Деплой на GitHub
+
+1. Один раз в **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+2. `push.bat` (сборка локально только для проверки; на Pages собирает CI) или `git push`.
+3. Workflow `.github/workflows/pages.yml` запускает `python build.py` и выкладывает сайт.
 
 ---
 
@@ -149,10 +158,6 @@ python calculator/build_cakes.py
 ```
 
 Открыть: `calculator/cakes/index.html`
-
-### Деплой на GitHub
-
-Двойной клик `push.bat` в корне (или обычный `git push`).
 
 ---
 
