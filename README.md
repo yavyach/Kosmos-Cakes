@@ -114,9 +114,10 @@ python site/build_site_pages.py
 
 ### Деплой на GitHub
 
-1. Workflow публикует сборку в ветку **gh-pages** (HTML в git не хранится).
-2. В **Settings → Pages → Branch: `gh-pages` / `/ (root)`** (если ещё не так).
-3. `push.bat` или `git push` — CI соберёт и выложит сайт за 1–2 мин.
+GitHub Pages настроен на ветку **`main`** (legacy). Сгенерированный HTML не хранится в исходниках вручную — workflow `.github/workflows/pages.yml` после каждого push собирает проект и коммитит HTML в `main` с меткой `[skip ci]`.
+
+1. `git push` (или `push.bat` — сборка локально для проверки).
+2. Через 1–2 мин Pages обновится: [yavyach.github.io/Kosmos-Cakes/site/](https://yavyach.github.io/Kosmos-Cakes/site/)
 
 ---
 

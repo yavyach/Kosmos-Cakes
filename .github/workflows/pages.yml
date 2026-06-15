@@ -14,30 +14,26 @@ concurrency:
 
 jobs:
   build-deploy:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Build site and calculators
         run: python build.py
-      - name: Stage built artifact (включая gitignore HTML)
+      - name: Sync built HTML to main (GitHub Pages legacy → branch main)
         run: |
-          mkdir -p _site
-          rsync -a \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='_site' \
-            --exclude='.gitignore' \
-            --exclude='site/photos raw' \
-            --exclude='.venv' \
-            --exclude='__pycache__' \
-            ./ _site/
-      - name: Publish to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages
-          force_orphan: true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f site/cakes/*.html site/index.html site/preview.html site/catalog-init.js site/tilda-embed.html
+          git add -f calculator/cakes/fixed/*.html calculator/cakes/tiered/*.html calculator/cakes/weight/*.html calculator/cakes/index.html
+          if git diff --staged --quiet; then
+            echo "Built HTML unchanged"
+            exit 0
+          fi
+          git commit -m "chore: sync built HTML for Pages [skip ci]"
+          git push
