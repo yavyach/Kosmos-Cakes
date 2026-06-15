@@ -408,6 +408,59 @@
     }
   }, 30);
 
+  /* Мобильные карусели: горизонтальный свайп + вертикальный скролл страницы. */
+  (function bindMobileCarouselSwipe(){
+    const mq = window.matchMedia('(max-width: 900px)');
+    const bound = new WeakSet();
+
+    function canSwipe(el){
+      return el && el.scrollWidth > el.clientWidth + 4;
+    }
+
+    function bind(el){
+      if (!el || bound.has(el)) return;
+      bound.add(el);
+      let startX, startY, lastX, lock = null;
+
+      el.addEventListener('touchstart', (e) => {
+        if (!e.touches[0]) return;
+        startX = lastX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        lock = null;
+      }, {passive: true});
+
+      el.addEventListener('touchmove', (e) => {
+        if (!e.touches[0] || !canSwipe(el)) return;
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        const dx = x - startX;
+        const dy = y - startY;
+        if (lock === null) {
+          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+          lock = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        }
+        if (lock === 'y') return;
+        e.preventDefault();
+        el.scrollLeft -= x - lastX;
+        lastX = x;
+      }, {passive: false});
+
+      el.addEventListener('touchend', () => { lock = null; }, {passive: true});
+      el.addEventListener('touchcancel', () => { lock = null; }, {passive: true});
+    }
+
+    function boot(){
+      if (!mq.matches) return;
+      bind(document.getElementById('cake-photos'));
+      bind(document.getElementById('fillings-col'));
+    }
+
+    boot();
+    window.addEventListener('load', boot, {once: true});
+    if (mq.addEventListener) mq.addEventListener('change', boot);
+    else if (mq.addListener) mq.addListener(boot);
+  })();
+
   (function syncCalcMobileCtx(){
     const mq = window.matchMedia('(max-width: 900px)');
     function apply(){

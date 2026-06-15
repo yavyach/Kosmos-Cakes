@@ -780,7 +780,7 @@ body.cake-page-body{
     display:flex;width:100vw;overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scroll-padding-inline:20px;
-    touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;
+    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
   }
   .cake-photos.k-loop-auto{
     scroll-snap-type:none;
@@ -794,7 +794,7 @@ body.cake-page-body{
     position:relative;width:100vw;display:flex;overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scroll-padding-inline:20px;
-    touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;
+    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
   }
   #fillings-col.col-fillings.k-loop-auto{
     scroll-snap-type:none;
@@ -808,7 +808,7 @@ body.cake-page-body{
     display:flex;width:100vw;max-width:100vw;overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scroll-padding-inline:20px;
-    touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain;
+    touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-x:contain;
     height:auto;
   }
   #fillings-col.col-fillings--photos .photo{
@@ -832,7 +832,7 @@ body.mob-page .menu-list{top:80px;left:14px}
   scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
   scroll-padding-inline:20px;
   cursor:grab;
-  touch-action:pan-y pinch-zoom;
+  touch-action:pan-x pan-y pinch-zoom;
 }
 .mob-photos.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-photos::after{
@@ -923,7 +923,7 @@ body.mob-page .menu-list{top:80px;left:14px}
   scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
   scroll-padding-inline:20px;
   cursor:grab;
-  touch-action:pan-y pinch-zoom;
+  touch-action:pan-x pan-y pinch-zoom;
 }
 .mob-fillings.k-loop-dragging{cursor:grabbing;user-select:none}
 .mob-fillings::after{
@@ -1007,7 +1007,7 @@ body.mob-page .menu-list{top:80px;left:14px}
     display:flex;width:100vw;overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scroll-padding-inline:20px;
-    touch-action:pan-y pinch-zoom;
+    touch-action:pan-x pan-y pinch-zoom;
   }
   .col-third .col-delivery{display:none;min-height:80vh}
   .cake-page.is-delivery .col-third .col-fillings{display:none}
