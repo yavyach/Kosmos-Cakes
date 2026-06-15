@@ -463,9 +463,8 @@ def photo_paths(cid: str, rel: str = PHOTO_REL) -> tuple[list[str], list[str]]:
 def cake_photos_html(cid: str, cname: str) -> str:
     """Одна лента фото: на десктопе — вертикальный скролл, на мобилке — карусель."""
     if cid in PHOTO_GRID_CAKES:
-        _, paths = photo_paths(cid)
-        half = max(1, (len(paths) + 1) // 2)
-        paths = paths[:half]
+        left, _, _, _ = photo_paths_split(cid)
+        paths = left
     else:
         _, paths = photo_paths(cid)
     lines = []
@@ -494,7 +493,7 @@ def fill_head_markup() -> str:
 
 
 
-PHOTO_GRID_CAKES: set[str] = set()
+PHOTO_GRID_CAKES: set[str] = {"tiramisu"}
 
 
 def photo_paths_split(cid: str) -> tuple[list[str], list[str], list[str], list[str]]:

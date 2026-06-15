@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>тирамису — kosmos</title>
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../style.css?v=1781513579">
-<link rel="stylesheet" href="../cake-page-layout.css?v=1781513579">
-<link rel="stylesheet" href="../../calculator/style.css?v=1781513602">
+<link rel="stylesheet" href="../style.css?v=1781514331">
+<link rel="stylesheet" href="../cake-page-layout.css?v=1781514331">
+<link rel="stylesheet" href="../../calculator/style.css?v=1781514349">
 <link rel="stylesheet" href="../../calculator/delivery/delivery.css?v=1781275030">
 </head>
 <body class="cake-page-body">
@@ -22,11 +22,9 @@
 
   <section class="cake-col col-photo" aria-label="фото торта">
     <div class="cake-photos" id="cake-photos">
-      <img class="photo" src="../photos/tiramisu/levo1.webp" alt="тирамису — деталь" loading="eager">
+      <img class="photo" src="../photos/tiramisu/cover.webp" alt="тирамису — обложка" loading="eager">
+      <img class="photo" src="../photos/tiramisu/levo1.webp" alt="тирамису — деталь" loading="lazy">
       <img class="photo" src="../photos/tiramisu/levo2.webp" alt="тирамису — деталь" loading="lazy">
-      <img class="photo" src="../photos/tiramisu/pravo1.webp" alt="тирамису — деталь" loading="lazy">
-      <img class="photo" src="../photos/tiramisu/pravo2.webp" alt="тирамису — деталь" loading="lazy">
-      <img class="photo" src="../photos/tiramisu/cover.webp" alt="тирамису" loading="lazy">
     </div>
     <div class="cake-photo-dots mob-dots" id="cake-photo-dots" aria-hidden="true"></div>
   </section>
@@ -42,11 +40,10 @@
   </section>
 
   <section class="cake-col col-third" aria-label="третья колонка">
-    <div class="cake-fill-head">
-      <h2 class="mob-section-title">Что внутри?<img class="mob-section-cherry" src="../assets/cherry.svg" alt="" aria-hidden="true"></h2>
+    <div class="col-fillings col-fillings--photos" id="fillings-col" data-fillings="">
+      <img class="photo" src="../photos/tiramisu/pravo1.webp" alt="тирамису">
+      <img class="photo" src="../photos/tiramisu/pravo2.webp" alt="тирамису">
     </div>
-
-    <div class="col-fillings" id="fillings-col" data-fillings="TIRAMISU"></div>
     <div class="cake-fillings-dots mob-dots mob-dots--small" id="cake-fillings-dots" aria-hidden="true"></div>
     <div class="col-delivery" id="delivery-col" aria-hidden="true">
       <button class="delivery-back" id="delivery-back" type="button" aria-label="закрыть доставку">
@@ -85,9 +82,9 @@ renderWeightCake({
 <script src="../../calculator/delivery/kosmos-dots.js?v=1781275208"></script>
 <script src="../../calculator/delivery/delivery.js?v=1781275208"></script>
 <script>Kosmos.mountDelivery(document.getElementById('dlv-root'));</script>
-<script src="../fillings/data.js?v=1781513934"></script>
+<script src="../fillings/data.js?v=1781514349"></script>
 <script>window.KOSMOS_CLASS_V='1781264970';</script>
-<script src="../kosmo-drum.js?v=1781513934"></script>
-<script src="../cake-page.js?v=1781513934"></script>
+<script src="../kosmo-drum.js?v=1781514349"></script>
+<script src="../cake-page.js?v=1781514349"></script>
 </body>
 </html>

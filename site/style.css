@@ -678,6 +678,10 @@ body.about-page{
   padding:16% 14% 22%;
   gap:6px;
   z-index:3;
+  pointer-events:none;
+}
+.slice-wrap .filling-bubble > *:not(.close){
+  pointer-events:none;
 }
 .slice-wrap.is-open .filling-bubble{display:flex}
 
@@ -712,6 +716,7 @@ body.about-page{
   border:0;background:none;padding:0;
   display:flex;align-items:center;justify-content:center;
   color:var(--red);z-index:4;
+  pointer-events:auto;cursor:pointer;touch-action:manipulation;
   transition:color .15s ease, transform .08s ease;
 }
 .slice-wrap .filling-bubble .close:hover{color:var(--rose)}

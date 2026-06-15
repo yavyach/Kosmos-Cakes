@@ -169,6 +169,14 @@
     if (!container || container.__kDeleg) return;
     container.__kDeleg = true;
     container.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('.filling-bubble .close');
+      if (closeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const wrap = closeBtn.closest('.slice-wrap');
+        if (wrap) closeWrap(wrap);
+        return;
+      }
       const dot = e.target.closest('.info-dot');
       if (!dot) return;
       const wrap = dot.closest('.slice-wrap');
@@ -176,7 +184,7 @@
       const name = wrap.dataset.filling;
       if (!name) return;
       openWrap(wrap, name);
-    });
+    }, true);
   }
 
   function mountFillings(el){
@@ -218,7 +226,7 @@
       stripEl: el,
       axis: vert ? 'y' : 'x',
       speed: speed,
-      pauseOnClick: '.info-dot, .filling-bubble, button, a, .close'
+      pauseOnClick: '.info-dot, .filling-bubble, button, a'
     });
   }
 
@@ -250,12 +258,12 @@
     _loopMode = mode;
     killLoops();
     if (_loopMq.matches){
-      if (ph){ var h = kosmoLoop(ph, false, 2.6); if (h) _loopHandles.push(h); }
-      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 2.2); if (h2) _loopHandles.push(h2); }
+      if (ph){ var h = kosmoLoop(ph, false, 1.3); if (h) _loopHandles.push(h); }
+      if (fc && fc.dataset.fillings){ var h2 = kosmoLoop(fc, false, 1.1); if (h2) _loopHandles.push(h2); }
     } else {
-      if (ph){ var h3 = kosmoLoop(ph, true, 1.6); if (h3) _loopHandles.push(h3); }
+      if (ph){ var h3 = kosmoLoop(ph, true, 0.8); if (h3) _loopHandles.push(h3); }
       if (fc && (fc.classList.contains('col-fillings--photos') || fc.dataset.fillings)){
-        var h4 = kosmoLoop(fc, true, 1.4); if (h4) _loopHandles.push(h4);
+        var h4 = kosmoLoop(fc, true, 0.7); if (h4) _loopHandles.push(h4);
       }
     }
     syncFillingsDrumPause();
