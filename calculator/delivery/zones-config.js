@@ -5,8 +5,7 @@
     {key:'orange', rate:1000, name:'оранжевая зона',  cls:'kosmos-dot--orange', onMap:true},
     {key:'red',    rate:1500, name:'красная зона',    cls:'kosmos-dot--red',    onMap:true},
     {key:'blue',   rate:2000, name:'голубая зона',    cls:'kosmos-dot--blue',   onMap:true},
-    {key:'brown',  rate:3500, name:'коричневая зона', cls:'kosmos-dot--brown',  onMap:true},
-    {key:'purple', rate:0,    name:'самовывоз',       cls:'kosmos-dot--purple', onMap:false, pickup:true}
+    {key:'brown',  rate:3500, name:'коричневая зона', cls:'kosmos-dot--brown',  onMap:true}
   ];
 
   var STYLE = {

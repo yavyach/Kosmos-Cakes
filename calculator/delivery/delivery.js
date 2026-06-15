@@ -227,7 +227,6 @@
       params: Object.assign({total:0,cake:'',weight:'',tiers:'',pieces:'',filling:'',tiered:false}, getUrlParams(), options.initialPayload||{}),
       rate  : null,
       name  : null,
-      pickup: false,
       address: ''
     };
 
@@ -238,28 +237,6 @@
       toast._t = setTimeout(function(){ $toast.classList.remove('show'); }, 3200);
     }
 
-    function applyTieredLock(){
-      var purple = zoneStrip ? zoneStrip.getButton('purple') :
-        $zones.querySelector('[data-key="purple"]');
-      if (!purple) return;
-      if (state.params.tiered){
-        purple.setAttribute('disabled', 'disabled');
-        purple.setAttribute('title', 'Самовывоз недоступен для ярусных тортов');
-        if (purple.classList.contains('is-active')){
-          purple.classList.remove('is-active');
-          state.rate = null; state.name = null; state.pickup = false;
-          mapApi.activeKey = null;
-          highlightMapZone(null);
-        }
-      } else {
-        if (zoneStrip) zoneStrip.setHidden('purple', false);
-        else purple.classList.remove('is-hidden');
-        purple.removeAttribute('disabled');
-        purple.removeAttribute('title');
-      }
-    }
-    applyTieredLock();
-
     function render(){
       if (state.rate === null){
         $deliveryL.textContent = 'стоимость доставки';
@@ -268,13 +245,8 @@
         $cta.setAttribute('disabled','disabled');
         return;
       }
-      if (state.pickup){
-        $deliveryL.textContent = 'самовывоз';
-        $deliveryV.textContent = 'бесплатно';
-      } else {
-        $deliveryL.textContent = 'стоимость доставки';
-        $deliveryV.textContent = fmtRub(state.rate);
-      }
+      $deliveryL.textContent = 'стоимость доставки';
+      $deliveryV.textContent = fmtRub(state.rate);
       $finalV.textContent = fmtRub(state.params.total + state.rate);
       $cta.removeAttribute('disabled');
     }
@@ -301,7 +273,6 @@
       btn.classList.add('is-active');
       state.rate   = parseInt(btn.dataset.rate, 10) || 0;
       state.name   = btn.dataset.name || '';
-      state.pickup = btn.dataset.pickup === '1';
       highlightMapZone(key);
       render();
     }
@@ -475,7 +446,6 @@
     }
 
     function deliveryText(){
-      if (state.pickup) return 'Самовывоз';
       if (state.rate === null) return '';
       if (state.address){
         var line = 'Адрес доставки: ' + state.address;
@@ -515,7 +485,6 @@
       state.params.pieces  = (payload.pieces  || '').toString().trim();
       state.params.filling = (payload.filling || '').toString().trim();
       state.params.tiered  = !!payload.tiered;
-      applyTieredLock();
       render();
     }
 
