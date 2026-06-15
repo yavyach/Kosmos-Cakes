@@ -1,4 +1,4 @@
-"""Сборка HTML-блока «Доставка» для вставки в Tilda (карта + адрес + зоны)."""
+"""Сборка блока «Доставка» для Tilda и отдельной страницы site/delivery.html."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -37,6 +37,35 @@ embed = (
     "</div>\n"
 )
 
-out = SITE / "tilda-delivery-embed.html"
-out.write_text(embed, encoding="utf-8")
-print(f"Wrote {out.name} ({len(embed)} bytes)")
+page = f"""<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Доставка — kosmos</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="{_v("../calculator/style.css", css_v)}">
+<link rel="stylesheet" href="{_v("../calculator/delivery/delivery.css", css_v)}">
+</head>
+<body style="margin:0;background:var(--bg,#cfcfcf)">
+<div class="delivery-inline" id="dlv-root"></div>
+<script src="{_v("../calculator/delivery/zones-config.js", js_v)}"></script>
+<script src="{_v("../calculator/delivery/kosmos-dots.js", js_v)}"></script>
+<script src="{_v("../calculator/delivery/delivery.js", js_v)}"></script>
+<script>Kosmos.mountDelivery(document.getElementById('dlv-root'));</script>
+</body>
+</html>
+"""
+
+(SITE / "tilda-delivery-embed.html").write_text(embed, encoding="utf-8")
+(SITE / "delivery.html").write_text(page, encoding="utf-8")
+
+iframe = (
+    '<iframe src="https://yavyach.github.io/Kosmos-Cakes/site/delivery.html" '
+    'title="доставка kosmos" style="display:block;width:100%;border:0;'
+    'min-height:min(1200px, 95vh);background:var(--bg,#cfcfcf)"></iframe>\n'
+)
+(SITE / "tilda-delivery-iframe.html").write_text(iframe, encoding="utf-8")
+print(f"Wrote tilda-delivery-embed.html ({len(embed)} bytes)")
+print(f"Wrote delivery.html ({len(page)} bytes)")
+print(f"Wrote tilda-delivery-iframe.html ({len(iframe)} bytes)")

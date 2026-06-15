@@ -381,7 +381,7 @@
       dot.addEventListener('click', () => {
         const target = originals[i];
         if (target && target.scrollIntoView){
-          target.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+          target.scrollIntoView({behavior:'smooth', block:'nearest', inline:'start'});
         }
       });
       dotsBox.appendChild(dot);
@@ -407,6 +407,81 @@
       kosmoDots('fillings-col', 'cake-fillings-dots');
     }
   }, 30);
+
+  (function bindMobileCarouselSnap(){
+    const mq = window.matchMedia('(max-width: 900px)');
+
+    function slideItems(el){
+      if (!el) return [];
+      const meta = el.__kLoop;
+      if (meta && meta.kids && meta.kids.length) return meta.kids;
+      return Array.prototype.filter.call(el.children, (c) => !c.classList.contains('k-loop-clone'));
+    }
+
+    function snapToNearest(el){
+      if (!el || !mq.matches) return;
+      const items = slideItems(el);
+      if (items.length < 2) return;
+      const w = el.clientWidth || 1;
+      const maxIdx = items.length - 1;
+      const idx = Math.max(0, Math.min(maxIdx, Math.round(el.scrollLeft / w)));
+      const target = idx * w;
+      const dist = Math.abs(el.scrollLeft - target);
+      if (dist <= 2) return;
+      el.scrollTo({left: target, behavior: dist > w * 0.15 ? 'auto' : 'smooth'});
+    }
+
+    function bind(el){
+      if (!el || el.__kSnapBound) return;
+      el.__kSnapBound = true;
+      let timer;
+      const onEnd = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => snapToNearest(el), 40);
+      };
+      el.addEventListener('scrollend', onEnd, {passive: true});
+      el.addEventListener('pointerup', onEnd, {passive: true});
+
+      /* Вертикальный свайп по карусели — прокрутка страницы, не «залипание» на фото */
+      let sx = 0;
+      let sy = 0;
+      let axis = null;
+      el.addEventListener('touchstart', (e) => {
+        axis = null;
+        const t = e.touches[0];
+        if (!t) return;
+        sx = t.clientX;
+        sy = t.clientY;
+      }, {passive: true});
+      el.addEventListener('touchmove', (e) => {
+        if (axis !== null || e.touches.length !== 1) return;
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - sx);
+        const dy = Math.abs(t.clientY - sy);
+        if (dx < 8 && dy < 8) return;
+        axis = dx > dy ? 'x' : 'y';
+        if (axis === 'y') el.style.pointerEvents = 'none';
+      }, {passive: true});
+      const unlockTouch = () => {
+        axis = null;
+        el.style.pointerEvents = '';
+        onEnd();
+      };
+      el.addEventListener('touchend', unlockTouch, {passive: true});
+      el.addEventListener('touchcancel', unlockTouch, {passive: true});
+    }
+
+    function boot(){
+      if (!mq.matches) return;
+      bind(document.getElementById('cake-photos'));
+      bind(document.getElementById('fillings-col'));
+    }
+
+    boot();
+    window.addEventListener('load', boot, {once: true});
+    if (mq.addEventListener) mq.addEventListener('change', boot);
+    else if (mq.addListener) mq.addListener(boot);
+  })();
 
   (function syncCalcMobileCtx(){
     const mq = window.matchMedia('(max-width: 900px)');
