@@ -35,9 +35,10 @@ calculator/cakes/index.html
 # Исходники фото для импорта (локально, не на GitHub Pages)
 site/photos raw/
 
-# Случайные офисные файлы рядом с медиа
+# Случайные офисные файлы рядом с медиа (кроме справочника по тортам)
 site/photos/**/*.docx
 site/photos/**/*.doc
+!site/photos/Вся инфа по тортикам.docx
 site/photos/**/*.xlsx
 
 # Логи и временные файлы
