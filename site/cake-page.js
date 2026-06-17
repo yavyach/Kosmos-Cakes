@@ -1,14 +1,28 @@
 /* Меню удалено: кнопка «К» теперь — простая ссылка-каталог (см. шаблон). */
 
   (function setupEmbedBack(){
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') !== 'kosmos') return;
+
+    function notifyClose(){
+      if (window.parent !== window) window.parent.postMessage('kosmos-close-cake', '*');
+      else location.href = 'https://kosmos-cake.ru/';
+    }
+
+    /* iOS: свайп «назад» срабатывает в iframe — ловим popstate и закрываем оверлей в каталоге. */
+    try {
+      history.pushState({ kosmosCakeEmbed: 1 }, '', location.href);
+    } catch (_) {}
+    window.addEventListener('popstate', () => {
+      notifyClose();
+    });
+
     const back = document.querySelector('.back-to-catalog');
     if (!back) return;
-    if (new URLSearchParams(location.search).get('embed') !== 'kosmos') return;
     back.setAttribute('href', '#');
     back.addEventListener('click', (e) => {
       e.preventDefault();
-      if (window.parent !== window) window.parent.postMessage('kosmos-close-cake', '*');
-      else location.href = 'https://kosmos-cake.ru/';
+      notifyClose();
     });
   })();
 
