@@ -112,6 +112,7 @@ body.mobile .fill-class{margin-top:8px}
   text-transform:lowercase;
 }
 .cake-desc::first-letter{text-transform:uppercase}
+.cake-desc .sent::first-letter{text-transform:uppercase}
 .cake-subtitle{
   margin:0;
   font-family:var(--text);font-weight:400;

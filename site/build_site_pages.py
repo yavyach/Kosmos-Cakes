@@ -486,6 +486,24 @@ def subtitle_html(cake: dict) -> str:
     return " ".join(x for x in parts if x).strip()
 
 
+_SENTENCE_BREAK = re.compile(r"(?<=[.!?…])\s+")
+
+
+def prose_sentences_html(text: str) -> str:
+    """Текст с text-transform:lowercase: заглавная буква у каждого предложения через .sent::first-letter."""
+    text = (text or "").strip()
+    if not text:
+        return ""
+    parts = _SENTENCE_BREAK.split(text)
+    if len(parts) <= 1:
+        return html.escape(text)
+    return " ".join(
+        f'<span class="sent">{html.escape(part.strip())}</span>'
+        for part in parts
+        if part.strip()
+    )
+
+
 
 def fill_head_markup() -> str:
     return load_template("cake-fill-head.html")
@@ -540,7 +558,7 @@ def cake_page_fields(cake: dict) -> dict[str, str]:
         "CAKE_ID": cid,
         "PAGE_TITLE": html.escape(f"{name} — kosmos"),
         "H1": html.escape(name),
-        "DESC": html.escape(cake.get("desc") or ""),
+        "DESC": prose_sentences_html(cake.get("desc") or ""),
         "SUB": subtitle_html(cake),
         "DETAILS": cake.get("details") or "",
         "PHOTOS": cake_photos_html(cid, name),

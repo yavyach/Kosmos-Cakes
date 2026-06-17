@@ -242,13 +242,20 @@ document.addEventListener('click', () => {
 /* ================================================================
    ХЕДЕР
    ================================================================ */
+function descSentencesHTML(text){
+  if (!text) return '';
+  var parts = String(text).trim().split(/(?<=[.!?…])\s+/).filter(function(s){ return s.trim(); });
+  if (parts.length <= 1) return text;
+  return parts.map(function(p){ return '<span class="sent">' + p.trim() + '</span>'; }).join(' ');
+}
+
 function renderHeader(cake){
   if (cake.mobile) return '';
   if (!cake.title && !cake.desc && !cake.subtitle) return '';
   return `
     <header class="cake-header">
       ${cake.title    ? `<h1 class="cake-title">${buildTitleHTML(cake.title)}</h1>` : ''}
-      ${cake.desc     ? `<p class="cake-desc">${cake.desc}</p>` : ''}
+      ${cake.desc     ? `<p class="cake-desc">${descSentencesHTML(cake.desc)}</p>` : ''}
       ${cake.subtitle ? `<p class="cake-subtitle">${cake.subtitle}</p>` : ''}
       ${cake.details ? `<p class="cake-details">${cake.details}</p>` : ''}
     </header>

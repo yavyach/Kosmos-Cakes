@@ -534,6 +534,7 @@ body.about-page{
   margin:10px 0 0;text-transform:lowercase;max-width:380px;
 }
 .col-info .cake-desc::first-letter{text-transform:uppercase}
+.col-info .cake-desc .sent::first-letter{text-transform:uppercase}
 .col-info .cake-sub{
   font-family:var(--text);font-weight:400;
   font-size:15px;line-height:1.2;color:var(--red);text-align:center;
@@ -884,6 +885,7 @@ body.mob-page .menu-list{top:80px;left:14px}
   margin:10px auto 0;text-transform:lowercase;max-width:300px;
 }
 .mob-head .cake-desc::first-letter{text-transform:uppercase}
+.mob-head .cake-desc .sent::first-letter{text-transform:uppercase}
 .mob-head .cake-sub{
   font-family:var(--text);font-weight:400;
   font-size:14px;line-height:1.25;color:var(--red);text-align:center;
