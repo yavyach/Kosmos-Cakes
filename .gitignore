@@ -16,6 +16,8 @@ env/
 site/tilda-catalog-embed.html
 site/tilda-embed.html
 site/tilda-delivery-embed.html
+site/delivery.html
+site/tilda-delivery-iframe.html
 site/_inject*
 site/_tmp*
 

@@ -1,32 +1,42 @@
 @echo off
 chcp 65001 >nul
 REM ============================================================
-REM   Один клик: коммитит все изменения и пушит в GitHub.
-REM   Положи этот файл в КОРЕНЬ репозитория (рядом с .git папкой).
-REM   Дабл-клик = всё залилось.
+REM   Один клик: коммитит ИСХОДНИКИ и пушит в main (без веток).
+REM   Сгенерированный HTML не коммитится — его дописывает CI на GitHub.
 REM ============================================================
 
 cd /d "%~dp0"
 
 if not exist ".git" (
   echo.
-  echo [!] Это не git-репозиторий. Сначала запусти клонирование:
-  echo     git clone https://github.com/yavyach/Kosmos-Cakes.git
-  echo.
+  echo [!] Это не git-репозиторий.
   pause
   exit /b 1
 )
 
-echo === Сборка (HTML генерируется локально, в git не попадает) ===
+echo === Сборка (локально, для проверки) ===
 python build.py
 if errorlevel 1 (
   echo.
-  echo [!] Ошибка сборки. Исправь и повтори.
+  echo [!] Ошибка сборки.
   pause
   exit /b 1
 )
 
-echo === Проверяю что изменилось ===
+echo === Сбрасываю сгенерированный HTML (в git его кладёт только CI) ===
+git checkout -- site/cakes site/index.html site/preview.html site/delivery.html site/tilda-embed.html site/catalog-init.js 2>nul
+git checkout -- calculator/cakes 2>nul
+
+echo === Подтягиваю origin/main (rebase, без merge-веток) ===
+git pull --rebase origin main
+if errorlevel 1 (
+  echo.
+  echo [!] Конфликт при rebase. Напиши в чат — разберём.
+  pause
+  exit /b 1
+)
+
+echo === Что изменилось (только исходники) ===
 git status --short
 
 echo.
@@ -37,31 +47,28 @@ if "%MSG%"=="" (
 )
 
 echo.
-echo === Добавляю изменения ===
+echo === Коммит ===
 git add -A
-
-echo === Коммитую: "%MSG%" ===
 git commit -m "%MSG%"
 
 if errorlevel 1 (
   echo.
-  echo [!] Нечего коммитить (или ошибка). Проверь git status.
+  echo [!] Нечего коммитить.
   pause
   exit /b 1
 )
 
-echo === Пушу на GitHub ===
-git push
+echo === Push в main ===
+git push origin main
 
 if errorlevel 1 (
   echo.
-  echo [!] Push не прошёл. Проверь интернет / токен.
+  echo [!] Push не прошёл — снова: git pull --rebase origin main
   pause
   exit /b 1
 )
 
 echo.
-echo === Готово! GitHub Actions соберёт сайт и обновит Pages (1-3 мин) ===
-echo URL: https://yavyach.github.io/Kosmos-Cakes/site/
-echo.
+echo === Готово! CI обновит HTML на Pages за 1-3 мин ===
+echo https://yavyach.github.io/Kosmos-Cakes/site/
 timeout /t 5
