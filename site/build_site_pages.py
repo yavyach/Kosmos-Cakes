@@ -638,7 +638,7 @@ def sync_kosmos_filling_sets() -> None:
 
 def write_site_preview_index(cakes: list, by_id: dict) -> None:
     """Полное превью site/preview.html — адаптивные страницы тортов."""
-    base = "https://ab-aacoop.github.io/kosmos_calc/site"
+    base = "https://yavyach.github.io/Kosmos-Cakes/site"
     oc = ordered_cakes(cakes, by_id)
 
     def card_cake(c: dict) -> str:

@@ -246,7 +246,7 @@ img{display:block;max-width:100%}
 }
 
 /* ============ ГЛАВНАЯ — ГРИД ОБЛОЖЕК ============
-   Сетка без зазоров: фото вплотную от верха. На широких экранах — больше колонок.
+   Сетка без зазоров: фото вплотную от верха. Мобильная — 2 в ряд, десктоп — 3.
    full-bleed: если каталог встроен в узкий блок (Tilda), растягиваем на всю ширину окна. */
 .cover-grid{
   --cover-cols:3;
@@ -301,23 +301,14 @@ body.catalog-page .cover img,
 .cover:hover .cover-name,
 .cover:focus-within .cover-name{opacity:1}
 
-@media (min-width:1400px){
-  .cover-grid{--cover-cols:4}
-}
-@media (min-width:1900px){
-  .cover-grid{--cover-cols:5}
-}
-@media (min-width:2400px){
-  .cover-grid{--cover-cols:6}
+@media (max-width:900px){
+  .cover-grid{--cover-cols:2}
+  .cover .cover-name{opacity:1;font-size:18px;padding:0 12px 14px}
 }
 
 /* Сенсорные экраны — название всегда видно (hover на таче нет). */
 @media (hover:none){
   .cover .cover-name{opacity:1}
-}
-@media (max-width:900px){
-  .cover-grid{--cover-cols:2}
-  .cover .cover-name{opacity:1;font-size:18px;padding:0 12px 14px}
 }
 
 /* ============ СТРАНИЦА «О НАС» ============ */

@@ -302,7 +302,7 @@ for _cake in CAKES:
 
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
-GITHUB_CALC = "https://ab-aacoop.github.io/kosmos_calc/calculator"
+GITHUB_CALC = "https://yavyach.github.io/Kosmos-Cakes/calculator"
 
 
 def cake_render_js(cake: dict) -> tuple[str, str]:
@@ -449,7 +449,7 @@ def cake_template(cake):
 # ----------------------------------------------------------------
 #  ПРЕВЬЮ-СТРАНИЦА
 # ----------------------------------------------------------------
-BASE_URL = 'https://ab-aacoop.github.io/kosmos_calc/calculator/cakes'
+BASE_URL = 'https://yavyach.github.io/Kosmos-Cakes/calculator/cakes'
 
 def _asset_versions():
     css = ROOT / "style.css"

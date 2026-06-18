@@ -20,7 +20,7 @@ ROOT = Path(__file__).parent
 SRC  = ROOT.parent.parent / "tortonachinki.xlsx"
 DST  = ROOT.parent.parent / "тортоначинки_with_inline.xlsx"
 
-GITHUB_CALC = "https://ab-aacoop.github.io/kosmos_calc/calculator"
+GITHUB_CALC = "https://yavyach.github.io/Kosmos-Cakes/calculator"
 
 # Маппинг: имя в xlsx → (тип папки, id файла) ─────────────────────
 CAKE_MAP = {
