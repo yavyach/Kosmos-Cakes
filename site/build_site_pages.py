@@ -480,28 +480,21 @@ def cake_photos_html(cid: str, cname: str) -> str:
 
 
 def subtitle_html(cake: dict) -> str:
-    parts = [html.escape(cake.get("subtitle") or "")]
+    parts: list[str] = []
+    sub = (cake.get("subtitle") or "").strip()
+    if sub:
+        parts.append(html.escape(sub).replace("\n", "<br>"))
     if cake.get("note"):
         parts.append(html.escape(cake["note"]))
-    return " ".join(x for x in parts if x).strip()
-
-
-_SENTENCE_BREAK = re.compile(r"(?<=[.!?…])\s+")
+    return "<br>".join(x for x in parts if x).strip()
 
 
 def prose_sentences_html(text: str) -> str:
-    """Текст с text-transform:lowercase: заглавная буква у каждого предложения через .sent::first-letter."""
+    """Текст описания торта — регистр как в источнике (docx)."""
     text = (text or "").strip()
     if not text:
         return ""
-    parts = _SENTENCE_BREAK.split(text)
-    if len(parts) <= 1:
-        return html.escape(text)
-    return " ".join(
-        f'<span class="sent">{html.escape(part.strip())}</span>'
-        for part in parts
-        if part.strip()
-    )
+    return html.escape(text).replace("\n", "<br>")
 
 
 
@@ -560,7 +553,7 @@ def cake_page_fields(cake: dict) -> dict[str, str]:
         "H1": html.escape(name),
         "DESC": prose_sentences_html(cake.get("desc") or ""),
         "SUB": subtitle_html(cake),
-        "DETAILS": cake.get("details") or "",
+        "DETAILS": html.escape(cake.get("details") or ""),
         "PHOTOS": cake_photos_html(cid, name),
         "CALC_INIT": f"{render_fn}({data_js});",
         "FILL_HEAD": fill_head_html(cake),

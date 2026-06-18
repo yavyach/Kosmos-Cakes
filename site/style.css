@@ -516,7 +516,7 @@ body.about-page{
   position:sticky;top:0;z-index:50;
   background:var(--bg);
   font-family:var(--display);font-weight:900;color:var(--pink);
-  font-size:56px;line-height:.7;text-transform:lowercase;letter-spacing:-1px;
+  font-size:56px;line-height:.7;letter-spacing:-1px;
   padding:18px 0px 14px;
   width: 100%;
   text-align:center;
@@ -531,10 +531,8 @@ body.about-page{
 .col-info .cake-desc{
   font-family:var(--display);font-weight:900;color:#fff;
   font-size:20px;line-height:1;text-align:center;
-  margin:10px 0 0;text-transform:lowercase;max-width:380px;
+  margin:10px 0 0;max-width:380px;
 }
-.col-info .cake-desc::first-letter{text-transform:uppercase}
-.col-info .cake-desc .sent::first-letter{text-transform:uppercase}
 .col-info .cake-sub{
   font-family:var(--text);font-weight:400;
   font-size:15px;line-height:1.2;color:var(--red);text-align:center;
@@ -876,16 +874,14 @@ body.mob-page .menu-list{top:80px;left:14px}
 .mob-head .cake-title{
   font-family:var(--display);font-weight:900;color:var(--pink);
   font-size:64px;line-height:.7;letter-spacing:-1px;
-  text-transform:lowercase;margin:0;width:100%;
+  margin:0;width:100%;
   padding-bottom:.05em;
 }
 .mob-head .cake-desc{
   font-family:var(--display);font-weight:900;color:#fff;
   font-size:20px;line-height:1;text-align:center;
-  margin:10px auto 0;text-transform:lowercase;max-width:300px;
+  margin:10px auto 0;max-width:300px;
 }
-.mob-head .cake-desc::first-letter{text-transform:uppercase}
-.mob-head .cake-desc .sent::first-letter{text-transform:uppercase}
 .mob-head .cake-sub{
   font-family:var(--text);font-weight:400;
   font-size:14px;line-height:1.25;color:var(--red);text-align:center;

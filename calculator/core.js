@@ -244,9 +244,9 @@ document.addEventListener('click', () => {
    ================================================================ */
 function descSentencesHTML(text){
   if (!text) return '';
-  var parts = String(text).trim().split(/(?<=[.!?…])\s+/).filter(function(s){ return s.trim(); });
-  if (parts.length <= 1) return text;
-  return parts.map(function(p){ return '<span class="sent">' + p.trim() + '</span>'; }).join(' ');
+  return String(text).trim()
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g, '<br>');
 }
 
 function renderHeader(cake){
@@ -504,6 +504,7 @@ window.renderWeightCake = function(cake){
         </div>
         ${classBadge(fillingClass(state.filling))}
       ` : ''}
+      <div class="hint">${decorHint()}${cake.note?'<br>'+cake.note:''}</div>
       ${totalHTML(r.total)}
       ${nextBtnHTML()}
       ${endBowHTML()}

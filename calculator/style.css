@@ -93,7 +93,6 @@ body.mobile .fill-class{margin-top:8px}
   margin:0 0 16px;
   font-family:var(--display);font-weight:900;
   color:var(--pink);
-  text-transform:lowercase;
   line-height:.85;
   letter-spacing:-1px;
   word-break:normal;
@@ -109,10 +108,7 @@ body.mobile .fill-class{margin-top:8px}
   font-family:var(--display);font-weight:900;
   font-size:24px;line-height:1;letter-spacing:.2px;
   color:#fff;
-  text-transform:lowercase;
 }
-.cake-desc::first-letter{text-transform:uppercase}
-.cake-desc .sent::first-letter{text-transform:uppercase}
 .cake-subtitle{
   margin:0;
   font-family:var(--text);font-weight:400;
