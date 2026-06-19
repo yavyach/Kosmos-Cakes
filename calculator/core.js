@@ -376,8 +376,7 @@ window.renderTieredCake = function(cake){
         <div class="value">${state.tiers}</div>
         <button class="step-btn plus"  data-act="t+" aria-label="плюс" type="button">${SVG_PLUS}</button>
       </div>
-      <div class="hint">От ${cake.minTiers} ярус${cake.minTiers===1?'а':'ов'}. От ${fmtWeight(cake.minWeight)} кг.${cake.note?'<br>'+cake.note:''}</div>
-      <div class="hint hint--big">Стоимость начинки в ярусных тортах фиксированная — 3&nbsp;200&nbsp;р/кг.</div>
+      ${cake.note ? `<div class="hint">${cake.note}</div>` : ''}
       ${totalHTML(r.total)}
       ${nextBtnHTML()}
       ${endBowHTML()}
