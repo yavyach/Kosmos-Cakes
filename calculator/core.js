@@ -472,16 +472,6 @@ window.renderWeightCake = function(cake){
     return { decor, filling, total: decor + filling };
   }
 
-  function decorHint(){
-    if (cake.id === 'berry-fields') return `От ${fmtWeight(cake.minWeight)} кг. Цена декора растёт по 1 кг — от 3 000р до 24 000р.`;
-    if (cake.id === 'tiramisu')     return `Стоимость только начинки — 3 000р/кг.`;
-    const parts = cake.decorTable.map(r => {
-      if (r.min === r.max) return `${r.min} кг — ${r.price.toLocaleString('ru-RU').replace(/,/g,' ')}р`;
-      return `${fmtWeight(r.min)}–${fmtWeight(r.max)} кг — ${r.price.toLocaleString('ru-RU').replace(/,/g,' ')}р`;
-    });
-    return `От ${fmtWeight(cake.minWeight)} кг. Декор: ${parts.join(' · ')}.`;
-  }
-
   function draw(){
     if (!cake.fillings.includes(state.filling)) state.filling = cake.fillings[0];
     const hasFillingPicker = cake.fillings.length > 1;
@@ -503,7 +493,7 @@ window.renderWeightCake = function(cake){
         </div>
         ${classBadge(fillingClass(state.filling))}
       ` : ''}
-      <div class="hint">${decorHint()}${cake.note?'<br>'+cake.note:''}</div>
+      ${cake.note ? `<div class="hint">${cake.note}</div>` : ''}
       ${totalHTML(r.total)}
       ${nextBtnHTML()}
       ${endBowHTML()}
