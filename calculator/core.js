@@ -406,7 +406,7 @@ window.renderTieredCake = function(cake){
 
 /* ================================================================
    ТИП 2 — ФИКС. ВЕС
-   total = вес × цена_начинки  +  декор(вес)
+   total = декор(2.5|3.5) + цена линейки начинки (база/классик/люкс)
    ================================================================ */
 window.renderFixedCake = function(cake){
   const state = { weight:2.5, filling:cake.fillings[0] };
@@ -414,7 +414,8 @@ window.renderFixedCake = function(cake){
 
   function calc(){
     const decor = cake.decor[state.weight];
-    const filling = state.weight * FILLING_PRICES[state.filling];
+    // Фикс. вес 2,5/3,5 кг: начинка — цена линейки (база/классик/люкс), не × кг.
+    const filling = FILLING_PRICES[state.filling];
     return { decor, filling, total: decor + filling };
   }
 
