@@ -35,12 +35,7 @@ function decorForFixed(decor, weight){
   return decor[weight] ?? decor[String(weight)] ?? 0;
 }
 
-/** Начинка: цена линейки (база/классик/люкс) — для фикс. веса 2,5/3,5 кг. */
-function fillingCostFixed(filling){
-  return FILLING_PRICES[filling] || 0;
-}
-
-/** Начинка: руб/кг × вес — для плоских и ярусных тортов. */
+/** Начинка: руб/кг × вес — для плоских, яйцевидных и ярусных тортов. */
 function fillingCostPerKg(filling, weight){
   return weight * (FILLING_PRICES[filling] || 0);
 }
@@ -420,8 +415,8 @@ window.renderTieredCake = function(cake){
 };
 
 /* ================================================================
-   ТИП 2 — ФИКС. ВЕС
-   total = декор(2.5|3.5) + цена линейки начинки (база/классик/люкс)
+   ТИП 2 — ЯЙЦЕВИДНЫЕ (фикс. 2,5 / 3,5 кг)
+   total = вес × цена_начинки_за_кг + декор(2.5|3.5)
    ================================================================ */
 window.renderFixedCake = function(cake){
   const state = { weight:2.5, filling:cake.fillings[0] };
@@ -429,7 +424,7 @@ window.renderFixedCake = function(cake){
 
   function calc(){
     const decor = decorForFixed(cake.decor, state.weight);
-    const filling = fillingCostFixed(state.filling);
+    const filling = fillingCostPerKg(state.filling, state.weight);
     return { decor, filling, total: decor + filling };
   }
 

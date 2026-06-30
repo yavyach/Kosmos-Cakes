@@ -56,7 +56,7 @@ def calc_total(cake: dict, *, weight: float | None = None, tiers: int | None = N
     if t == "fixed":
         w = weight if weight is not None else 2.5
         key = str(w) if str(w) in cake["decor"] else w
-        return cake["decor"][key] + fp  # flat filling
+        return cake["decor"][key] + w * fp
     w = weight if weight is not None else cake["minWeight"]
     decor = decor_for_weight(cake["decorTable"], w)
     if cake["id"] == "tiramisu":
@@ -98,19 +98,19 @@ def main() -> int:
             # blueberry hill sample
             if cid == "blueberry-hill":
                 t25 = calc_total(cake, weight=2.5)
-                if t25 != 8500:
-                    issues.append(f"blueberry-hill 2.5+синнабон: {t25} ≠ 8500")
+                if t25 != 13000:
+                    issues.append(f"blueberry-hill 2.5+синнабон: {t25} ≠ 13000")
 
-    print("\n=== Fixed-weight spot checks ===")
+    print("\n=== Fixed-weight spot checks (ves*nachinka + dekor) ===")
     for cid, w, expected in [
-        ("blueberry-hill", 2.5, 8500),
-        ("blueberry-hill", 3.5, 9500),
-        ("faberge", 2.5, 6000),
-        ("faberge", 3.5, 6500),
-        ("secret-garden", 2.5, 6500),
-        ("secret-garden", 3.5, 7000),
-        ("la-la-land", 2.5, 6000),
-        ("la-la-land", 3.5, 6500),
+        ("blueberry-hill", 2.5, 13000),
+        ("blueberry-hill", 3.5, 17000),
+        ("faberge", 2.5, 10500),
+        ("faberge", 3.5, 14000),
+        ("secret-garden", 2.5, 11000),
+        ("secret-garden", 3.5, 14500),
+        ("la-la-land", 2.5, 10500),
+        ("la-la-land", 3.5, 14000),
     ]:
         cake = next(c for c in CAKES if c["id"] == cid)
         got = calc_total(cake, weight=w)
